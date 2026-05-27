@@ -1,0 +1,283 @@
+<section class="product">
+  <div class="product__inner">
+
+    <!-- MEDIA -->
+    <div class="product__media" aria-label="Product media">
+
+      {% assign image_media = product.media | where: 'media_type', 'image' %}
+
+      <!-- Swipe/scroll gallery (used on ALL breakpoints) -->
+      <div class="product__gallery" id="ProductGallery" aria-label="Product gallery">
+        {% for media in image_media %}
+          <div
+            class="product__gallery-slide"
+            data-slide-index="{{ forloop.index0 }}"
+            aria-label="Image {{ forloop.index }}"
+          >
+            <img
+              src="{{ media | image_url: width: 2400 }}"
+              alt="{{ media.alt | escape }}"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            >
+          </div>
+          <div class="product__gallery-arrows" aria-hidden="false">
+             <button type="button" class="product__gallery-arrow is-prev" data-dir="-1" aria-label="Previous image">
+                 ‹
+             </button>
+             <button type="button" class="product__gallery-arrow is-next" data-dir="1" aria-label="Next image">
+             ›
+            </button>
+        </div>
+
+        {% endfor %}
+      </div>
+
+      <!-- Progress bars -->
+      <div class="product__gallery-progress" id="ProductGalleryProgress" aria-hidden="true">
+        {% for media in image_media %}
+          <button
+            type="button"
+            class="product__progress-seg{% if forloop.first %} is-active{% endif %}"
+            data-target-index="{{ forloop.index0 }}"
+            tabindex="-1"
+            aria-hidden="true"
+          ></button>
+        {% endfor %}
+      </div>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="product__info">
+
+      <header class="product__header">
+        <h1 class="product__title">{{ product.title }}</h1>
+
+        <div class="product__price">
+          {{ product.selected_or_first_available_variant.price | money }}
+        </div>
+      </header>
+
+      {% form 'product', product, class: 'product__form', id: 'ProductForm' %}
+        {% assign v = product.selected_or_first_available_variant %}
+
+        <!-- Anchor (kept for JS guard — sticky disabled) -->
+        <div class=\"product__purchase-anchor\" id=\"ProductPurchaseAnchor\"></div>
+
+        <!-- SINGLE purchase block (moves between anchor and sticky) -->
+        <div class="product__purchase" id="ProductPurchase">
+          {% unless product.has_only_default_variant %}
+            {% assign option = product.options_with_values.first %}
+
+            <label class="product__select-label" for="ProductSizeSelect">
+              {{ option.name }}
+            </label>
+
+            <div class="product__select-wrap">
+              <select id="ProductSizeSelect" class="product__select">
+                <option value="">Select Size</option>
+
+                {% for variant in product.variants %}
+                  <option
+                    value="{{ variant.id }}"
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                    {{ variant.title }}{% unless variant.available %} (Sold out){% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endunless %}
+
+          <input type="hidden" name="id" id="ProductVariantId" value="">
+
+          <button class="product__add" type="submit" disabled>
+            Add to cart
+          </button>
+        </div>
+
+      {% endform %}
+
+      <!-- DETAILS -->
+      <div class="product__accordions">
+        <details class="product__accordion" open>
+          <summary>Product Details</summary>
+          <div class="product__accordion-body">
+            {{ product.description }}
+          </div>
+        </details>
+
+        <details class="product__accordion">
+          <summary>Shipping</summary>
+          <div class="product__accordion-body">
+            <p>{{ section.settings.shipping_copy }}</p>
+          </div>
+        </details>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Gallery progress + click-to-jump + active segment -->
+<script>
+  (function () {
+    var gallery = document.getElementById('ProductGallery');
+    var progress = document.getElementById('ProductGalleryProgress');
+    if (!gallery || !progress) return;
+
+    var segs = progress.querySelectorAll('.product__progress-seg');
+    var slides = gallery.querySelectorAll('.product__gallery-slide');
+    if (!segs.length || !slides.length) return;
+
+    function setActive(i) {
+      segs.forEach(function (s) { s.classList.remove('is-active'); });
+      if (segs[i]) segs[i].classList.add('is-active');
+    }
+
+    // Click segments to scroll to slide (editorial, optional but useful)
+    segs.forEach(function (seg) {
+      seg.addEventListener('click', function () {
+        var idx = parseInt(seg.getAttribute('data-target-index'), 10);
+        if (isNaN(idx) || !slides[idx]) return;
+        slides[idx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      });
+    });
+
+    // Observe which slide is most visible in the gallery viewport
+    var io = new IntersectionObserver(function (entries) {
+      var best = null;
+
+      entries.forEach(function (e) {
+        if (!best || e.intersectionRatio > best.intersectionRatio) best = e;
+      });
+
+      if (!best) return;
+      var idx = parseInt(best.target.getAttribute('data-slide-index'), 10);
+      if (!isNaN(idx)) setActive(idx);
+    }, { root: gallery, threshold: [0.5, 0.6, 0.7] });
+
+    slides.forEach(function (slide) { io.observe(slide); });
+  })();
+</script>
+
+<script>
+  (function () {
+    var gallery = document.getElementById('ProductGallery');
+    if (!gallery) return;
+
+    var slides = gallery.querySelectorAll('.product__gallery-slide');
+    if (!slides.length) return;
+
+    var arrows = document.querySelectorAll('.product__gallery-arrow');
+    if (!arrows.length) return;
+
+    function getActiveIndex() {
+      var bestIdx = 0;
+      var bestDist = Infinity;
+
+      // Find the slide whose left edge is closest to the gallery's left edge
+      var left = gallery.scrollLeft;
+      slides.forEach(function (slide, i) {
+        var dist = Math.abs(slide.offsetLeft - left);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIdx = i;
+        }
+      });
+
+      return bestIdx;
+    }
+
+    function scrollToIndex(i) {
+      i = Math.max(0, Math.min(slides.length - 1, i));
+      slides[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+    }
+
+    arrows.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var dir = parseInt(btn.getAttribute('data-dir'), 10);
+        if (!dir) return;
+        var idx = getActiveIndex();
+        scrollToIndex(idx + dir);
+      });
+    });
+
+    // Keyboard support: only when gallery is focused/hovered in viewport
+    function onKeyDown(e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+
+      // Only respond if gallery is reasonably in view
+      var rect = gallery.getBoundingClientRect();
+      var inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (!inView) return;
+
+      var idx = getActiveIndex();
+      scrollToIndex(idx + (e.key === 'ArrowRight' ? 1 : -1));
+    }
+
+    var mq = window.matchMedia('(min-width: 768px)');
+    window.addEventListener('keydown', function (e) {
+    if (!mq.matches) return;
+     onKeyDown(e);
+    });
+  })();
+</script>
+
+
+<!-- Size dropdown — variant sync -->
+<script>
+  (function () {
+    var form = document.getElementById('ProductForm');
+    if (!form) return;
+
+    var sizeSelect = document.getElementById('ProductSizeSelect');
+    var variantIdInput = document.getElementById('ProductVariantId');
+    var addBtn = form.querySelector('.product__add');
+
+    if (!sizeSelect || !variantIdInput || !addBtn) return;
+
+    /* -----------------------
+       Variant sync (unchanged)
+       ----------------------- */
+    function selectedOption() {
+      var idx = sizeSelect.selectedIndex;
+      if (idx <= 0) return null;
+      return sizeSelect.options[idx];
+    }
+
+    function syncVariant() {
+      var opt = selectedOption();
+      var id = opt ? opt.value : '';
+      variantIdInput.value = id;
+
+      if (!opt) {
+        addBtn.disabled = true;
+        addBtn.textContent = 'Add to cart';
+        return;
+      }
+
+      var soldOut = !!opt.disabled;
+      addBtn.disabled = soldOut;
+      addBtn.textContent = soldOut ? 'Sold out' : 'Add to cart';
+    }
+
+    sizeSelect.addEventListener('change', syncVariant);
+    syncVariant();
+  })();
+</script>
+
+
+{% schema %}
+{
+  "name": "Main product",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "shipping_copy",
+      "label": "Shipping copy",
+      "default": "All sales are final. Please allow 12–14 business days for shipping."
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,310 @@
+<section class="cart">
+  <div class="cart__inner">
+
+    {% if cart.item_count > 0 %}
+
+      <form action="{{ routes.cart_url }}" method="post" novalidate>
+
+        <div class="cart__items" data-cart-items>
+          {% for item in cart.items %}
+            <div class="cart__item" data-cart-line="{{ forloop.index }}">
+
+              <div class="cart__item-media">
+                {% if item.image %}
+                  <img
+                    src="{{ item.image | image_url: width: 400 }}"
+                    alt="{{ item.product.title | escape }}"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </div>
+
+              <div class="cart__item-content">
+                <div class="cart__item-header">
+                  <p class="cart__item-title">{{ item.product.title }}</p>
+
+                  {% if item.variant.title != 'Default Title' %}
+                    <p class="cart__item-variant">{{ item.variant.title }}</p>
+                  {% endif %}
+                </div>
+
+                <div class="cart__item-controls">
+                  <div class="cart__item-quantity" data-qty-wrap>
+                    <button
+                      type="button"
+                      class="cart__qty-btn"
+                      aria-label="Decrease quantity"
+                      data-qty-minus
+                      data-line="{{ forloop.index }}"
+                    >
+                      −
+                    </button>
+
+                    <input
+                      type="number"
+                      class="cart__qty-input"
+                      name="updates[]"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      inputmode="numeric"
+                      aria-label="Quantity for {{ item.product.title }}"
+                      data-qty-input
+                      data-line="{{ forloop.index }}"
+                    >
+
+                    <button
+                      type="button"
+                      class="cart__qty-btn"
+                      aria-label="Increase quantity"
+                      data-qty-plus
+                      data-line="{{ forloop.index }}"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  <a
+                    href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                    class="cart__item-remove"
+                  >
+                    Remove
+                  </a>
+                </div>
+              </div>
+
+              <div class="cart__item-price" data-line-price="{{ forloop.index }}">
+                {{ item.final_line_price | money }}
+              </div>
+
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="cart__footer">
+          <div class="cart__subtotal-label">Subtotal</div>
+
+          <div class="cart__summary-right">
+            <div class="cart__subtotal-amount" data-cart-subtotal>{{ cart.total_price | money }}</div>
+
+            <div class="cart__actions">
+              <button type="submit" name="checkout" class="cart__action-btn cart__action-btn--primary">
+                Checkout
+              </button>
+
+              <a href="https://www.sandoitchi.com/pages/catering?view=shop-grid" class="cart__action-btn cart__action-btn--secondary">
+                Keep shopping
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <script>
+        (function () {
+          // Guard against double-init (theme editor / PJAX-like situations)
+          if (document.documentElement.hasAttribute('data-cart-qty-init')) return;
+          document.documentElement.setAttribute('data-cart-qty-init', 'true');
+
+          var moneyFormat = {{ shop.money_format | json }};
+          var root = document.querySelector('[data-cart-items]');
+          if (!root) return;
+
+          var subtotalEl = document.querySelector('[data-cart-subtotal]');
+          var headerBadge = document.querySelector('.header-cart-badge');
+          var headerPill  = document.querySelector('.header-cart-badge__pill');
+
+          function formatMoney(cents, format) {
+            if (typeof cents === 'string') cents = cents.replace('.', '');
+            cents = Number(cents || 0);
+
+            function addThousands(s, sep) {
+              var parts = String(s).split('.');
+              parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+              return parts.join('.');
+            }
+
+            var amount2 = (cents / 100).toFixed(2);
+            var amount0 = (cents / 100).toFixed(0);
+
+            // Default “amount” (2 decimals, comma thousands)
+            var formattedAmount = addThousands(amount2, ',');
+
+            // Comma decimal variants
+            var commaAmount2 = (cents / 100).toFixed(2).replace('.', ',');
+            commaAmount2 = (function (v) {
+              var p = v.split(',');
+              p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+              return p.join(',');
+            })(commaAmount2);
+
+            var commaAmount0 = (cents / 100).toFixed(0);
+            commaAmount0 = commaAmount0.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            return String(format)
+              .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, commaAmount0)
+              .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, commaAmount2)
+              .replace(/\{\{\s*amount_no_decimals\s*\}\}/, addThousands(amount0, ','))
+              .replace(/\{\{\s*amount\s*\}\}/, formattedAmount);
+          }
+
+          function setDisabled(el, isDisabled) {
+            if (!el) return;
+            el.disabled = !!isDisabled;
+            el.setAttribute('aria-disabled', isDisabled ? 'true' : 'false');
+          }
+
+          function updateHeaderCount(count) {
+            if (count <= 0) {
+              if (headerBadge) headerBadge.style.display = 'none';
+              return;
+            }
+            if (headerBadge) headerBadge.style.display = '';
+            if (headerPill) headerPill.textContent = String(count);
+          }
+
+          function updateLinePrice(line, cents) {
+            var el = document.querySelector('[data-line-price="' + line + '"]');
+            if (!el) return;
+            el.textContent = formatMoney(cents, moneyFormat);
+          }
+
+          function updateSubtotal(cents) {
+            if (!subtotalEl) return;
+            subtotalEl.textContent = formatMoney(cents, moneyFormat);
+          }
+
+          async function changeLineQuantity(line, quantity) {
+            var lineRoot = document.querySelector('[data-cart-line="' + line + '"]');
+            if (!lineRoot) return;
+
+            var input = lineRoot.querySelector('[data-qty-input]');
+            var minus = lineRoot.querySelector('[data-qty-minus]');
+            var plus  = lineRoot.querySelector('[data-qty-plus]');
+
+            setDisabled(minus, true);
+            setDisabled(plus, true);
+            if (input) setDisabled(input, true);
+
+            try {
+              var res = await fetch('/cart/change.js', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                },
+                body: JSON.stringify({ line: Number(line), quantity: Number(quantity) })
+              });
+
+              if (!res.ok) throw new Error('Cart update failed');
+
+              var cart = await res.json();
+
+              if (!cart || !cart.items || cart.items.length === 0) {
+                window.location.reload();
+                return;
+              }
+
+              updateSubtotal(cart.total_price);
+              updateHeaderCount(cart.item_count);
+
+              var idx = Number(line) - 1;
+              var updatedItem = cart.items[idx];
+
+              if (!updatedItem) {
+                window.location.reload();
+                return;
+              }
+
+              if (input) input.value = updatedItem.quantity;
+              updateLinePrice(line, updatedItem.final_line_price);
+
+              if (minus) setDisabled(minus, updatedItem.quantity <= 1);
+            } catch (e) {
+              window.location.reload();
+            } finally {
+              var lineRoot2 = document.querySelector('[data-cart-line="' + line + '"]');
+              if (!lineRoot2) return;
+
+              var input2 = lineRoot2.querySelector('[data-qty-input]');
+              var minus2 = lineRoot2.querySelector('[data-qty-minus]');
+              var plus2  = lineRoot2.querySelector('[data-qty-plus]');
+
+              if (input2) setDisabled(input2, false);
+              if (plus2) setDisabled(plus2, false);
+
+              if (minus2 && input2) setDisabled(minus2, Number(input2.value || 1) <= 1);
+            }
+          }
+
+          // Click handling for +/-
+          root.addEventListener('click', function (e) {
+            var btn = e.target && e.target.closest && e.target.closest('[data-qty-minus],[data-qty-plus]');
+            if (!btn) return;
+
+            var line = btn.getAttribute('data-line');
+            if (!line) return;
+
+            var lineRoot = document.querySelector('[data-cart-line="' + line + '"]');
+            if (!lineRoot) return;
+
+            var input = lineRoot.querySelector('[data-qty-input]');
+            if (!input) return;
+
+            var current = Number(input.value || 0);
+            var next = current;
+
+            if (btn.hasAttribute('data-qty-plus')) next = current + 1;
+            if (btn.hasAttribute('data-qty-minus')) next = Math.max(1, current - 1);
+
+            changeLineQuantity(line, next);
+          });
+
+          // Manual typing: update on blur + Enter
+          root.addEventListener('keydown', function (e) {
+            var input = e.target && e.target.matches && e.target.matches('[data-qty-input]');
+            if (!input) return;
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+
+            var line = input.getAttribute('data-line');
+            var qty = Math.max(0, Number(input.value || 0));
+            changeLineQuantity(line, qty);
+          });
+
+          root.addEventListener('blur', function (e) {
+            var input = e.target && e.target.matches && e.target.matches('[data-qty-input]');
+            if (!input) return;
+
+            var line = input.getAttribute('data-line');
+            var qty = Math.max(0, Number(input.value || 0));
+            changeLineQuantity(line, qty);
+          }, true);
+
+          // Initialize minus disabled states
+          root.querySelectorAll('[data-cart-line]').forEach(function (row) {
+            var input = row.querySelector('[data-qty-input]');
+            var minus = row.querySelector('[data-qty-minus]');
+            if (!input || !minus) return;
+            setDisabled(minus, Number(input.value || 1) <= 1);
+          });
+        })();
+      </script>
+
+    {% else %}
+
+      <div class="cart__empty">
+        <p>Your cart is empty.</p>
+      </div>
+
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main cart",
+  "settings": []
+}
+{% endschema %}

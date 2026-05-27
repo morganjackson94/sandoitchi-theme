@@ -1,0 +1,119 @@
+<section class="order-select">
+  <h1 class="order-select__heading">Choose Location:</h1>
+  <div class="order-select__grid">
+
+    <a class="order-select__card order-select__card--dallas" href="https://order.toasttab.com/online/sandoitchi-dallas/">
+      <span class="order-select__city">Dallas</span>
+      <span class="order-select__address">1604 Main St Suite 110<br>Dallas, TX 75201</span>
+    </a>
+
+    <a class="order-select__card order-select__card--denver" href="https://taptapeat.com/sandoitchi/#/app/home">
+      <span class="order-select__city">Denver</span>
+      <span class="order-select__address">1950 35th St<br>Denver, CO 80216</span>
+    </a>
+
+  </div>
+</section>
+
+<style>
+.order-select {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 32px 64px;
+  box-sizing: border-box;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.order-select__heading {
+  font-family: inherit;
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #000;
+  margin: 0 0 36px;
+  line-height: 1;
+}
+
+/* Desktop: side by side */
+.order-select__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.order-select__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 24px;
+  padding: 48px 32px 36px;
+  text-decoration: none;
+  aspect-ratio: 3 / 4;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-select__card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 56px rgba(0,0,0,0.15);
+}
+
+.order-select__card--dallas { background: #c0392b; }
+.order-select__card--denver { background: #5a9e52; }
+
+.order-select__city {
+  font-family: inherit;
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #000;
+  line-height: 1;
+}
+
+.order-select__address {
+  font-size: clamp(12px, 1.6vw, 15px);
+  font-weight: 700;
+  color: #000;
+  line-height: 1.5;
+  font-family: inherit;
+}
+
+/* Mobile: stacked, landscape card ratio */
+@media (max-width: 600px) {
+  .order-select {
+    min-height: calc(100vh - 80px);
+    padding: 36px 24px calc(80px + env(safe-area-inset-bottom, 0px));
+    justify-content: center;
+    gap: 0;
+  }
+
+  .order-select__heading {
+    margin-bottom: 28px;
+    font-size: 18px;
+  }
+
+  .order-select__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .order-select__card {
+    aspect-ratio: 5 / 3;
+    border-radius: 18px;
+    padding: 28px 28px 24px;
+  }
+
+  .order-select__city {
+    font-size: 32px;
+  }
+
+  .order-select__address {
+    font-size: 13px;
+  }
+}
+</style>

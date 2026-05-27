@@ -1,0 +1,339 @@
+{% if page.handle == 'dallas' or page.handle == 'denver' %}
+ 
+{%- assign is_dallas = false -%}
+{%- assign is_denver = false -%}
+{%- if page.handle == 'dallas' -%}{%- assign is_dallas = true -%}{%- endif -%}
+{%- if page.handle == 'denver' -%}{%- assign is_denver = true -%}{%- endif -%}
+ 
+<style>
+  /* ── Location page: scoped styles ── */
+ 
+  .loc-page {
+    width: 100%;
+  }
+ 
+  /* ── Hero band ── */
+  .loc-hero {
+    width: 100%;
+    padding: 60px var(--grid-padding-desktop) 52px;
+    border-bottom: 1px solid var(--color-line);
+  }
+ 
+  .loc-hero--dallas { background: #df2522; }
+  .loc-hero--denver { background: #e8e4dc; }
+ 
+  .loc-hero__city {
+    font-family: 'Booton', sans-serif;
+    font-weight: 400;
+    font-size: clamp(72px, 18vw, 180px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin: 0 0 28px;
+  }
+ 
+  .loc-hero--dallas .loc-hero__city { color: #000; }
+  .loc-hero--denver .loc-hero__city { color: #000; }
+ 
+  .loc-hero__address {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: clamp(13px, 1.8vw, 16px);
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: rgba(0,0,0,0.65);
+    margin: 0;
+  }
+ 
+  /* ── Hours grid ── */
+  .loc-hours {
+    width: 100%;
+    padding: 48px var(--grid-padding-desktop);
+    border-bottom: 1px solid var(--color-line);
+  }
+ 
+  .loc-hours__label {
+    font-family: 'Booton', sans-serif;
+    font-size: clamp(18px, 3vw, 36px);
+    letter-spacing: -0.02em;
+    text-transform: lowercase;
+    color: #000;
+    margin: 0 0 24px;
+  }
+ 
+  .loc-hours__grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+  }
+ 
+  .loc-hours__cell {
+    border: 1px solid var(--color-line);
+    padding: 14px 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+ 
+  .loc-hours__day {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.45);
+    line-height: 1;
+  }
+ 
+  .loc-hours__time {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: clamp(10px, 1.2vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #000;
+    line-height: 1.2;
+  }
+ 
+  .loc-hours__cell--closed .loc-hours__time {
+    color: rgba(0,0,0,0.35);
+  }
+ 
+  .loc-hours__closed-dot {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+ 
+  .loc-hours__closed-dot span {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+ 
+  @media (max-width: 767px) {
+    .loc-hours__grid {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 4px;
+    }
+    .loc-hours__cell {
+      padding: 10px 4px;
+      gap: 6px;
+    }
+    .loc-hours__day { font-size: 8px; letter-spacing: 0.04em; }
+    .loc-hours__time { font-size: 9px; }
+    .loc-hours__closed-dot { width: 38px; height: 38px; }
+    .loc-hours__closed-dot span { font-size: 7px; }
+  }
+ 
+  /* ── Order CTA row ── */
+  .loc-order {
+    width: 100%;
+    padding: 48px var(--grid-padding-desktop);
+    border-bottom: 1px solid var(--color-line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+ 
+  .loc-order__text {
+    font-family: 'Booton', sans-serif;
+    font-size: clamp(22px, 4vw, 40px);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-transform: lowercase;
+    color: #000;
+    margin: 0;
+  }
+ 
+  .loc-order__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 36px;
+    background: #000;
+    color: #fff;
+    font-family: 'Booton', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    text-transform: lowercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.15s ease;
+    flex-shrink: 0;
+  }
+ 
+  .loc-order__btn:hover { opacity: 0.75; }
+ 
+  /* Dallas uses red CTA */
+  .loc-page--dallas .loc-order__btn {
+    background: #df2522;
+    color: #fff;
+  }
+ 
+  @media (max-width: 600px) {
+    .loc-order {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .loc-order__btn { width: 100%; text-align: center; }
+  }
+ 
+  /* ── About section ── */
+  .loc-about {
+    width: 100%;
+  }
+ 
+  .loc-about__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      #fff,
+      #fff 8px,
+      #e0e0e0 8px,
+      #e0e0e0 9px
+    );
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--color-line);
+  }
+ 
+  .loc-about__header-label {
+    font-family: 'Booton', sans-serif;
+    font-weight: 400;
+    font-size: clamp(18px, 3vw, 36px);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-transform: lowercase;
+    color: #000;
+  }
+ 
+  .loc-about__body {
+    padding: 48px var(--grid-padding-desktop) 56px;
+    background: #e8e4dc;
+  }
+ 
+  .loc-about__text {
+    font-family: 'Booton', sans-serif;
+    font-weight: 400;
+    font-size: clamp(16px, 3.5vw, 22px);
+    line-height: 1.55;
+    letter-spacing: 0.04em;
+    color: #000;
+    max-width: 760px;
+    margin: 0;
+    text-align: justify;
+  }
+ 
+  @media (max-width: 767px) {
+    .loc-hero { padding: 40px 20px 36px; }
+    .loc-hours { padding: 32px 20px; }
+    .loc-order { padding: 32px 20px; }
+    .loc-about__body { padding: 32px 20px 40px; }
+  }
+</style>
+ 
+<div class="loc-page {% if is_dallas %}loc-page--dallas{% else %}loc-page--denver{% endif %}">
+ 
+  <!-- Hero -->
+  <div class="loc-hero {% if is_dallas %}loc-hero--dallas{% else %}loc-hero--denver{% endif %}">
+    <h1 class="loc-hero__city">{% if is_dallas %}Dallas{% else %}Denver{% endif %}</h1>
+    <p class="loc-hero__address">
+      {% if is_dallas %}
+        1604 Main St Suite 110, Dallas, TX 75201<br>The Joule Hotel
+      {% else %}
+        1950 35th St, Denver, CO 80216<br> RiNO ArtPark
+      {% endif %}
+    </p>
+  </div>
+ 
+  <!-- Hours: Mon closed | Tue–Fri 10AM–3PM | Sat–Sun 10AM–4PM -->
+  <div class="loc-hours">
+    <p class="loc-hours__label">hours</p>
+    <div class="loc-hours__grid">
+
+      <div class="loc-hours__cell loc-hours__cell--closed">
+        <span class="loc-hours__day">Mon</span>
+        <div class="loc-hours__closed-dot"><span>closed</span></div>
+      </div>
+
+      <div class="loc-hours__cell">
+        <span class="loc-hours__day">Tue</span>
+        <span class="loc-hours__time">10AM–3PM</span>
+      </div>
+
+      <div class="loc-hours__cell">
+        <span class="loc-hours__day">Wed</span>
+        <span class="loc-hours__time">10AM–3PM</span>
+      </div>
+
+      <div class="loc-hours__cell">
+        <span class="loc-hours__day">Thu</span>
+        <span class="loc-hours__time">10AM–3PM</span>
+      </div>
+
+      <div class="loc-hours__cell">
+        <span class="loc-hours__day">Fri</span>
+        <span class="loc-hours__time">10AM–3PM</span>
+      </div>
+
+      <div class="loc-hours__cell">
+        <span class="loc-hours__day">Sat</span>
+        <span class="loc-hours__time">10AM–4PM</span>
+      </div>
+
+      <div class="loc-hours__cell">
+        <span class="loc-hours__day">Sun</span>
+        <span class="loc-hours__time">10AM–4PM</span>
+      </div>
+
+    </div>
+  </div>
+ 
+  <!-- About -->
+  <div class="loc-about">
+    <div class="loc-about__header"></div>
+    <div class="loc-about__body">
+      {% if is_dallas %}
+        <p class="loc-about__text">Sandoitchi Dallas is our flagship — where it all started. Find us inside The Joule in the heart of downtown, serving soft, fluffy sandos on milk bread and bold matcha drinks. Classic katsu, egg salad, seasonal specials, and everything in between. Clean execution, thoughtful ingredients, one sando at a time.</p>
+      {% else %}
+        <p class="loc-about__text">An elevated Sandoitchi experience lands at Denver’s RiNo ArtPark for a limited 3-month residency through August 30th. Expect the same meticulously crafted sando, signature bold matcha, and a rotating lineup of exclusive specials. Catch us Tuesday through Sunday.</p>
+      {% endif %}
+    </div>
+  </div>
+ 
+  <!-- Order CTA -->
+  <div class="loc-order">
+    <p class="loc-order__text">order online for pickup</p>
+    {% if is_dallas %}
+      <a href="https://order.toasttab.com/online/sandoitchi" target="_blank" rel="noopener" class="loc-order__btn">order now</a>
+    {% else %}
+      <a href="/pages/denver-order" class="loc-order__btn">order now</a>
+    {% endif %}
+  </div>
+ 
+</div>
+ 
+{% else %}
+ 
+{%- comment -%} Generic fallback for all other pages {%- endcomment -%}
+<div class="grid-container" style="padding-top: var(--space-4); padding-bottom: var(--space-5);">
+  <h1 style="font-family:'Booton',sans-serif; font-size:clamp(36px,6vw,72px); letter-spacing:-0.02em; font-weight:400; text-transform:lowercase; margin:0 0 32px;">{{ page.title }}</h1>
+  <div style="max-width:720px; font-size:16px; line-height:1.7; color:var(--color-dark);">
+    {{ page.content }}
+  </div>
+</div>
+ 
+{% endif %}

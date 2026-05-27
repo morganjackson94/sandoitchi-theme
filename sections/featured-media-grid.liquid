@@ -1,0 +1,761 @@
+{%- assign carousel = section.settings.enable_carousel -%}
+<section
+  class="featured-media-grid{% if carousel %} media-grid--carousel{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  {%- assign media_cell_index = 0 -%}
+  {% for block in section.blocks %}
+
+    {%- comment -%} ── Section label block: full-width heading row ── {%- endcomment -%}
+    {% if block.type == 'section_label' %}
+      {%- assign label_text = block.settings.label_text -%}
+      {%- case block.settings.label_style -%}
+        {%- when 'uppercase' -%}{%- assign label_text = label_text | upcase -%}
+        {%- when 'lowercase' -%}{%- assign label_text = label_text | downcase -%}
+      {%- endcase -%}
+      <div class="media-section-label" {{ block.shopify_attributes }}>
+        <span>{{ label_text }}</span>
+      </div>
+      {% continue %}
+    {% endif %}
+
+    {%- comment -%} ── Newsletter block: full-width email signup row ── {%- endcomment -%}
+    {% if block.type == 'newsletter' %}
+      <div class="media-newsletter-row" {{ block.shopify_attributes }}>
+        <div class="media-newsletter-row__inner">
+          {% form 'customer', class: 'media-newsletter-form' %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            {% if form.posted_successfully? %}
+              <p class="media-newsletter-success">{{ block.settings.success_message }}</p>
+            {% else %}
+              <input
+                type="email"
+                name="contact[email]"
+                autocomplete="email"
+                placeholder="{{ block.settings.placeholder }}"
+                aria-label="{{ block.settings.placeholder }}"
+                required
+                class="media-newsletter-input"
+              >
+              {% if form.errors %}
+                <p class="media-newsletter-error">{{ form.errors.messages.email }}</p>
+              {% endif %}
+            {% endif %}
+          {% endform %}
+        </div>
+      </div>
+      {% continue %}
+    {% endif %}
+
+    {%- assign is_tall = false -%}
+    {%- assign pattern_mod = media_cell_index | modulo: 5 -%}
+    {%- if pattern_mod == 0 -%}
+      {%- assign is_tall = true -%}
+    {%- endif -%}
+    {%- assign media_cell_index = media_cell_index | plus: 1 -%}
+
+    {%- assign enable_share = block.settings.enable_share -%}
+
+    {%- comment -%} Determine share URL per block type {%- endcomment -%}
+    {%- if block.type == 'product' and block.settings.product != blank -%}
+      {%- assign share_url = shop.url | append: block.settings.product.url -%}
+    {%- elsif block.settings.url != blank -%}
+      {%- assign share_url = shop.url | append: block.settings.url -%}
+    {%- else -%}
+      {%- assign share_url = shop.url | append: request.path -%}
+    {%- endif -%}
+
+    <div
+      class="media-cell{% if is_tall %} media-cell--tall{% endif %}"
+      {{ block.shopify_attributes }}
+    >
+      <div class="media-cell__inner">
+
+        {% case block.type %}
+
+          {% when 'image' %}
+            {% if block.settings.image != blank %}
+              {% if block.settings.url != blank %}
+                <a href="{{ block.settings.url }}" {% if block.settings.tile_open_new_tab %}target="_blank" rel="noopener"{% endif %}>
+              {% endif %}
+              <img
+                src="{{ block.settings.image | image_url: width: 1400 }}"
+                alt="{{ block.settings.alt | escape }}"
+                loading="lazy"
+              >
+              {% if block.settings.url != blank %}
+                </a>
+              {% endif %}
+            {% endif %}
+
+          {% when 'product' %}
+            {% assign product = block.settings.product %}
+            {% if product %}
+              <a href="{{ product.url }}" {% if block.settings.tile_open_new_tab %}target="_blank" rel="noopener"{% endif %} class="media-product">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 1400 }}"
+                    alt="{{ product.title | escape }}"
+                    loading="lazy"
+                  >
+                {% endif %}
+                {% if block.settings.show_meta %}
+                  <div class="media-meta">
+                    <div class="media-meta__title">{{ product.title }}</div>
+                    <div class="media-meta__price">{{ product.price | money }}</div>
+                  </div>
+                {% endif %}
+              </a>
+            {% endif %}
+
+          {% when 'link' %}
+            {% if block.settings.url != blank %}
+              <a href="{{ block.settings.url }}" {% if block.settings.tile_open_new_tab %}target="_blank" rel="noopener"{% endif %} class="media-link">
+                {% if block.settings.image != blank %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 1400 }}"
+                    alt="{{ block.settings.alt | escape }}"
+                    loading="lazy"
+                  >
+                {% endif %}
+                {% if block.settings.label != blank %}
+                  <div class="media-badge">{{ block.settings.label }}</div>
+                {% endif %}
+              </a>
+            {% endif %}
+
+          {% when 'video' %}
+            {% if block.settings.video_file != blank %}
+              {% assign poster_image = block.settings.poster %}
+              {% if block.settings.url != blank %}
+                <a href="{{ block.settings.url }}" {% if block.settings.open_new_tab %}target="_blank" rel="noopener"{% endif %}>
+              {% endif %}
+              <video
+                class="media-video media-video--{{ block.settings.fit }}"
+                {% if block.settings.autoplay %}autoplay{% endif %}
+                {% if block.settings.loop %}loop{% endif %}
+                {% if block.settings.muted %}muted{% endif %}
+                playsinline
+                preload="metadata"
+                {% if poster_image != blank %}poster="{{ poster_image | image_url: width: 1400 }}"{% endif %}
+              >
+                <source src="{{ block.settings.video_file }}" type="video/mp4">
+              </video>
+              {% if block.settings.url != blank %}
+                </a>
+              {% endif %}
+            {% endif %}
+
+          {% when 'embed' %}
+            {% if block.settings.embed_html != blank %}
+              <div
+                class="media-embed media-embed--{{ block.settings.fit }}"
+                style="--embed-bg: {{ block.settings.bg }};"
+              >
+                {{ block.settings.embed_html }}
+              </div>
+            {% endif %}
+
+          {% when 'carousel' %}
+            {%- assign carousel_id = 'carousel-' | append: block.id -%}
+            <div class="fmg-carousel" id="{{ carousel_id }}">
+              {%- for i in (1..5) -%}
+                {%- assign img_key = 'slide_' | append: i | append: '_image' -%}
+                {%- assign vid_key = 'slide_' | append: i | append: '_video' -%}
+                {%- assign sl_img = block.settings[img_key] -%}
+                {%- assign sl_vid = block.settings[vid_key] -%}
+                {%- if sl_vid != blank or sl_img != blank -%}
+                  <div class="fmg-carousel__slide{% if forloop.first %} is-active{% endif %}" data-slide="{{ forloop.index0 }}">
+                    {%- if sl_vid != blank -%}
+                      <video src="{{ sl_vid }}" autoplay muted loop playsinline></video>
+                    {%- else -%}
+                      <img
+                        src="{{ sl_img | image_url: width: 900 }}"
+                        alt="{{ sl_img.alt | escape }}"
+                        loading="lazy"
+                        width="{{ sl_img.width }}"
+                        height="{{ sl_img.height }}"
+                      >
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+              <div class="fmg-carousel__dots" aria-hidden="true"></div>
+            </div>
+
+        {% endcase %}
+
+        {%- comment -%} ── Action buttons wrapper ── {%- endcomment -%}
+        {%- assign has_share    = enable_share -%}
+        {%- assign action_style = block.settings.action_btn_style | default: 'none' -%}
+        {%- assign has_action   = false -%}
+        {%- if action_style != 'none' -%}{%- assign has_action = true -%}{%- endif -%}
+        {%- assign has_cart     = block.settings.enable_cart_btn | default: false -%}
+        {%- assign has_ig       = block.settings.enable_ig_btn   | default: false -%}
+        {%- assign btn_pos      = block.settings.btn_position    | default: 'bottom-right' -%}
+
+        {%- if has_share or has_action or has_cart -%}
+          <div class="media-cell__actions media-cell__actions--{{ btn_pos }}">
+
+            {%- if has_share -%}
+              <button type="button" class="media-share-btn" data-share-url="{{ block.settings.share_btn_url | default: share_url | escape }}" aria-label="Share">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" aria-hidden="true" focusable="false" class="media-share-btn__icon">
+                  <path d="M342.6 73.4C330.1 60.9 309.8 60.9 297.3 73.4L169.3 201.4C156.8 213.9 156.8 234.2 169.3 246.7C181.8 259.2 202.1 259.2 214.6 246.7L288 173.3L288 384C288 401.7 302.3 416 320 416C337.7 416 352 401.7 352 384L352 173.3L425.4 246.7C437.9 259.2 458.2 259.2 470.7 246.7C483.2 234.2 483.2 213.9 470.7 201.4L342.7 73.4zM160 416C160 398.3 145.7 384 128 384C110.3 384 96 398.3 96 416L96 480C96 533 139 576 192 576L448 576C501 576 544 533 544 480L544 416C544 398.3 529.7 384 512 384C494.3 384 480 398.3 480 416L480 480C480 497.7 465.7 512 448 512L192 512C174.3 512 160 497.7 160 480L160 416z"/>
+                </svg>
+                <span class="media-share-btn__label" aria-live="polite"></span>
+              </button>
+            {%- endif -%}
+
+            {%- if has_action and block.settings.action_btn_url != blank -%}
+              {%- assign a_url = block.settings.action_btn_url -%}
+              {% if action_style == 'notify-me-black' %}<button type="button" class="media-action-svg-btn" data-notify="true" aria-label="Notify me">{% else %}<a class="media-action-svg-btn" href="{{ a_url }}" {% if block.settings.action_btn_new_tab %}target="_blank" rel="noopener"{% endif %} aria-label="{{ action_style | replace: '-', ' ' }}">{% endif %}
+                {%- if action_style == 'order-now-red' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 305.79 111.99"><defs><style>.abn-r1{fill:#fff;font-family:HelveticaNeue,'Helvetica Neue';font-size:53.15px}.abn-r2{letter-spacing:0em}.abn-r3{fill:#df2522;filter:url(#ds-r)}.abn-r4{letter-spacing:.02em}</style><filter id="ds-r" x="-3.06" y="-3.14" width="316.32" height="122.64" filterUnits="userSpaceOnUse"><feOffset dx="2.19" dy="2.19"/><feGaussianBlur result="blur" stdDeviation="1.7"/><feFlood flood-color="#010000" flood-opacity=".08"/><feComposite in2="blur" operator="in"/><feComposite in="SourceGraphic"/></filter></defs><rect class="abn-r3" width="305.79" height="111.99" rx="18.86" ry="18.86"/><text class="abn-r1" transform="translate(28.68 72.18)"><tspan class="abn-r4" x="0" y="0">o</tspan><tspan class="abn-r2" x="31.57" y="0">r</tspan><tspan class="abn-r4" x="49.38" y="0">der now</tspan></text></svg>
+                {%- elsif action_style == 'order-now-black' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 305.79 111.99"><defs><style>.abn-b1{letter-spacing:0em}.abn-b2{fill:#fff;filter:url(#ds-b)}.abn-b3{fill:#010000;font-family:HelveticaNeue,'Helvetica Neue';font-size:53.15px}.abn-b4{letter-spacing:.02em}</style><filter id="ds-b" x="-2.98" y="-2.92" width="316.32" height="122.4" filterUnits="userSpaceOnUse"><feOffset dx="2.19" dy="2.19"/><feGaussianBlur result="blur" stdDeviation="1.7"/><feFlood flood-color="#010000" flood-opacity=".08"/><feComposite in2="blur" operator="in"/><feComposite in="SourceGraphic"/></filter></defs><rect class="abn-b2" width="305.79" height="111.99" rx="18.86" ry="18.86"/><text class="abn-b3" transform="translate(28.68 72.18)"><tspan class="abn-b4" x="0" y="0">o</tspan><tspan class="abn-b1" x="31.57" y="0">r</tspan><tspan class="abn-b4" x="49.38" y="0">der now</tspan></text></svg>
+                {%- elsif action_style == 'shop-now-red' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 305.25 111.79"><defs><style>.abn-s1{fill:#df2522;filter:url(#ds-s)}.abn-s2{fill:#fff;font-family:HelveticaNeue,'Helvetica Neue';font-size:53.06px;letter-spacing:.02em}</style><filter id="ds-s" x="-3.09" y="-3.01" width="315.84" height="122.4" filterUnits="userSpaceOnUse"><feOffset dx="2.19" dy="2.19"/><feGaussianBlur result="blur" stdDeviation="1.7"/><feFlood flood-color="#010000" flood-opacity=".08"/><feComposite in2="blur" operator="in"/><feComposite in="SourceGraphic"/></filter></defs><rect class="abn-s1" width="305.25" height="111.79" rx="18.83" ry="18.83"/><text class="abn-s2" transform="translate(33.55 72.06)"><tspan x="0" y="0">shop now</tspan></text></svg>
+                {%- elsif action_style == 'shop-now-black' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 305.25 111.79"><defs><style>.abn-sb1{fill:#252023;filter:url(#ds-sb)}.abn-sb2{fill:#fff;font-family:HelveticaNeue,'Helvetica Neue';font-size:53.06px;letter-spacing:.02em}</style><filter id="ds-sb" x="-3.09" y="-3.01" width="315.84" height="122.4" filterUnits="userSpaceOnUse"><feOffset dx="2.19" dy="2.19"/><feGaussianBlur result="blur" stdDeviation="1.7"/><feFlood flood-color="#010000" flood-opacity=".08"/><feComposite in2="blur" operator="in"/><feComposite in="SourceGraphic"/></filter></defs><rect class="abn-sb1" width="305.25" height="111.79" rx="18.83" ry="18.83"/><text class="abn-sb2" transform="translate(33.55 72.06)"><tspan x="0" y="0">shop now</tspan></text></svg>
+                {%- elsif action_style == 'notify-me-black' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 305.79 111.99"><defs><style>.abn-n1{fill:#252023;filter:url(#ds-n)}.abn-n2{fill:#fff;font-family:HelveticaNeue,'Helvetica Neue';font-size:53.06px;letter-spacing:.02em}</style><filter id="ds-n" x="-3.16" y="-2.92" width="316.56" height="122.4" filterUnits="userSpaceOnUse"><feOffset dx="2.19" dy="2.19"/><feGaussianBlur result="blur" stdDeviation="1.7"/><feFlood flood-color="#010000" flood-opacity=".08"/><feComposite in2="blur" operator="in"/><feComposite in="SourceGraphic"/></filter></defs><rect class="abn-n1" width="305.79" height="111.99" rx="18.86" ry="18.86"/><text class="abn-n2" transform="translate(39.06 72.18)"><tspan x="0" y="0">notify me</tspan></text></svg>
+                {%- endif -%}
+              {% if action_style == 'notify-me-black' %}</button>{% else %}</a>{% endif %}
+            {%- endif -%}
+
+            {%- if has_cart -%}
+              <a class="media-cart-btn" href="{{ block.settings.cart_btn_url | default: routes.cart_url }}" {% if block.settings.cart_btn_new_tab %}target="_blank" rel="noopener"{% endif %} aria-label="Cart">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" aria-hidden="true" focusable="false" class="media-cart-btn__icon">
+                  <path d="M0 72C0 58.7 10.7 48 24 48L69.3 48C96.4 48 119.6 67.4 124.4 94L124.8 96L312 96L312 198.1L281 167.1C271.6 157.7 256.4 157.7 247.1 167.1C237.8 176.5 237.7 191.7 247.1 201L319.1 273C328.5 282.4 343.7 282.4 353 273L425 201C434.4 191.6 434.4 176.4 425 167.1C415.6 157.8 400.4 157.7 391.1 167.1L360.1 198.1L360.1 96L537.5 96C557.5 96 572.6 114.2 568.9 133.9L537.8 299.8C532.1 330.1 505.7 352 474.9 352L171.3 352L176.4 380.3C178.5 391.7 188.4 400 200 400L456 400C469.3 400 480 410.7 480 424C480 437.3 469.3 448 456 448L200.1 448C165.3 448 135.5 423.1 129.3 388.9L77.2 102.6C76.5 98.8 73.2 96 69.3 96L24 96C10.7 96 0 85.3 0 72zM160 528C160 501.5 181.5 480 208 480C234.5 480 256 501.5 256 528C256 554.5 234.5 576 208 576C181.5 576 160 554.5 160 528zM384 528C384 401.5 405.5 480 432 480C458.5 480 480 501.5 480 528C480 554.5 458.5 576 432 576C405.5 576 384 554.5 384 528z"/>
+                </svg>
+              {% if action_style == 'notify-me-black' %}</button>{% else %}</a>{% endif %}
+            {%- endif -%}
+
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} ── Instagram button ── {%- endcomment -%}
+        {%- if has_ig and block.settings.ig_url != blank -%}
+          <a
+            class="media-ig-btn media-ig-btn--{{ block.settings.ig_float | default: 'right' }}"
+            href="{{ block.settings.ig_url }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram"
+          >
+            {%- if block.settings.ig_btn_img != blank -%}
+              <img src="{{ block.settings.ig_btn_img | image_url: width: 80 }}" alt="Instagram" class="media-action-btn__img">
+            {%- else -%}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
+                <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+              </svg>
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+
+      </div>
+    </div>
+  {% endfor %}
+</section>
+
+<script>
+(function () {
+  var section = document.querySelector(
+    '.featured-media-grid[data-section-id="{{ section.id }}"]'
+  );
+  if (!section) return;
+
+  // ── Share buttons ──────────────────────────────────────────────────────
+  section.querySelectorAll('.media-share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      var url   = btn.getAttribute('data-share-url') || window.location.href;
+      var label = btn.querySelector('.media-share-btn__label');
+      function showConfirm() {
+        if (!label) return;
+        label.textContent = 'copied';
+        setTimeout(function () { label.textContent = ''; }, 1800);
+      }
+      if (navigator.share) {
+        navigator.share({ url: url }).catch(function () {});
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(showConfirm).catch(function () {});
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showConfirm(); } catch (err) {}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+
+  // ── Carousel blocks — Instagram-style push animation ──────────────────
+  section.querySelectorAll('.fmg-carousel').forEach(function (carousel) {
+    var slides   = Array.from(carousel.querySelectorAll('.fmg-carousel__slide'));
+    var dotsWrap = carousel.querySelector('.fmg-carousel__dots');
+    if (slides.length <= 1) return;
+
+    var current     = 0;
+    var isAnimating = false;
+    var DURATION    = 380; // ms — must match CSS transition duration
+
+    // Build dots
+    slides.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.className = 'fmg-carousel__dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+      dot.addEventListener('click', function () { goTo(i); });
+      dotsWrap.appendChild(dot);
+    });
+
+    function goTo(index) {
+      if (index === current || isAnimating) return;
+      isAnimating = true;
+
+      var direction = index > current ? 1 : -1;
+      var outgoing  = slides[current];
+      var incoming  = slides[index];
+
+      // 1. Park incoming off-screen instantly (disable transition via inline override)
+      incoming.style.transition = 'none';
+      incoming.style.transform  = 'translateX(' + (direction * 100) + '%)';
+      incoming.getBoundingClientRect(); // force reflow — registers position before re-enabling transition
+      incoming.style.transition = ''; // restore CSS transition
+
+      // 2. Push both slides simultaneously — all via inline styles, no class changes yet
+      //    Inline styles win over .is-active CSS, so no flash from class toggling
+      incoming.style.transform = 'translateX(0)';
+      outgoing.style.transform = 'translateX(' + (-direction * 100) + '%)';
+
+      // Update dots immediately
+      dotsWrap.children[current].classList.remove('is-active');
+      dotsWrap.children[index].classList.add('is-active');
+
+      // Video: pause outgoing, play incoming
+      slides.forEach(function (sl, i) {
+        var v = sl.querySelector('video');
+        if (!v) return;
+        i === index ? v.play() : v.pause();
+      });
+
+      var prev = current;
+      current = index;
+
+      // 3. After animation completes: swap .is-active, clear inline styles
+      //    CSS .is-active = translateX(0), no-class = translateX(100%)
+      //    Both snaps happen off-screen so overflow:hidden hides them
+      setTimeout(function () {
+        outgoing.classList.remove('is-active');
+        outgoing.style.transform  = ''; // snaps to translateX(100%) — hidden by overflow
+        incoming.classList.add('is-active');
+        incoming.style.transform  = ''; // CSS .is-active holds translateX(0)
+        isAnimating = false;
+      }, DURATION);
+    }
+
+    // Swipe
+    var startX = 0;
+    carousel.addEventListener('touchstart', function (e) {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+    carousel.addEventListener('touchend', function (e) {
+      var diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) < 40) return;
+      if (diff > 0 && current < slides.length - 1) goTo(current + 1);
+      else if (diff < 0 && current > 0) goTo(current - 1);
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Featured Media Grid",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Carousel mode",
+      "default": false,
+      "info": "Converts the grid into a horizontal scroll carousel."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "section_label",
+      "name": "Section Label",
+      "settings": [
+        { "type": "text", "id": "label_text", "label": "Label text", "default": "shop" },
+        {
+          "type": "select", "id": "label_style", "label": "Text style", "default": "lowercase",
+          "options": [
+            { "value": "lowercase", "label": "lowercase" },
+            { "value": "uppercase", "label": "UPPERCASE" },
+            { "value": "as-typed",  "label": "As typed" }
+          ]
+        },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter Signup",
+      "settings": [
+        { "type": "text", "id": "placeholder",     "label": "Placeholder text", "default": "enter your email for updates" },
+        { "type": "text", "id": "success_message", "label": "Success message",  "default": "you\u2019re subscribed." },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image",            "label": "Image" },
+        { "type": "url",          "id": "url",              "label": "Optional link" },
+        { "type": "checkbox",     "id": "tile_open_new_tab","label": "Open tile link in new tab", "default": false },
+        { "type": "text",         "id": "alt",              "label": "Alt text" },
+        { "type": "checkbox",     "id": "enable_share",     "label": "Show share button",         "default": false },
+        { "type": "url",          "id": "share_btn_url",    "label": "Share button URL (optional, overrides auto)" },
+        { "type": "checkbox",     "id": "enable_cart_btn",  "label": "Show Cart button",          "default": false },
+        { "type": "url",          "id": "cart_btn_url",     "label": "Cart button URL" },
+        { "type": "checkbox",     "id": "cart_btn_new_tab", "label": "Open in new tab",           "default": false },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false },
+        {
+          "type": "select", "id": "btn_position", "label": "Button position", "default": "bottom-left",
+          "options": [
+            { "value": "bottom-left",  "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ]
+        },
+        { "type": "header",   "content": "Instagram" },
+        { "type": "checkbox", "id": "enable_ig_btn", "label": "Show Instagram button", "default": false },
+        { "type": "url",      "id": "ig_url",        "label": "Instagram URL" },
+        {
+          "type": "select", "id": "ig_float", "label": "Instagram button side", "default": "right",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left",  "label": "Left" }
+          ]
+        },
+        { "type": "image_picker", "id": "share_btn_img", "label": "Share button PNG" },
+        { "type": "image_picker", "id": "ig_btn_img",    "label": "Instagram button PNG" }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product",  "id": "product",           "label": "Product" },
+        { "type": "checkbox", "id": "tile_open_new_tab", "label": "Open product link in new tab", "default": false },
+        { "type": "checkbox", "id": "show_meta",         "label": "Show title + price",           "default": false },
+        { "type": "checkbox", "id": "enable_share",      "label": "Show share button",            "default": false },
+        { "type": "url",      "id": "share_btn_url",     "label": "Share button URL (optional, overrides auto)" },
+        { "type": "checkbox", "id": "enable_cart_btn",   "label": "Show Cart button",             "default": false },
+        { "type": "url",      "id": "cart_btn_url",      "label": "Cart button URL" },
+        { "type": "checkbox", "id": "cart_btn_new_tab",  "label": "Open in new tab",              "default": false },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false },
+        {
+          "type": "select", "id": "btn_position", "label": "Button position", "default": "bottom-left",
+          "options": [
+            { "value": "bottom-left",  "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ]
+        },
+        { "type": "header",   "content": "Instagram" },
+        { "type": "checkbox", "id": "enable_ig_btn", "label": "Show Instagram button", "default": false },
+        { "type": "url",      "id": "ig_url",        "label": "Instagram URL" },
+        {
+          "type": "select", "id": "ig_float", "label": "Instagram button side", "default": "right",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left",  "label": "Left" }
+          ]
+        },
+        { "type": "image_picker", "id": "share_btn_img", "label": "Share button PNG" },
+        { "type": "image_picker", "id": "ig_btn_img",    "label": "Instagram button PNG" }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        { "type": "url",          "id": "url",              "label": "Link URL" },
+        { "type": "checkbox",     "id": "tile_open_new_tab","label": "Open link in new tab",  "default": false },
+        { "type": "image_picker", "id": "image",            "label": "Preview image" },
+        { "type": "text",         "id": "label",            "label": "Optional label" },
+        { "type": "text",         "id": "alt",              "label": "Alt text" },
+        { "type": "checkbox",     "id": "enable_share",     "label": "Show share button",     "default": false },
+        { "type": "url",          "id": "share_btn_url",    "label": "Share button URL (optional, overrides auto)" },
+        { "type": "checkbox",     "id": "enable_cart_btn",  "label": "Show Cart button",      "default": false },
+        { "type": "url",          "id": "cart_btn_url",     "label": "Cart button URL" },
+        { "type": "checkbox",     "id": "cart_btn_new_tab", "label": "Open in new tab",       "default": false },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false },
+        {
+          "type": "select", "id": "btn_position", "label": "Button position", "default": "bottom-left",
+          "options": [
+            { "value": "bottom-left",  "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ]
+        },
+        { "type": "header",   "content": "Instagram" },
+        { "type": "checkbox", "id": "enable_ig_btn", "label": "Show Instagram button", "default": false },
+        { "type": "url",      "id": "ig_url",        "label": "Instagram URL" },
+        {
+          "type": "select", "id": "ig_float", "label": "Instagram button side", "default": "right",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left",  "label": "Left" }
+          ]
+        },
+        { "type": "image_picker", "id": "share_btn_img", "label": "Share button PNG" },
+        { "type": "image_picker", "id": "ig_btn_img",    "label": "Instagram button PNG" }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video (MP4)",
+      "settings": [
+        { "type": "url",          "id": "video_file",    "label": "MP4 file URL", "info": "Upload MP4 in Shopify Admin \u2192 Content \u2192 Files, then paste the file URL here." },
+        { "type": "image_picker", "id": "poster",        "label": "Poster image (optional)" },
+        {
+          "type": "select", "id": "fit", "label": "Fit mode", "default": "cover",
+          "options": [
+            { "value": "cover",   "label": "Cover" },
+            { "value": "contain", "label": "Contain" }
+          ]
+        },
+        { "type": "checkbox", "id": "autoplay",         "label": "Autoplay",                     "default": true },
+        { "type": "checkbox", "id": "loop",             "label": "Loop",                          "default": true },
+        { "type": "checkbox", "id": "muted",            "label": "Muted (required for autoplay)", "default": true },
+        { "type": "url",      "id": "url",              "label": "Optional click-through link" },
+        { "type": "checkbox", "id": "open_new_tab",     "label": "Open link in new tab",          "default": false },
+        { "type": "checkbox", "id": "enable_share",     "label": "Show share button",             "default": false },
+        { "type": "url",      "id": "share_btn_url",    "label": "Share button URL (optional, overrides auto)" },
+        { "type": "checkbox", "id": "enable_cart_btn",  "label": "Show Cart button",              "default": false },
+        { "type": "url",      "id": "cart_btn_url",     "label": "Cart button URL" },
+        { "type": "checkbox", "id": "cart_btn_new_tab", "label": "Open in new tab",               "default": false },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false },
+        {
+          "type": "select", "id": "btn_position", "label": "Button position", "default": "bottom-left",
+          "options": [
+            { "value": "bottom-left",  "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ]
+        },
+        { "type": "header",   "content": "Instagram" },
+        { "type": "checkbox", "id": "enable_ig_btn", "label": "Show Instagram button", "default": false },
+        { "type": "url",      "id": "ig_url",        "label": "Instagram URL" },
+        {
+          "type": "select", "id": "ig_float", "label": "Instagram button side", "default": "right",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left",  "label": "Left" }
+          ]
+        },
+        { "type": "image_picker", "id": "share_btn_img", "label": "Share button PNG" },
+        { "type": "image_picker", "id": "ig_btn_img",    "label": "Instagram button PNG" }
+      ]
+    },
+    {
+      "type": "embed",
+      "name": "Embed",
+      "settings": [
+        { "type": "liquid", "id": "embed_html", "label": "Embed code" },
+        {
+          "type": "select", "id": "fit", "label": "Fit mode", "default": "cover",
+          "options": [
+            { "value": "cover",   "label": "Cover" },
+            { "value": "contain", "label": "Contain" }
+          ]
+        },
+        { "type": "color",    "id": "bg",              "label": "Letterbox background", "default": "#FFFFFF" },
+        { "type": "checkbox", "id": "enable_share",    "label": "Show share button",    "default": false },
+        { "type": "url",      "id": "share_btn_url",   "label": "Share button URL (optional, overrides auto)" },
+        { "type": "checkbox", "id": "enable_cart_btn", "label": "Show Cart button",     "default": false },
+        { "type": "url",      "id": "cart_btn_url",    "label": "Cart button URL" },
+        { "type": "checkbox", "id": "cart_btn_new_tab","label": "Open in new tab",      "default": false },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false },
+        {
+          "type": "select", "id": "btn_position", "label": "Button position", "default": "bottom-left",
+          "options": [
+            { "value": "bottom-left",  "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ]
+        },
+        { "type": "header",   "content": "Instagram" },
+        { "type": "checkbox", "id": "enable_ig_btn", "label": "Show Instagram button", "default": false },
+        { "type": "url",      "id": "ig_url",        "label": "Instagram URL" },
+        {
+          "type": "select", "id": "ig_float", "label": "Instagram button side", "default": "right",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left",  "label": "Left" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "carousel",
+      "name": "Carousel",
+      "settings": [
+        { "type": "header",       "content": "Slide 1" },
+        { "type": "image_picker", "id": "slide_1_image", "label": "Image" },
+        { "type": "url",          "id": "slide_1_video", "label": "Video URL (overrides image)" },
+        { "type": "header",       "content": "Slide 2" },
+        { "type": "image_picker", "id": "slide_2_image", "label": "Image" },
+        { "type": "url",          "id": "slide_2_video", "label": "Video URL (overrides image)" },
+        { "type": "header",       "content": "Slide 3" },
+        { "type": "image_picker", "id": "slide_3_image", "label": "Image" },
+        { "type": "url",          "id": "slide_3_video", "label": "Video URL (overrides image)" },
+        { "type": "header",       "content": "Slide 4" },
+        { "type": "image_picker", "id": "slide_4_image", "label": "Image" },
+        { "type": "url",          "id": "slide_4_video", "label": "Video URL (overrides image)" },
+        { "type": "header",       "content": "Slide 5" },
+        { "type": "image_picker", "id": "slide_5_image", "label": "Image" },
+        { "type": "url",          "id": "slide_5_video", "label": "Video URL (overrides image)" },
+        { "type": "header",       "content": "Tile" },
+        { "type": "checkbox",     "id": "enable_share",     "label": "Show share button",  "default": false },
+        { "type": "url",          "id": "share_btn_url",    "label": "Share button URL (optional, overrides auto)" },
+        { "type": "checkbox",     "id": "enable_cart_btn",  "label": "Show Cart button",   "default": false },
+        { "type": "url",          "id": "cart_btn_url",     "label": "Cart button URL" },
+        { "type": "checkbox",     "id": "cart_btn_new_tab", "label": "Open in new tab",    "default": false },
+        { "type": "header", "content": "Action Button" },
+        {
+          "type": "select", "id": "action_btn_style", "label": "Button style", "default": "none",
+          "options": [
+            { "value": "none",            "label": "None" },
+            { "value": "order-now-red",   "label": "Order Now \u2014 red" },
+            { "value": "order-now-black", "label": "Order Now \u2014 black" },
+            { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
+            { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+          ]
+        },
+        { "type": "url",      "id": "action_btn_url",     "label": "Button URL" },
+        { "type": "checkbox", "id": "action_btn_new_tab", "label": "Open in new tab", "default": false },
+        {
+          "type": "select", "id": "btn_position", "label": "Button position", "default": "bottom-left",
+          "options": [
+            { "value": "bottom-left",  "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ]
+        },
+        { "type": "header",   "content": "Instagram" },
+        { "type": "checkbox", "id": "enable_ig_btn", "label": "Show Instagram button", "default": false },
+        { "type": "url",      "id": "ig_url",        "label": "Instagram URL" },
+        {
+          "type": "select", "id": "ig_float", "label": "Instagram button side", "default": "right",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left",  "label": "Left" }
+          ]
+        },
+        { "type": "image_picker", "id": "share_btn_img", "label": "Share button PNG" },
+        { "type": "image_picker", "id": "ig_btn_img",    "label": "Instagram button PNG" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Media Grid"
+    }
+  ]
+}
+{% endschema %}

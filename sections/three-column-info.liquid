@@ -1,0 +1,75 @@
+<div class="info-section-wrapper" id="section-info">
+
+  <div class="info-section-header">
+    <div class="info-section-label-row">
+      {%- if section.settings.emblem != blank -%}
+        <img src="{{ section.settings.emblem | image_url: width: 80 }}" alt="" class="info-section-emblem">
+      {%- else -%}
+        <img src="{{ 'info-emblem.png' | asset_url }}" alt="" class="info-section-emblem">
+      {%- endif -%}
+    </div>
+    {%- if section.settings.collapsible -%}
+      <button
+        class="info-section-toggle"
+        aria-expanded="true"
+        aria-controls="info-section-body"
+        aria-label="Toggle information section"
+      >
+        <span class="info-section-toggle__icon">−</span>
+      </button>
+    {%- endif -%}
+  </div>
+
+  <div
+    class="info-section-body{% if section.settings.collapsible %} info-section-body--collapsible{% endif %}"
+    id="info-section-body"
+  >
+    <div class="info-section-content">
+      {%- if section.settings.title != blank -%}
+        <h2 class="info-section-title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <p class="info-section-body-text">{{ section.settings.body }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+</div>
+
+{%- if section.settings.collapsible -%}
+<script>
+(function() {
+  var btn = document.querySelector('.info-section-toggle');
+  var body = document.getElementById('info-section-body');
+  if (!btn || !body) return;
+  body.style.maxHeight = body.scrollHeight + 'px';
+  btn.addEventListener('click', function() {
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      body.style.maxHeight = '0px';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.querySelector('.info-section-toggle__icon').textContent = '+';
+    } else {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      btn.setAttribute('aria-expanded', 'true');
+      btn.querySelector('.info-section-toggle__icon').textContent = '−';
+    }
+  });
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Information Section",
+  "settings": [
+    { "type": "checkbox", "id": "collapsible", "label": "Collapsible", "default": true },
+    { "type": "image_picker", "id": "emblem", "label": "Header icon (overrides default)" },
+    { "type": "text", "id": "title", "label": "Title", "default": "sandoitchi" },
+    { "type": "textarea", "id": "body", "label": "Body text", "default": "Sandoitchi is a modern take on the classic Japanese konbini — part café, part everyday ritual. We serve soft, fluffy sando stacked with care and bold, energizing matcha drinks that bring bright calmness to your day. Reimagining the Japanese café experience with a fresh, modern sensibility, we keep it simple, satisfying, and never too serious. Good vibes, great food, one sando and sip at a time." }
+  ],
+  "presets": [
+    { "name": "Information Section" }
+  ]
+}
+{% endschema %}

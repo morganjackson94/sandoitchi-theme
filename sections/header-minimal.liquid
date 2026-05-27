@@ -1,0 +1,351 @@
+<div class="site-header-sticky">
+  <header class="site-header">
+
+    {%- assign menu_handle = section.settings.menu | default: 'top-menu' -%}
+    {%- assign nav = linklists[menu_handle] -%}
+
+    <!-- LEFT CLUSTER: Hamburger + Title Variant + Shop + Cart -->
+    <div class="header-left">
+
+      <!-- HAMBURGER BUTTON (mobile only, left of logo) -->
+      {%- if section.settings.show_hamburger -%}
+        <button
+          class="header-hamburger"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="hamburger-menu-overlay"
+        >
+          <span class="header-hamburger__bar"></span>
+          <span class="header-hamburger__bar"></span>
+          <span class="header-hamburger__bar"></span>
+        </button>
+      {%- endif -%}
+
+      <!-- HAMBURGER BUTTON (desktop only, left of logo) -->
+      {%- if section.settings.show_hamburger -%}
+        <button
+          class="header-hamburger header-hamburger--desktop"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="hamburger-menu-overlay"
+        >
+          <span class="header-hamburger__bar"></span>
+          <span class="header-hamburger__bar"></span>
+          <span class="header-hamburger__bar"></span>
+        </button>
+      {%- endif -%}
+
+      <!-- PNG TITLE — RANDOM VARIANT ON EACH PAGE LOAD -->
+      {%- assign hv_urls = '' -%}
+      {%- assign hv_settings = 'hero_variant_1|hero_variant_2|hero_variant_3|hero_variant_4|hero_variant_5|hero_variant_6|hero_variant_7|hero_variant_8|hero_variant_9|hero_variant_10|hero_variant_11|hero_variant_12|hero_variant_13|hero_variant_14' | split: '|' -%}
+
+      {%- for key in hv_settings -%}
+        {%- assign img = section.settings[key] -%}
+        {%- if img != blank -%}
+          {%- assign url = img | image_url: width: 600 -%}
+          {%- assign token = '|' | append: url | append: '|' -%}
+          {%- unless hv_urls contains token -%}
+            {%- assign hv_urls = hv_urls | append: url | append: '|' -%}
+          {%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- assign hv_list = hv_urls | split: '|' -%}
+      {%- assign hv_first = hv_list | first -%}
+
+      {%- if hv_first != blank -%}
+        <a class="header-title" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+          <img
+            class="header-title__logo js-header-title-variant"
+            src="{{ hv_first }}"
+            alt="{{ shop.name }}"
+            loading="eager"
+            data-variants="{%- assign hv_pipe = '' -%}{%- for u in hv_list -%}{%- assign uu = u | strip -%}{%- if uu != blank -%}{%- unless forloop.first -%}{%- assign hv_pipe = hv_pipe | append: '|' -%}{%- endunless -%}{%- assign hv_pipe = hv_pipe | append: uu -%}{%- endif -%}{%- endfor -%}{{ hv_pipe | escape }}"
+          >
+        </a>
+      {%- endif -%}
+
+      <!-- Strawberry Cart — hidden when empty -->
+      <a class="header-cart{% if cart.item_count == 0 %} header-cart--hidden{% endif %}" href="{{ routes.cart_url }}" aria-label="Cart" data-cart-count="{{ cart.item_count }}">
+        <span class="header-cart-badge__pill">{{ cart.item_count }}</span>
+      </a>
+
+    </div>
+
+    <!-- RIGHT CLUSTER: Order Now + Hamburger -->
+    <div class="header-right">
+
+      <!-- Order Now — random variant on each page load -->
+      {%- if nav.links.size > 1 -%}
+        {%- assign ov_urls = '' -%}
+        {%- assign ov_settings = 'order_variant_1|order_variant_2|order_variant_3|order_variant_4|order_variant_5|order_variant_6' | split: '|' -%}
+
+        {%- for key in ov_settings -%}
+          {%- assign oimg = section.settings[key] -%}
+          {%- if oimg != blank -%}
+            {%- assign ourl = oimg | image_url: width: 400 -%}
+            {%- assign otoken = '|' | append: ourl | append: '|' -%}
+            {%- unless ov_urls contains otoken -%}
+              {%- assign ov_urls = ov_urls | append: ourl | append: '|' -%}
+            {%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- assign ov_list = ov_urls | split: '|' -%}
+        {%- assign ov_first = ov_list | first -%}
+
+        {%- if ov_first != blank -%}
+          <a class="header-order-emblem" href="{{ nav.links[1].url }}" target="_blank" rel="noopener">
+            <img
+              class="js-order-variant"
+              src="{{ ov_first }}"
+              alt="{{ nav.links[1].title | escape }}"
+              height="36"
+              loading="eager"
+              data-variants="{%- assign ov_pipe = '' -%}{%- for u in ov_list -%}{%- assign uu = u | strip -%}{%- if uu != blank -%}{%- unless forloop.first -%}{%- assign ov_pipe = ov_pipe | append: '|' -%}{%- endunless -%}{%- assign ov_pipe = ov_pipe | append: uu -%}{%- endif -%}{%- endfor -%}{{ ov_pipe | escape }}"
+            >
+          </a>
+        {%- else -%}
+          <a class="header-order-emblem" href="{{ nav.links[1].url }}" target="_blank" rel="noopener">
+            <img src="/cdn/shop/files/order-now.png" alt="{{ nav.links[1].title | escape }}" height="36">
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+
+    </div>
+
+  </header>
+</div>
+
+<!-- HAMBURGER MENU OVERLAY -->
+{%- if section.settings.show_hamburger -%}
+  {%- assign order_url = '' -%}
+  {%- if section.settings.order_url != blank -%}
+    {%- assign order_url = section.settings.order_url -%}
+  {%- elsif nav.links.size > 1 -%}
+    {%- assign order_url = nav.links[1].url -%}
+  {%- endif -%}
+
+  {%- assign shop_url = '' -%}
+  {%- if section.settings.shop_url != blank -%}
+    {%- assign shop_url = section.settings.shop_url -%}
+  {%- elsif nav.links.size > 0 -%}
+    {%- assign shop_url = nav.links[0].url -%}
+  {%- endif -%}
+
+  <div class="hamburger-overlay" id="hamburger-menu-overlay" aria-hidden="true" role="dialog" aria-label="Navigation menu">
+    <button class="hamburger-overlay__x hamburger-overlay__close" type="button" aria-label="Close menu">&#x2715;</button>
+    <nav class="hamburger-overlay__nav">
+      <ul class="hamburger-overlay__list">
+        <li class="hamburger-overlay__item">
+          <a class="hamburger-overlay__link" href="{{ routes.root_url }}">Home</a>
+        </li>
+        <li class="hamburger-overlay__item">
+          <a class="hamburger-overlay__link" href="{{ order_url }}" target="_blank" rel="noopener">Order</a>
+        </li>
+        <li class="hamburger-overlay__item">
+          <a class="hamburger-overlay__link" href="{{ shop_url }}">Shop</a>
+        </li>
+        <li class="hamburger-overlay__item">
+          <a class="hamburger-overlay__link js-scroll-to" href="/#section-info" data-target="section-info">Info</a>
+        </li>
+        <li class="hamburger-overlay__item">
+          <a class="hamburger-overlay__link js-scroll-to" href="/#section-locations" data-target="section-locations">Locations</a>
+        </li>
+        <li class="hamburger-overlay__item">
+          <a class="hamburger-overlay__link" href="mailto:order@sandoitchi.menu">Contact</a>
+        </li>
+        <li class="hamburger-overlay__item">
+          <button class="hamburger-overlay__link hamburger-overlay__link--close hamburger-overlay__close" type="button" aria-label="Close menu">Close</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+{%- endif -%}
+
+<script>
+/* ── Header: random title variant on page load ── */
+(function () {
+  var img = document.querySelector('.js-header-title-variant');
+  if (!img) return;
+  var raw = img.getAttribute('data-variants');
+  if (!raw) return;
+  var variants = raw.split('|').map(function (v) { return v.trim(); }).filter(Boolean);
+  if (variants.length < 2) return;
+  img.src = variants[Math.floor(Math.random() * variants.length)];
+})();
+
+/* ── Header: random order-now variant on page load ── */
+(function () {
+  var img = document.querySelector('.js-order-variant');
+  if (!img) return;
+  var raw = img.getAttribute('data-variants');
+  if (!raw) return;
+  var variants = raw.split('|').map(function (v) { return v.trim(); }).filter(Boolean);
+  if (variants.length < 2) return;
+  img.src = variants[Math.floor(Math.random() * variants.length)];
+})();
+
+/* ── Scroll state ── */
+(function () {
+  if (document.documentElement.hasAttribute('data-header-scroll-init')) return;
+  document.documentElement.setAttribute('data-header-scroll-init', 'true');
+  var body = document.body;
+  if (!body) return;
+  var ticking = false;
+  var scrollTimeout;
+  function applyScrolledState() {
+    ticking = false;
+    if (window.scrollY > 1) body.classList.add('is-scrolled');
+    else body.classList.remove('is-scrolled');
+  }
+  function onScroll() {
+    body.classList.add('is-scrolling');
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function () { body.classList.remove('is-scrolling'); }, 180);
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame ? window.requestAnimationFrame(applyScrolledState) : setTimeout(applyScrolledState, 16);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  applyScrolledState();
+})();
+
+/* ── Cart visibility — hide when empty, show when items present ── */
+(function () {
+  var cartEl = document.querySelector('.header-cart');
+  if (!cartEl) return;
+
+  function syncCart(count) {
+    if (count > 0) {
+      cartEl.classList.remove('header-cart--hidden');
+    } else {
+      cartEl.classList.add('header-cart--hidden');
+    }
+    var pill = cartEl.querySelector('.header-cart-badge__pill');
+    if (pill) pill.textContent = count > 0 ? count : '';
+  }
+
+  // Listen for Shopify section:load and custom cart update events
+  document.addEventListener('cart:updated', function (e) {
+    syncCart((e.detail && e.detail.cart && e.detail.cart.item_count) || 0);
+  });
+
+  // Poll the Cart API on fetch completion (covers Ajax add-to-cart)
+  var _fetch = window.fetch;
+  window.fetch = function () {
+    return _fetch.apply(this, arguments).then(function (res) {
+      if (res.url && (res.url.indexOf('/cart') !== -1 || res.url.indexOf('cart.js') !== -1)) {
+        fetch('/cart.js').then(function (r) { return r.json(); }).then(function (data) {
+          syncCart(data.item_count || 0);
+        }).catch(function () {});
+      }
+      return res;
+    });
+  };
+})();
+
+(function () {
+  function init() {
+    var btns    = document.querySelectorAll('.header-hamburger');
+    var overlay = document.getElementById('hamburger-menu-overlay');
+
+    if (!btns.length || !overlay) return;
+
+    function openMenu() {
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      btns.forEach(function(b){ b.setAttribute('aria-expanded', 'true'); });
+      document.body.classList.add('hamburger-open');
+    }
+
+    function closeMenu() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      btns.forEach(function(b){ b.setAttribute('aria-expanded', 'false'); });
+      document.body.classList.remove('hamburger-open');
+    }
+
+    btns.forEach(function(btn){ btn.addEventListener('click', openMenu); });
+
+    // Use event delegation on overlay so close button is always found
+    overlay.addEventListener('click', function (e) {
+      if (e.target.closest('.hamburger-overlay__close')) {
+        closeMenu();
+        return;
+      }
+      if (e.target === overlay) closeMenu();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'Escape' || e.keyCode === 27) && overlay.classList.contains('is-open')) {
+        closeMenu();
+      }
+    });
+
+    // Smooth scroll links (Info + Locations) — works from any page
+    overlay.querySelectorAll('.js-scroll-to').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var targetId = link.getAttribute('data-target');
+        var target = document.getElementById(targetId);
+        closeMenu();
+        if (target) {
+          // Already on home page — smooth scroll
+          e.preventDefault();
+          setTimeout(function () {
+            var headerHeight = (document.querySelector('.site-header-sticky') || {}).offsetHeight || 80;
+            var barHeight = (document.querySelector('.announcement-bar') || {}).offsetHeight || 38;
+            var top = target.getBoundingClientRect().top + window.scrollY - headerHeight - barHeight - 8;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }, 320);
+        }
+        // If target not on page, href="/#section-xxx" handles navigation natively
+      });
+    });
+
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+{% schema %}
+{
+  "name": "Header Minimal",
+  "settings": [
+    { "type": "image_picker", "id": "hero_variant_1",  "label": "Hero Variant 1" },
+    { "type": "image_picker", "id": "hero_variant_2",  "label": "Hero Variant 2" },
+    { "type": "image_picker", "id": "hero_variant_3",  "label": "Hero Variant 3" },
+    { "type": "image_picker", "id": "hero_variant_4",  "label": "Hero Variant 4" },
+    { "type": "image_picker", "id": "hero_variant_5",  "label": "Hero Variant 5" },
+    { "type": "image_picker", "id": "hero_variant_6",  "label": "Hero Variant 6" },
+    { "type": "image_picker", "id": "hero_variant_7",  "label": "Hero Variant 7" },
+    { "type": "image_picker", "id": "hero_variant_8",  "label": "Hero Variant 8" },
+    { "type": "image_picker", "id": "hero_variant_9",  "label": "Hero Variant 9" },
+    { "type": "image_picker", "id": "hero_variant_10", "label": "Hero Variant 10" },
+    { "type": "image_picker", "id": "hero_variant_11", "label": "Hero Variant 11" },
+    { "type": "image_picker", "id": "hero_variant_12", "label": "Hero Variant 12" },
+    { "type": "image_picker", "id": "hero_variant_13", "label": "Hero Variant 13" },
+    { "type": "image_picker", "id": "hero_variant_14", "label": "Hero Variant 14" },
+    { "type": "link_list", "id": "menu", "label": "Menu" },
+    { "type": "header", "content": "Order Now variants" },
+    { "type": "image_picker", "id": "order_variant_1", "label": "Order Now Variant 1" },
+    { "type": "image_picker", "id": "order_variant_2", "label": "Order Now Variant 2" },
+    { "type": "image_picker", "id": "order_variant_3", "label": "Order Now Variant 3" },
+    { "type": "image_picker", "id": "order_variant_4", "label": "Order Now Variant 4" },
+    { "type": "image_picker", "id": "order_variant_5", "label": "Order Now Variant 5" },
+    { "type": "image_picker", "id": "order_variant_6", "label": "Order Now Variant 6" },
+    { "type": "header", "content": "Hamburger Menu" },
+    { "type": "checkbox", "id": "show_hamburger", "label": "Show hamburger menu", "default": true },
+    { "type": "url", "id": "order_url", "label": "Order URL (fallback if not set in nav)" },
+    { "type": "url", "id": "shop_url", "label": "Shop URL (fallback if not set in nav)" }
+  ]
+}
+{% endschema %}

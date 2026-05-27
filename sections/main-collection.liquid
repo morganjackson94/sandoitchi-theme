@@ -1,0 +1,232 @@
+<section class="collection">
+  <div class="grid-container">
+    {% paginate collection.products by section.settings.products_per_page %}
+
+      {% if collection.products_count == 0 %}
+        <p class="collection__empty">No products found.</p>
+      {% else %}
+
+        {%- comment -%}
+          =========================================================
+          UNIFIED EDITORIAL GRID — POSITION-BASED MIXED TILES
+
+          image_tile blocks can occupy any grid position (1-based).
+          Products fill all remaining slots in order.
+
+          Each product tile renders:
+            - product.images[1] exists → editorial cover tile (full-bleed, no meta)
+            - no second image          → standard tile (featured_media + title/price)
+
+          image_tile blocks render as full-bleed editorial cover tiles,
+          functioning as link tiles (like the home page media grid).
+
+          Desktop: 4 cols. Mobile: 2 cols.
+          =========================================================
+        {%- endcomment -%}
+
+        {% assign image_blocks = section.blocks | where: "type", "image_tile" %}
+        {% assign products_size = collection.products.size %}
+
+        {%- comment -%} Build a map of which grid positions are occupied by image_tile blocks {%- endcomment -%}
+        {% assign max_slots = products_size | plus: image_blocks.size | plus: 4 %}
+
+        <div class="collection-grid collection-grid--unified" role="list">
+
+          {% assign p = 0 %}
+          {% assign slot = 1 %}
+
+          {% for _i in (1..200) %}
+            {%- comment -%} Stop once we've shown all products {%- endcomment -%}
+            {% if p >= products_size and slot > max_slots %}{% break %}{% endif %}
+            {% if p >= products_size %}
+              {%- comment -%} Check if any remaining image blocks fill this slot {%- endcomment -%}
+              {% assign has_block_here = false %}
+              {% for block in image_blocks %}
+                {% assign block_pos = block.settings.grid_position | plus: 0 %}
+                {% if block_pos == slot %}{% assign has_block_here = true %}{% endif %}
+              {% endfor %}
+              {% unless has_block_here %}{% break %}{% endunless %}
+            {% endif %}
+
+            {%- comment -%} Check if an image_tile block is assigned to this slot {%- endcomment -%}
+            {% assign slot_block = nil %}
+            {% for block in image_blocks %}
+              {% assign block_pos = block.settings.grid_position | plus: 0 %}
+              {% if block_pos == slot %}
+                {% assign slot_block = block %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+
+            {% if slot_block %}
+              {%- comment -%} IMAGE TILE BLOCK — editorial link tile {%- endcomment -%}
+              <a
+                class="collection-item collection-item--editorial collection-item--link-tile"
+                {% if slot_block.settings.link != blank %}
+                  href="{{ slot_block.settings.link }}"
+                {% else %}
+                  href="#"
+                  aria-disabled="true"
+                {% endif %}
+                role="listitem"
+                {{ slot_block.shopify_attributes }}
+              >
+                <div class="collection-item__media">
+                  {% if slot_block.settings.image %}
+                    {{ slot_block.settings.image | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'collection-item__image', alt: slot_block.settings.alt_text | default: 'Editorial image' }}
+                  {% endif %}
+                </div>
+              </a>
+
+            {% elsif p < products_size %}
+              {%- comment -%} PRODUCT TILE {%- endcomment -%}
+              {% assign product = collection.products[p] %}
+              {% assign editorial_img = product.images[1] %}
+
+              {% if editorial_img %}
+                {%- comment -%} Editorial cover tile — product.images[1] {%- endcomment -%}
+                <a
+                  class="collection-item collection-item--editorial"
+                  href="{{ product.url }}"
+                  role="listitem"
+                  aria-label="{{ product.title }}"
+                >
+                  <div class="collection-item__media">
+                    {{ editorial_img | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'collection-item__image', alt: product.title }}
+                  </div>
+                </a>
+              {% else %}
+                {%- comment -%} Standard tile — featured_media + meta {%- endcomment -%}
+                <a
+                  class="collection-item collection-item--standard"
+                  href="{{ product.url }}"
+                  role="listitem"
+                  data-fit="{{ section.settings.image_fit }}"
+                >
+                  {% if section.settings.show_image %}
+                    <div class="collection-item__media">
+                      {% if product.featured_media %}
+                        {{ product.featured_media | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'collection-item__image', alt: product.title }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  <div class="collection-item__meta">
+                    <div class="collection-item__title">{{ product.title }}</div>
+                    {% if section.settings.show_price %}
+                      <div class="collection-item__price">
+                        {{ product.price | money }}
+                        {% unless product.available %}<span class="collection-item__soldout">Sold out</span>{% endunless %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </a>
+              {% endif %}
+
+              {% assign p = p | plus: 1 %}
+            {% endif %}
+
+            {% assign slot = slot | plus: 1 %}
+          {% endfor %}
+
+        </div>
+
+      {% endif %}
+
+      {% if paginate.pages > 1 %}
+        <nav class="collection-pagination" role="navigation" aria-label="Pagination">
+          <div class="collection-pagination__inner">
+            {% if paginate.previous %}
+              <a class="collection-pagination__link" href="{{ paginate.previous.url }}">Prev</a>
+            {% else %}
+              <span class="collection-pagination__link is-disabled">Prev</span>
+            {% endif %}
+            <span class="collection-pagination__count">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {% if paginate.next %}
+              <a class="collection-pagination__link" href="{{ paginate.next.url }}">Next</a>
+            {% else %}
+              <span class="collection-pagination__link is-disabled">Next</span>
+            {% endif %}
+          </div>
+        </nav>
+      {% endif %}
+
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show product image",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit (standard tiles only)",
+      "default": "contain",
+      "options": [
+        { "value": "contain", "label": "Contain" },
+        { "value": "cover", "label": "Cover" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_tile",
+      "name": "Editorial link tile",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Places a full-bleed image link at a specific grid position. Products fill all other slots."
+        },
+        {
+          "type": "range",
+          "id": "grid_position",
+          "label": "Grid position (slot number)",
+          "min": 1,
+          "max": 100,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt text",
+          "default": "Editorial image"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 48
+}
+{% endschema %}

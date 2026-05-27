@@ -1,0 +1,30 @@
+<section class="split-image-hero">
+  <div class="image left">
+    {% if section.settings.left_image %}
+      {{ section.settings.left_image | image_url: width: 1500 | image_tag }}
+    {% endif %}
+  </div>
+  <div class="image right">
+    {% if section.settings.right_image %}
+      {{ section.settings.right_image | image_url: width: 1500 | image_tag }}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Split Image Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Left image"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right image"
+    }
+  ]
+}
+{% endschema %}

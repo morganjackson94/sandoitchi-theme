@@ -1,0 +1,67 @@
+<section class="locations-grid" id="section-locations" style="background-color:#1a3cff;">
+
+  {%- if section.settings.heading != blank -%}
+    <div class="locations-grid__heading-wrap">
+      {%- if section.settings.emblem != blank -%}
+        <img
+          src="{{ section.settings.emblem | image_url: width: 120 }}"
+          alt=""
+          class="locations-grid__emblem"
+        >
+      {%- endif -%}
+      <h2 class="locations-grid__heading">{{ section.settings.heading }}</h2>
+    </div>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="locations-grid__list">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.city_name != blank -%}
+          <div class="locations-grid__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.city_url != blank and block.settings.city_url != '#' -%}
+              <a class="locations-grid__link" href="{{ block.settings.city_url }}">
+                {{- block.settings.city_name -}}
+              </a>
+            {%- else -%}
+              <span class="locations-grid__link">{{- block.settings.city_name -}}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Locations Grid",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "locations"
+    },
+    {
+      "type": "image_picker",
+      "id": "emblem",
+      "label": "Heading emblem (overrides default)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "city",
+      "name": "City",
+      "settings": [
+        { "type": "text", "id": "city_name", "label": "City name" },
+        { "type": "url",  "id": "city_url",  "label": "City URL" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Locations Grid" }
+  ]
+}
+{% endschema %}

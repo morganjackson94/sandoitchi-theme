@@ -1,0 +1,194 @@
+<footer class="site-footer">
+
+  {%- comment -%} Location illustration removed per design {%- endcomment -%}
+
+  {% assign delivery_has_content = false %}
+  {% if section.settings.delivery_uber_image != blank and section.settings.delivery_uber_link != blank %}
+    {% assign delivery_has_content = true %}
+  {% endif %}
+  {% if section.settings.delivery_doordash_image != blank and section.settings.delivery_doordash_link != blank %}
+    {% assign delivery_has_content = true %}
+  {% endif %}
+  {% if section.settings.delivery_grubhub_image != blank and section.settings.delivery_grubhub_link != blank %}
+    {% assign delivery_has_content = true %}
+  {% endif %}
+  {% if section.settings.delivery_postmates_image != blank and section.settings.delivery_postmates_link != blank %}
+    {% assign delivery_has_content = true %}
+  {% endif %}
+
+  {% if delivery_has_content %}
+    <div class="footer-delivery-apps" aria-label="Delivery app links">
+      <div class="footer-delivery-apps__grid">
+
+        {% if section.settings.delivery_uber_image != blank and section.settings.delivery_uber_link != blank %}
+          <a class="footer-delivery-apps__item" href="{{ section.settings.delivery_uber_link }}" target="_blank" rel="noopener">
+            <img
+              src="{{ section.settings.delivery_uber_image | image_url: width: 600 }}"
+              alt="{{ section.settings.delivery_uber_alt | escape }}"
+              loading="lazy"
+            >
+          </a>
+        {% endif %}
+
+        {% if section.settings.delivery_doordash_image != blank and section.settings.delivery_doordash_link != blank %}
+          <a class="footer-delivery-apps__item" href="{{ section.settings.delivery_doordash_link }}" target="_blank" rel="noopener">
+            <img
+              src="{{ section.settings.delivery_doordash_image | image_url: width: 600 }}"
+              alt="{{ section.settings.delivery_doordash_alt | escape }}"
+              loading="lazy"
+            >
+          </a>
+        {% endif %}
+
+        {% if section.settings.delivery_grubhub_image != blank and section.settings.delivery_grubhub_link != blank %}
+          <a class="footer-delivery-apps__item" href="{{ section.settings.delivery_grubhub_link }}" target="_blank" rel="noopener">
+            <img
+              src="{{ section.settings.delivery_grubhub_image | image_url: width: 600 }}"
+              alt="{{ section.settings.delivery_grubhub_alt | escape }}"
+              loading="lazy"
+            >
+          </a>
+        {% endif %}
+
+        {% if section.settings.delivery_postmates_image != blank and section.settings.delivery_postmates_link != blank %}
+          <a class="footer-delivery-apps__item" href="{{ section.settings.delivery_postmates_link }}" target="_blank" rel="noopener">
+            <img
+              src="{{ section.settings.delivery_postmates_image | image_url: width: 600 }}"
+              alt="{{ section.settings.delivery_postmates_alt | escape }}"
+              loading="lazy"
+            >
+          </a>
+        {% endif %}
+
+      </div>
+    </div>
+  {% endif %}
+
+ <div class="footer-social">
+  {% assign ig_handle = section.settings.social_handle | remove: '@' %}
+  <a
+    href="https://www.instagram.com/sando.itchi"
+    target="_blank"
+    rel="noopener"
+    aria-label="Instagram {{ section.settings.social_handle }}"
+  >
+    {{ section.settings.social_handle }}
+  </a>
+</div>
+
+
+</footer>
+
+{% schema %}
+{
+  "name": "Footer Content",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "location_image",
+      "label": "Locations graphic image"
+    },
+    {
+      "type": "url",
+      "id": "location_link",
+      "label": "Optional link (Google Maps / Locations page)"
+    },
+    {
+      "type": "text",
+      "id": "location_alt",
+      "label": "Image alt text",
+      "default": "Sandoitchi location"
+    },
+
+    {
+      "type": "header",
+      "content": "Delivery App Links"
+    },
+    {
+      "type": "text",
+      "id": "delivery_heading",
+      "label": "Delivery section heading",
+      "default": "order delivery"
+    },
+    {
+      "type": "image_picker",
+      "id": "delivery_uber_image",
+      "label": "Uber Eats logo"
+    },
+    {
+      "type": "url",
+      "id": "delivery_uber_link",
+      "label": "Uber Eats link"
+    },
+    {
+      "type": "text",
+      "id": "delivery_uber_alt",
+      "label": "Uber Eats alt text",
+      "default": "Uber Eats"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "delivery_doordash_image",
+      "label": "DoorDash logo"
+    },
+    {
+      "type": "url",
+      "id": "delivery_doordash_link",
+      "label": "DoorDash link"
+    },
+    {
+      "type": "text",
+      "id": "delivery_doordash_alt",
+      "label": "DoorDash alt text",
+      "default": "DoorDash"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "delivery_grubhub_image",
+      "label": "Grubhub logo"
+    },
+    {
+      "type": "url",
+      "id": "delivery_grubhub_link",
+      "label": "Grubhub link"
+    },
+    {
+      "type": "text",
+      "id": "delivery_grubhub_alt",
+      "label": "Grubhub alt text",
+      "default": "Grubhub"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "delivery_postmates_image",
+      "label": "Postmates logo"
+    },
+    {
+      "type": "url",
+      "id": "delivery_postmates_link",
+      "label": "Postmates link"
+    },
+    {
+      "type": "text",
+      "id": "delivery_postmates_alt",
+      "label": "Postmates alt text",
+      "default": "Postmates"
+    },
+
+    {
+      "type": "text",
+      "id": "social_handle",
+      "label": "Social handle",
+      "default": "@sando.itchi"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer Content"
+    }
+  ]
+}
+{% endschema %}

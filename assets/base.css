@@ -1,0 +1,7183 @@
+/* =========================================================
+   BASE RESET & VARIABLES
+   ========================================================= */
+
+:root {
+  --color-black: #000000;
+  --color-dark: #333333;
+  --color-mid: #666666;
+  --color-light: #999999;
+  --color-line: #CCCCCC;
+  --color-link: #0066CC;
+
+  --bg-white: #FFFFFF;
+  --bg-blue: #E8F4f8;
+  --bg-cream: #F5EDE3;
+  --bg-footer: #F5F5F5;
+
+  --grid-max-width: 1440px;
+  --grid-padding-desktop: 60px;
+
+  /* Spacing scale (editorial rhythm) */
+  --space-1: 12px;
+  --space-2: 20px;
+  --space-3: 32px;
+  --space-4: 52px;
+  --space-5: 84px;
+
+  /* Featured media */
+  --media-radius: 0px;
+
+  /* Header fade states */
+  --header-bg-top: rgba(255, 255, 255, 1);
+  --header-bg-scrolled: rgba(255, 255, 255, 0.78);
+  --header-border-top: rgba(204, 204, 204, 1);
+  --header-border-scrolled: rgba(204, 204, 204, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  min-height: 100%;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+  color: var(--color-black);
+  background: var(--bg-white);
+
+  /* Sticky header offset (intentional & must remain) */
+  padding-top: 80px;
+}
+
+/* IMPORTANT:
+   Do NOT force height:100% on html/body with a padded body.
+   It creates phantom scroll space (especially iOS Safari). */
+html, body {
+  height: auto;
+}
+
+#MainContent {
+  /* keep header offset handled by body padding-top:80px; 
+     this is the â€œfirst section breathing roomâ€ and should be on-scale */
+  padding-top: var(--space-2); /* 20px */
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* =========================================================
+   PAGE LOAD â€” WHITE VEIL FADE (EDITORIAL)
+   ========================================================= */
+
+.page-fade {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646; /* just under .site-header-sticky (2147483647) */
+  background: var(--bg-white);
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 360ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+html.is-loaded .page-fade { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade { transition: none; }
+}
+
+/* =========================================================
+   REVEAL ON VIEWPORT ENTRY (OPT-IN)
+   ========================================================= */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 420ms ease, transform 520ms ease;
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* =========================================================
+   GLOBAL GRID UTILITIES
+   ========================================================= */
+
+.grid-container {
+  max-width: var(--grid-max-width);
+  margin: 0 auto;
+  padding: 0 var(--grid-padding-desktop);
+}
+
+/* =========================================================
+   HEADER (FIXED / STICKY)
+   ========================================================= */
+
+.site-header-sticky {
+  position: fixed !important;
+  top: var(--announcement-bar-height) !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2147483647 !important;
+
+  background: var(--header-bg-top) !important;
+  border-bottom: 1px solid var(--header-border-top) !important;
+
+  transition:
+    top 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+body.is-scrolled .site-header-sticky {
+  background: var(--header-bg-scrolled) !important;
+  border-bottom-color: var(--header-border-scrolled) !important;
+
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+/*
+  Fixed headers break if any ancestor has transform/filter/perspective/contain.
+  These hard resets preserve working sticky behavior.
+*/
+html, body,
+#MainContent,
+.shopify-section,
+[id^="shopify-section-"] {
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+  contain: none !important;
+}
+
+/* =========================================================
+   HEADER â€” FIXED STICKY WRAPPER
+   ========================================================= */
+
+.site-header-sticky {
+  position: fixed;
+  top: var(--announcement-bar-height);
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+
+  background: var(--header-bg-top);
+  border-bottom: 1px solid var(--header-border-top);
+
+  transition:
+    top 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+body.is-scrolled .site-header-sticky {
+  background: var(--header-bg-scrolled);
+  border-bottom-color: var(--header-border-scrolled);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+body.is-scrolling .site-header-sticky {
+  background: rgba(255, 255, 255, 0.38);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+/* =========================================================
+   HEADER â€” INNER LAYOUT
+   flex + space-between gives clean left/right clusters
+   with no absolute trickery needed
+   ========================================================= */
+
+.site-header {
+  width: 100%;
+  height: 80px;
+  padding: 0 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Base link style */
+.site-header a {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-black);
+  text-decoration: none;
+  transition: opacity 220ms ease;
+}
+
+/* =========================================================
+   LEFT CLUSTER
+   ========================================================= */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Header title â€” height-locked, width flows naturally */
+.header-title {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-title__logo {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+Shop link â€” desktop only
+.header-shop-link {
+  display: none !important;
+}
+
+/* Cart */
+.header-cart {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.header-cart--hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* =========================================================
+   CART PILL â€” STRAWBERRY BACKDROP
+   ========================================================= */
+
+.header-cart-badge__pill {
+  width: 20px;
+  height: 24px;
+  margin-left: 0px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: url("/cdn/shop/files/strawberry.png");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  padding-top: 7px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   RIGHT CLUSTER
+   ========================================================= */
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-order-emblem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-order-emblem img {
+  display: block;
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 749px) {
+  .site-header {
+    padding: 0 16px;
+  }
+
+  .header-left {
+    gap: 16px;
+  }
+
+  /* Hide Shop/Home link on mobile â€” copyright bar handles nav there */
+  .header-shop-link {
+    display: none !important;
+  }
+
+  .header-title__logo {
+    height: 22px;
+  }
+
+  .header-order-emblem img {
+    height: 30px;
+  }
+}
+
+
+/* =========================================================
+   HERO TITLE (CLEAN, NO MORPH)
+   ========================================================= */
+
+.hero-title {
+  /* scale-locked rhythm (no one-offs) */
+  padding: var(--space-4) 0 var(--space-5);
+  position: relative;
+  z-index: 2;
+}
+
+
+.hero-title h1 {
+  margin: 0;
+  font-size: 180px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-black);
+}
+
+.hero-title p {
+  margin-top: var(--space-1);
+  font-size: 18px;
+  color: var(--color-dark);
+}
+
+.hero-title__logo {
+  display: block;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  height: auto;
+}
+
+.hero-title__logo--svg {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  display: block;
+  height: clamp(140px, 18vw, 220px);
+}
+
+.hero-title__logo--svg .hero-title__logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* =========================================================
+   THREE COLUMN INFO
+   ========================================================= */
+
+.three-column-info {
+  display: none;
+}
+
+/* === INFORMATION SECTION === */
+
+.info-section-wrapper {
+  width: 100%;
+  background-color: #e8e4dc;
+}
+
+.info-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 8px,
+    #e0e0e0 8px,
+    #e0e0e0 9px
+  );
+  padding: 10px 12px;
+}
+
+.info-section-label-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+/* No white bg â€” emblem renders directly on stripe */
+.info-section-emblem {
+  height: 17px;
+  width: auto;
+  display: block;
+  opacity: 0.7;
+}
+
+.info-section-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  line-height: 1;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.info-section-toggle__icon {
+  font-family: sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  display: block;
+}
+
+.info-section-body--collapsible {
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.info-section-content {
+  padding: 48px 40px 56px;
+}
+
+@media (max-width: 767px) {
+  .info-section-content {
+    padding: 32px 20px 40px;
+  }
+}
+
+.info-section-title {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(52px, 12vw, 96px);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: #000;
+  margin: 0 0 32px;
+  text-transform: lowercase;
+}
+
+.info-section-body-text {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 3.5vw, 22px);
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  color: #000;
+  margin: 0;
+  text-align: justify;
+}
+
+
+/* =========================================================
+   FEATURED MEDIA GRID â€” DESKTOP 3-COL / MOBILE PORTRAIT RHYTHM
+   Mobile pattern:
+   - 1st tile (and every 5th): Portrait 3/4 and full-width (spans 2 cols)
+   - next 4 tiles: Portrait 3/4 (2x2)
+   ========================================================= */
+
+.featured-media-grid {
+  width: 100%;
+  display: grid;
+  gap: 0;
+  overflow-anchor: none;
+
+  border-top: 1px solid var(--color-line);
+
+  padding: 0;
+  margin: 0;
+
+  /* Mobile default: 2 columns */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  /* Helps avoid holes when span items appear */
+  grid-auto-flow: dense;
+}
+
+/* Desktop only: 3 columns */
+@media (min-width: 768px) {
+  .featured-media-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Each cell draws structure lines (desktop + larger) */
+.featured-media-grid .media-cell {
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+
+  padding: 0;
+  min-width: 0;
+  border-radius: 0;
+
+  overflow: hidden;
+}
+
+/* Media window default (desktop baseline + mobile portrait) */
+.featured-media-grid .media-cell__inner {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+/* =========================================================
+   MOBILE â€” PORTRAIT RHYTHM + EDITORIAL SPACING
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* Editorial breathing room */
+  .featured-media-grid {
+    gap: 1px;
+  }
+
+  /* Remove structural borders on mobile
+     (spacing replaces the grid line rhythm here) */
+  .featured-media-grid .media-cell {
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  /* Rhythm anchor spans full width (still 3/4) */
+  .featured-media-grid .media-cell--tall {
+    grid-column: span 2;
+  }
+}
+
+/* Desktop: tall behaves like a normal cell */
+@media (min-width: 768px) {
+  .featured-media-grid .media-cell--tall {
+    grid-column: auto;
+  }
+}
+
+/* Links block-fill */
+.featured-media-grid .media-cell__inner > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Media fills the window */
+.featured-media-grid .media-cell__inner > a,
+.featured-media-grid .media-cell__inner > .media-embed,
+.featured-media-grid .media-cell__inner > video,
+.featured-media-grid .media-cell__inner > iframe,
+.featured-media-grid .media-cell__inner > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Images */
+.featured-media-grid .media-cell__inner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Videos */
+.featured-media-grid .media-cell__inner video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-media-grid .media-cell__inner video.media-video--contain {
+  object-fit: contain;
+}
+
+/* Embeds */
+.featured-media-grid .media-embed {
+  width: 100%;
+  height: 100%;
+  background: var(--embed-bg, transparent);
+}
+
+/* Overlay inset */
+.featured-media-grid .media-badge,
+.featured-media-grid .media-meta {
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+}
+
+/* Hover zoom (restrained) */
+@media (hover: hover) and (pointer: fine) {
+  .featured-media-grid .media-cell__inner img {
+    transition: transform 0.3s ease;
+    will-change: transform;
+  }
+
+  .featured-media-grid .media-cell:hover .media-cell__inner img {
+    transform: scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-media-grid .media-cell__inner img {
+    transition: none;
+  }
+
+  .featured-media-grid .media-cell:hover .media-cell__inner img {
+    transform: none;
+  }
+}
+
+
+
+/* =========================================================
+   SIGN UP SECTION
+   ========================================================= */
+
+/* Editorial email input â€” calm, centered, intentional */
+.ai-signup-button-{{ ai_gen_id }} input[type="email"] {
+  display: block;
+  width: 100%;
+
+  /* Typography: inherit the themeâ€™s editorial voice */
+  font-family: var(--font-body-family, inherit);
+  font-size: var(--font-size-base, 1rem);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+
+  /* Centered, composed */
+  text-align: center;
+  color: inherit;
+
+  /* Remove all default input chrome */
+  background: transparent;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+
+  /* Match the previous CTAâ€™s vertical rhythm */
+  padding: {{ block.settings.button_padding }}px;
+}
+
+/* Placeholder: quieter, editorial */
+.ai-signup-button-{{ ai_gen_id }} input[type="email"]::placeholder {
+  color: currentColor;
+  opacity: 0.45;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* Focus state: subtle, no glow, no movement */
+.ai-signup-button-{{ ai_gen_id }} input[type="email"]:focus::placeholder {
+  opacity: 0.25;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.site-footer {
+  width: 100%;
+  border-top: 1px solid var(--color-line);
+  padding: 0;
+  text-align: center;
+  background: var(--bg-white);
+}
+
+.footer-location {
+  width: 100%;
+  padding: var(--space-4) var(--grid-padding-desktop);
+  border-bottom: 1px solid var(--color-line);
+  overflow: hidden;
+}
+
+.footer-location img {
+  width: 100%;
+  max-height: 600px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  background: var(--bg-white);
+  margin: 0 auto;
+}
+
+.footer-delivery-apps {
+  width: 100%;
+  padding: 28px var(--grid-padding-desktop);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.footer-delivery-apps__grid {
+  max-width: var(--grid-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-delivery-apps__item {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease;
+}
+
+.footer-delivery-apps__item:hover {
+  opacity: 0.6;
+}
+
+.footer-delivery-apps__item img {
+  width: 100%;
+  height: 36px;
+  object-fit: contain;
+}
+
+@media (max-width: 767px) {
+  .footer-delivery-apps {
+    padding: 20px 12px;
+  }
+  .footer-delivery-apps__grid {
+    gap: 8px;
+  }
+  .footer-delivery-apps__item img {
+    height: 22px;
+  }
+}
+
+/* Social handle (gradient link) */
+.site-footer .footer-social {
+  padding: 28px var(--grid-padding-desktop);
+  font-size: 22px;
+  color: var(--color-mid);
+  margin: 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.footer-social a {
+  display: inline-block;
+  text-decoration: none;
+
+  background: linear-gradient(
+    90deg,
+    #833ab4,
+    #c13584,
+    #e1306c,
+    #fd1d1d,
+    #f77737
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.footer-social a:hover,
+.footer-social a:focus-visible {
+  opacity: 0.8;
+}
+
+/* Footer links (if used) */
+.site-footer .footer-links {
+  padding: 18px var(--grid-padding-desktop) 32px;
+  font-size: 12px;
+}
+
+.site-footer .footer-links a {
+  color: var(--color-black);
+  text-decoration: none;
+  margin: 0 8px;
+}
+
+.site-footer .footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   COPYRIGHT + MODALS (FOOTER BAR)
+   Desktop: in-flow
+   Mobile: fixed bottom bar
+   ========================================================= */
+
+/* ---------- Base (all viewports) ---------- */
+
+.copyright {
+  width: 100%;
+  background: #000;
+  color: #fff;
+
+  padding: 14px var(--grid-padding-desktop);
+  text-align: center;
+
+  /* Anchor for desktop modals (they sit above the bar) */
+  position: relative;
+
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+/* Links container (desktop defaults to text links) */
+.copyright__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2.25rem);
+  margin: 0;
+}
+
+/* Links/buttons normalized */
+.copyright__link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  text-decoration: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Label text */
+.copyright__label {
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.85;
+  text-transform: lowercase;
+}
+
+/* Desktop: icons OFF by default */
+.copyright__icon {
+  display: none;
+}
+
+/* Bottom copyright line */
+.copyright__bottom {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.15;
+  opacity: 0.65;
+}
+
+/* ---------- Modals (desktop: anchored above bar) ---------- */
+
+.site-modal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 10px);
+  z-index: 40;
+  pointer-events: none;
+}
+
+.site-modal[hidden] { display: none; }
+
+/* If an overlay element exists in any older markup, keep it off */
+.site-modal__overlay { display: none; }
+
+.site-modal__dialog {
+  pointer-events: auto;
+
+  max-width: 640px;
+  margin: 0 auto;
+
+  background: #fff;
+  color: rgba(0, 0, 0, 0.88);
+
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 18px;
+
+  padding: 1.25rem 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+  position: relative;
+}
+
+.site-modal__title {
+  margin: 0 0 0.75rem 0;
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.site-modal__body {
+  max-width: 52ch;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+}
+
+.site-modal__body p {
+  margin: 0 0 1rem 0;
+}
+
+.site-modal__dialog a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.site-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: #fff;
+
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 18px;
+  line-height: 1;
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+}
+
+/* =========================================================
+   MOBILE (â‰¤ 768px) â€” FIXED TAB BAR (compact + translucent)
+   Single source of truth. Replace ALL other mobile footer-bar blocks.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  :root { --copyright-bar-h: 76px; }
+
+  /* Reserve space so page content never hides behind the fixed bar */
+  body {
+    padding-bottom: calc(var(--copyright-bar-h) + env(safe-area-inset-bottom, 0px) + 20px) !important;
+  }
+
+  /* Fixed bar: translucent like YouTube */
+  body .copyright {
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999 !important;
+
+    background: rgba(255, 255, 255, 0.88) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+
+    padding: 8px 16px !important;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0 !important;
+
+    text-align: center !important;
+  }
+
+  /* One-row tabs */
+  body .copyright .copyright__links {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+
+    width: 100% !important;
+    max-width: 520px !important;
+
+    align-items: end !important;
+    justify-items: center !important;
+    margin: 0 !important;
+  }
+
+  body .copyright .copyright__link {
+    width: 100% !important;
+    max-width: 108px !important;
+
+    padding: 6px 4px 4px !important;
+
+    display: grid !important;
+    grid-template-rows: 22px auto !important;
+    justify-items: center !important;
+    align-content: end !important;
+
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.10);
+  }
+
+  /* Icons ON */
+  body .copyright .copyright__icon {
+    display: block !important;
+    width: 22px !important;
+    height: 22px !important;
+    opacity: 0.92 !important;
+  }
+
+  body .copyright .copyright__icon svg {
+    width: 22px !important;
+    height: 22px !important;
+    display: block !important;
+  }
+
+  body .copyright .copyright__label {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0.01em !important;
+    text-transform: lowercase !important;
+    opacity: 0.85 !important;
+    text-align: center !important;
+  }
+
+  /* Remove second row to shrink height */
+  body .copyright .copyright__bottom {
+    display: none !important;
+  }
+
+  /* Modals: fixed, bottom edge sits just above the copyright nav bar */
+  body .site-modal {
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: calc(var(--copyright-bar-h) + env(safe-area-inset-bottom, 0px) + 12px) !important;
+    top: auto !important;
+    transform: none !important;
+    z-index: 1000 !important;
+    width: auto !important;
+    pointer-events: none;
+  }
+
+  body .site-modal__dialog {
+    width: 100% !important;
+    margin: 0 !important;
+    pointer-events: auto;
+  }
+}
+
+
+/* ---------- Desktop lock: icons always off ---------- */
+@media (min-width: 769px) {
+  .copyright__icon {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .copyright__icon { line-height: 0; }
+  .copyright__icon img { display: block; }
+}
+
+/* =========================================================
+   COPYRIGHT BAR â€” ICON NORMALIZATION (MOBILE ONLY)
+   Makes PNG icons render in a consistent 1:1 box and center.
+   ========================================================= */
+@media (max-width: 768px) {
+
+  /* Make each tab a centered stack (icon over label) */
+  .copyright__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* adjust if you want tighter */
+  }
+
+  /* A hard, uniform icon box */
+  .copyright__icon {
+    width: 24px;         /* bump from 22px for more consistency */
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;      /* kills baseline whitespace */
+    flex: 0 0 auto;
+  }
+
+  .copyright__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;      /* removes weird inline gaps */
+  }
+
+  /* Keep labels visually consistent */
+  .copyright__label {
+    line-height: 1;
+    display: block;
+  }
+}
+
+
+/* =========================================================
+   PRODUCT PAGE (EDITORIAL)
+   ========================================================= */
+
+.product {
+  padding: clamp(2rem, 4vw, 4rem) 1.25rem;
+}
+
+.product__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+@media (min-width: 900px) {
+  .product__inner {
+    grid-template-columns: 1.35fr 0.65fr;
+    align-items: start;
+  }
+}
+
+/* Media (desktop baseline) */
+.product__media {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Main image */
+.product__media-main img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Thumbs rail (desktop defaults are in your layout elsewhere; keep minimal here) */
+.product__thumb {
+  opacity: 0.6;
+  transition: opacity 160ms ease;
+}
+
+.product__thumb.is-active { opacity: 1; }
+
+/* Info column */
+.product__info { max-width: 520px; }
+
+.product__header { margin-bottom: 1.5rem; }
+
+.product__title {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  letter-spacing: 0.01em;
+}
+
+.product__price {
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+/* Form */
+.product__form {
+  margin-top: 1.75rem;
+  margin-bottom: 2.25rem;
+}
+
+/* Size select */
+.product__select-label {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.product__select-wrap {
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.5);
+}
+
+.product__select-wrap::after {
+  content: "";
+  width: 10px;
+  height: 6px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23000'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #000;
+  opacity: 0.8;
+}
+
+.product__select {
+  width: 100%;
+  padding: 0.9rem 2.5rem 0.9rem 1rem;
+  background: transparent;
+  border: 0;
+  appearance: none;
+  color: #000;
+  -webkit-text-fill-color: #000; /* iOS: prevent blue */
+}
+
+.product__select option { color: #000; }
+
+/* Add to cart â€” editorial (ALWAYS black text) */
+.product__add {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(0,0,0,0.5);
+  background: transparent;
+  color: #000;
+  border-color: #000;
+  cursor: pointer;
+}
+
+.product__add[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Inline purchase spacing */
+.product__purchase .product__add {
+  margin-top: 0.75rem;
+}
+
+/* Accordions */
+.product__accordions {
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.product__accordion {
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  padding: 1rem 0;
+}
+
+.product__accordion > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.product__accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+.product__accordion-body {
+  padding-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  opacity: 0.95;
+}
+
+/* =========================================================
+   MOBILE â€” PRODUCT MEDIA + STICKY PURCHASE
+   ========================================================= */
+
+@media (max-width: 767px) {
+  /* Media: vertical stack (main, then thumbs strip) */
+  .product__media {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5rem;
+  }
+
+  .product__media-main {
+    padding: 0;
+  }
+
+  .product__media-main img {
+    width: 100%;
+    height: auto;
+    max-height: 82vh;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+
+  /* Thumbs strip (scrollable) */
+  .product__media-thumbs {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    order: 2;
+  }
+
+  .product__thumb {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    opacity: 0.6;
+  }
+
+  .product__thumb.is-active { opacity: 1; }
+
+  .product__thumb img {
+    width: 72px;
+    height: auto;
+    display: block;
+  }
+
+  .product__media-thumbs::-webkit-scrollbar { display: none; }
+  .product__media-thumbs { scrollbar-width: none; }
+
+  /* Sticky bar disabled â€” purchase block stays in normal document flow */
+  .product-sticky { display: none !important; }
+}
+
+/* =========================================================
+   RESPONSIVE â€” GLOBAL
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  :root { --grid-padding-desktop: 40px; }
+
+  .hero-title h1 { font-size: 120px; }
+  .hero-title__logo { max-width: 800px; }
+
+  .three-column-info .info-heading {
+    font-size: 28px;
+    margin: 12px 0;
+  }
+
+  .three-column-info .info-subtext { font-size: 13px; }
+
+  .three-column-info .info-label {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .footer-location img { max-height: 520px; }
+
+  .footer-delivery-apps__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .footer-delivery-apps__item img { height: 52px; }
+}
+
+@media (max-width: 768px) {
+  :root { --grid-padding-desktop: 20px; }
+
+  .hero-title { padding: var(--space-3) 0; }
+  .hero-title h1 { font-size: 64px; }
+  .hero-title p { font-size: 16px; }
+  .hero-title__logo { max-width: 90%; }
+
+  .hero-title__logo--svg {
+    height: clamp(120px, 30vw, 180px);
+  }
+
+  .three-column-info {
+    padding: 40px 20px;
+  }
+
+  .three-column-info .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .three-column-info .info-column:not(:last-child) {
+    border-right: none;
+  }
+
+  .three-column-info .info-column {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+    text-align: center;
+  }
+
+  .three-column-info .info-column:last-child {
+    border-bottom: none;
+  }
+
+  .three-column-info .info-heading {
+    font-size: 26px;
+    margin: 10px 0;
+  }
+
+  .three-column-info .info-subtext {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .three-column-info .info-label {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .three-column-info .info-spacing { margin-top: 22px; }
+
+  @media (max-width: 767px) {
+  .featured-media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Remove right border on last column (mobile, 2-col) */
+  /* Use :nth-of-type on .media-cell only, ignoring .media-section-label rows */
+  .featured-media-grid .media-cell:nth-child(2n) {
+    border-right: 0;
+  }
+
+  /* Re-correct pairing after a full-width label row:
+     label spans 1 row, so cells after it continue naturally.
+     Force label to always start on a fresh row. */
+  .featured-media-grid .media-section-label {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+}
+
+
+  .footer-location {
+    padding: 28px var(--grid-padding-desktop);
+  }
+
+  .footer-location img { max-height: 420px; }
+
+  /* delivery app responsive â€” handled in base rule */
+
+  .site-footer .footer-social {
+    padding: 28px var(--grid-padding-desktop);
+    font-size: 22px;
+  }
+
+  .site-footer .footer-links {
+    padding: 14px var(--grid-padding-desktop) 26px;
+  }
+
+  .copyright { --copyright-height: 64px; }
+  .copyright__links { gap: 0.75rem; }
+
+  .site-modal__dialog { padding: 2.25rem 2.5rem; }
+
+  .site-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: 0;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 420px) {
+  .three-column-info .info-heading { font-size: 22px; }
+  .three-column-info .info-subtext { font-size: 12px; }
+
+  .three-column-info .info-column--right .info-heading {
+    word-break: keep-all;
+  }
+
+  .footer-location img { max-height: 320px; }
+
+  .footer-delivery-apps__grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .footer-delivery-apps__item img { height: 44px; }
+}
+
+/* =========================================================
+   PDP MEDIA â€” GALLERY LAYOUT (replaces old thumb-rail hotfix)
+   ========================================================= */
+
+.product__media {
+  /* Let the gallery fill the media column */
+  display: block;
+  max-width: 100%;
+  margin: 0;
+  min-width: 0;
+}
+
+.product__gallery {
+  width: 100%;
+  max-width: 100%;
+}
+
+.product__gallery-slide {
+  width: 100%;
+}
+
+.product__gallery-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Progress bars: thin long dashes, centered under the media */
+.product__gallery-progress {
+  width: 100%;
+  max-width: 680px; /* keeps it "editorial" vs full-bleed */
+  margin: 12px auto 0;
+  gap: 14px;
+}
+
+.product__progress-seg {
+  height: 2px;
+  border-radius: 0;
+  background: rgba(0,0,0,0.18);
+}
+
+.product__progress-seg.is-active {
+  background: rgba(0,0,0,0.85);
+}
+
+/* Desktop: large Margiela-ish media height */
+@media (min-width: 768px) {
+  .product__gallery-slide img {
+    max-height: 78vh;
+  }
+}
+
+/* Mobile: fit usable viewport above sticky purchase */
+@media (max-width: 767px) {
+  .product__gallery-slide img {
+    max-height: calc(100svh - 80px - 96px - 16px);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   Sticky bar CTA must NEVER become white text / black bg
+   (Overrides existing conflicting rule in base.css)
+   --------------------------------------------------------- */
+@media (max-width: 767px) {
+  .product-sticky .product__add {
+    background: transparent !important;
+    color: #000 !important;
+    border-color: rgba(0,0,0,0.5) !important;
+  }
+
+  .product-sticky .product__add[disabled] {
+    background: transparent !important;
+    color: #000 !important;
+    opacity: 0.45;
+  }
+
+  /* iOS select blue text prevention (sticky + inline) */
+  .product__select,
+  .product-sticky .product__select {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+  }
+}
+
+/* =========================================================
+   MOBILE PDP â€” iPhone viewport fit + floating sticky controls
+   Paste at VERY END of base.css
+   ========================================================= */
+@media (max-width: 767px) {
+  :root {
+    --header-h: 80px;        /* your fixed header height */
+    --sticky-h: 84px;        /* approx sticky controls height incl padding */
+    --sticky-gap: 14px;      /* breathing room above sticky */
+  }
+
+  /* Ensure media stack isn't visually fighting sticky area */
+  .product__media-main img {
+    /* Fit the image to the usable viewport (header + sticky accounted for) */
+    max-height: calc(100svh - var(--header-h) - var(--sticky-h) - var(--sticky-gap));
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Keep thumbs below, never overlay */
+  .product__media-thumbs {
+    margin-top: 0.5rem;
+  }
+
+  /* Sticky container stays clear (no bar), but controls float */
+  .product-sticky {
+    background: transparent !important;
+    border-top: 0 !important;
+  }
+
+  /* Floating button look (white tiles) */
+  .product-sticky .product__select-wrap,
+  .product-sticky .product__add {
+    background: #fff !important;
+    border: 1px solid rgba(0,0,0,0.18) !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.10) !important;
+  }
+
+  /* Keep select text black (prevents iOS blue) */
+  .product-sticky .product__select,
+  .product-sticky .product__select option {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+  }
+
+  /* If any earlier rule tries to turn CTA white, hard override */
+  .product-sticky .product__add {
+    color: #000 !important;
+  }
+
+  .product-sticky .product__add[disabled] {
+    opacity: 0.45;
+  }
+}
+
+/* =========================================================
+   MOBILE: clamp media area so thumbs donâ€™t extend page
+   + add â€œmoreâ€ arrow cue on the thumbs strip
+   ========================================================= */
+@media (max-width: 767px) {
+  :root {
+    --header-h: 80px;
+    --sticky-h: 84px;
+    --sticky-gap: 14px;
+
+    /* NEW: reserved height for the thumbs strip */
+    --thumbs-h: 112px;
+  }
+
+  /* Constrain the MAIN image so main + thumbs fit the viewport */
+  .product__media-main img {
+    max-height: calc(
+      100svh - var(--header-h) - var(--sticky-h) - var(--sticky-gap) - var(--thumbs-h)
+    );
+  }
+
+  /* Clamp the thumbs strip so it doesnâ€™t increase page height beyond the design */
+  .product__media-thumbs {
+    max-height: var(--thumbs-h);
+    overflow: hidden;            /* ðŸ‘ˆ this prevents the strip from â€œextendingâ€ */
+    position: relative;
+    padding-right: 3.5rem;       /* room for the arrow cue */
+  }
+
+  /* Subtle fade on the right edge (editorial â€œmoreâ€) */
+  .product__media-thumbs::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 64px;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+  }
+
+  /* Universal arrow cue (doesnâ€™t need JS) */
+  .product__media-thumbs::after {
+    content: "â€º";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.16);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+    color: #000;
+    opacity: 0.9;
+    pointer-events: none; /* purely visual cue */
+  }
+}
+
+/* =========================================================
+   MOBILE SWIPE GALLERY (Margiela-style)
+   ========================================================= */
+@media (max-width: 767px) {
+  /* Mobile uses swipe gallery only */
+  .product__media-thumbs,
+  .product__media-main {
+    display: none !important;
+  }
+
+  .product__media-swipe {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+
+    /* IMPORTANT: prevent page-width overflow */
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* each slide is exactly viewport width */
+  .product__swipe-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: start;
+
+    /* keep the image centered and clean */
+    display: grid;
+    place-items: center;
+  }
+
+  .product__swipe-slide img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+
+    /* Fit usable viewport (header + sticky accounted for) */
+    max-height: calc(100svh - 80px - 84px - 14px);
+  }
+
+  /* Optional: hide scrollbar */
+  .product__media-swipe::-webkit-scrollbar { display: none; }
+  .product__media-swipe { scrollbar-width: none; }
+
+  /* Kill any accidental horizontal overflow on page */
+  html, body {
+    overflow-x: hidden;
+  }
+}
+
+/* =========================================================
+   PDP Gallery (All breakpoints) + Progress bars
+   Paste at VERY END of base.css
+   ========================================================= */
+
+.product__gallery {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+
+  width: 100%;
+  max-width: 100%;
+
+  /* keep it calm */
+  scrollbar-width: none;
+}
+
+.product__gallery::-webkit-scrollbar { display: none; }
+
+.product__gallery-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  display: grid;
+  place-items: center;
+}
+
+.product__gallery-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Progress bars (Margiela-style dashes) */
+.product__media { position: relative; }
+
+/* =========================================================
+   Gallery progress â€” editorial dots
+   ========================================================= */
+
+.product__gallery-progress {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.product__progress-seg {
+  appearance: none;
+  border: 0;
+
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,0.22);
+  padding: 0;
+  cursor: pointer;
+
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.product__progress-seg.is-active {
+  background: rgba(0,0,0,0.9);
+  transform: scale(1.15);
+}
+
+
+/* give the progress room so it doesn't overlap the bottom edge */
+.product__gallery {
+  padding-bottom: 26px;
+}
+
+
+/* Desktop: set a composed gallery height (Margiela-ish) */
+@media (min-width: 768px) {
+  .product__gallery-slide img {
+    max-height: 78vh;
+  }
+}
+
+/* Mobile: fit usable viewport above sticky purchase */
+@media (max-width: 767px) {
+  .product__gallery-slide img {
+    max-height: calc(100svh - 80px - 96px - 16px);
+  }
+
+  /* Avoid accidental horizontal overflow anywhere */
+  html, body { overflow-x: hidden; }
+}
+
+/* =========================================================
+   DESKTOP: restore full-width product gallery
+   ========================================================= */
+@media (min-width: 768px) {
+  .product__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .product__media {
+    width: 100%;
+  }
+
+  .product__gallery {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product__gallery-slide {
+    width: 100%;
+  }
+
+  .product__gallery-slide img {
+    width: 100%;
+    max-height: 82vh;
+    object-fit: contain;
+  }
+}
+
+/* =========================================================
+   ADD TO CART â€” STATE STYLING (INLINE + STICKY)
+   ========================================================= */
+
+/* Base button (neutral, inactive look) */
+.product__add {
+  background: #fff;
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.35);
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+/* Disabled / inactive */
+.product__add:disabled,
+.product__add[disabled] {
+  background: #fff;
+  color: rgba(0,0,0,0.45);
+  border-color: rgba(0,0,0,0.25);
+  cursor: not-allowed;
+}
+
+/* Active (variant selected & available) */
+.product__add:not(:disabled) {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Ensure sticky bar inherits same behavior */
+.product-sticky .product__add {
+  background: #fff;
+  color: #000;
+  border-color: rgba(0,0,0,0.35);
+}
+
+.product-sticky .product__add:disabled {
+  background: #fff;
+  color: rgba(0,0,0,0.45);
+  border-color: rgba(0,0,0,0.25);
+}
+
+.product-sticky .product__add:not(:disabled) {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* =========================================================
+   FINAL PDP ADD TO CART STATE (wins over everything)
+   ========================================================= */
+
+/* Default / disabled */
+.product .product__add,
+.product .product-sticky .product__add {
+  background: #fff !important;
+  color: rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(0,0,0,0.35) !important;
+  opacity: 1 !important;
+}
+
+/* Enabled */
+.product .product__add:not(:disabled),
+.product .product-sticky .product__add:not(:disabled) {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+
+
+/* =========================================================
+   Gallery arrows â€” minimal, editorial (desktop only)
+   ========================================================= */
+
+.product__gallery-arrows {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .product__media {
+    position: relative;
+  }
+
+  .product__gallery-arrows {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    pointer-events: none;
+  }
+
+  .product__gallery-arrow {
+    pointer-events: auto;
+
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px 8px;
+
+    transition: color 160ms ease, transform 160ms ease;
+  }
+
+  .product__gallery-arrow:hover {
+    color: rgba(0,0,0,0.9);
+    transform: translateY(-1px);
+  }
+}
+
+/* =========================================================
+   COLLECTION â€” EDITORIAL GRID (LTTT RHYTHM) â€” CLEAN
+   Single source of truth (no duplicates, no conflicts)
+   ========================================================= */
+
+.collection {
+  padding: 0 0 var(--space-5);
+}
+
+/* Break out of container so grid is full-bleed */
+.collection .grid-container {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Grid with real grid lines */
+/* =========================================================
+   COLLECTION â€” UNIFIED EDITORIAL GRID
+   Single grid for mobile + desktop.
+   Mirrors the home page featured-media-grid aesthetic.
+   ========================================================= */
+
+.collection-grid--unified {
+  margin-top: -1px;
+  display: grid;
+  gap: 0;
+  grid-auto-flow: row dense;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--color-line);
+  border-left: 1px solid var(--color-line);
+}
+
+@media (min-width: 1100px) {
+  .collection-grid--unified {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* â”€â”€ Base cell â”€â”€ */
+.collection-item {
+  display: block;
+  color: var(--color-black);
+  text-decoration: none;
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  overflow: hidden;
+  position: relative;
+}
+
+/* â”€â”€ EDITORIAL tile (product.images[1]) â€” full bleed, no meta â”€â”€ */
+.collection-item--editorial {
+  padding: 0;
+}
+
+.collection-item--editorial .collection-item__media {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+.collection-item--editorial .collection-item__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.collection-item--editorial:hover .collection-item__image,
+.collection-item--link-tile:hover .collection-item__image {
+  transform: scale(1.03);
+}
+
+/* â”€â”€ STANDARD tile (fallback, featured_media + meta) â”€â”€ */
+.collection-item--standard {
+  padding: var(--space-3);
+}
+
+@media (min-width: 720px) {
+  .collection-item--standard {
+    padding: calc(var(--space-4) * 1.05);
+  }
+}
+
+@media (min-width: 1100px) {
+  .collection-item--standard {
+    padding: calc(var(--space-4) * 1.2);
+  }
+}
+
+.collection-item--standard .collection-item__media {
+  width: 100%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 4;
+}
+
+.collection-item--standard .collection-item__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.collection-item--standard[data-fit="cover"] .collection-item__image {
+  object-fit: cover;
+}
+
+/* â”€â”€ IMAGE TILE blocks (injected between product groups) â”€â”€ */
+.collection-item--media {
+  padding: 0;
+}
+
+.collection-item--media .collection-item__media {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  font-size: 0;
+  line-height: 0;
+}
+
+.collection-item--media .collection-item__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  display: block;
+}
+
+/* Mobile: hero spans full width, companion hides */
+.collection-item--media.is-media-hero {
+  grid-column: 1 / -1;
+}
+
+.collection-item--media.is-media-hero .collection-item__media {
+  aspect-ratio: 4 / 5;
+}
+
+.collection-item--media.is-media-companion {
+  display: none;
+}
+
+/* Tablet: same as mobile */
+@media (min-width: 720px) and (max-width: 1099px) {
+  .collection-item--media.is-media-hero {
+    grid-column: 1 / -1;
+  }
+  .collection-item--media.is-media-companion {
+    display: none;
+  }
+}
+
+/* Desktop: hero + companion each span 2 cols, tall panels */
+@media (min-width: 1100px) {
+  .collection-item--media.is-media-hero,
+  .collection-item--media.is-media-companion {
+    grid-column: span 2;
+    display: block;
+  }
+
+  .collection-item--media.is-media-hero .collection-item__media,
+  .collection-item--media.is-media-companion .collection-item__media {
+    aspect-ratio: unset;
+    height: 88vh;
+    min-height: 640px;
+    max-height: 1080px;
+  }
+}
+
+/* â”€â”€ Meta (standard tiles only) â”€â”€ */
+.collection-item__meta {
+  padding-top: var(--space-2);
+  display: grid;
+  gap: 10px;
+}
+
+.collection-item__title {
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.collection-item__price {
+  font-size: 0.92rem;
+  opacity: 0.7;
+  color: var(--color-dark);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.collection-item__soldout {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 719px) {
+  .collection-item__meta { padding-top: var(--space-2); gap: 6px; }
+  .collection-item__title { font-size: 0.92rem; line-height: 1.25; max-width: 22ch; }
+  .collection-item__price { font-size: 0.88rem; }
+}
+
+/* â”€â”€ Pagination â”€â”€ */
+.collection-pagination {
+  padding: calc(var(--space-5) * 1.6) 0 0;
+}
+
+/* â”€â”€ Bottom safe area (mobile fixed bar) â”€â”€ */
+@media (max-width: 719px) {
+  .collection {
+    padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px) + 80px);
+  }
+}
+
+/* Legacy grid classes â€” hidden, replaced by unified grid */
+.collection-grid--desktop { display: none; }
+.collection-grid--mobile  { display: none; }--bg-white: #FFFFFF;
+  --bg-blue: #E8F4f8;
+  --bg-cream: #F5EDE3;
+  --bg-footer: #F5F5F5;
+
+  --grid-max-width: 1440px;
+  --grid-padding-desktop: 60px;
+
+  /* Spacing scale (editorial rhythm) */
+  --space-1: 12px;
+  --space-2: 20px;
+  --space-3: 32px;
+  --space-4: 52px;
+  --space-5: 84px;
+
+  /* Featured media */
+  --media-radius: 0px;
+
+  /* Header fade states */
+  --header-bg-top: rgba(255, 255, 255, 1);
+  --header-bg-scrolled: rgba(255, 255, 255, 0.78);
+  --header-border-top: rgba(204, 204, 204, 1);
+  --header-border-scrolled: rgba(204, 204, 204, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  min-height: 100%;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+  color: var(--color-black);
+  background: var(--bg-white);
+
+  /* Sticky header offset (intentional & must remain) */
+  padding-top: 80px;
+}
+
+/* IMPORTANT:
+   Do NOT force height:100% on html/body with a padded body.
+   It creates phantom scroll space (especially iOS Safari). */
+html, body {
+  height: auto;
+}
+
+#MainContent {
+  /* keep header offset handled by body padding-top:80px; 
+     this is the â€œfirst section breathing roomâ€ and should be on-scale */
+  padding-top: var(--space-2); /* 20px */
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* =========================================================
+   PAGE LOAD â€” WHITE VEIL FADE (EDITORIAL)
+   ========================================================= */
+
+.page-fade {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646; /* just under .site-header-sticky (2147483647) */
+  background: var(--bg-white);
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 360ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+html.is-loaded .page-fade { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade { transition: none; }
+}
+
+/* =========================================================
+   REVEAL ON VIEWPORT ENTRY (OPT-IN)
+   ========================================================= */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 420ms ease, transform 520ms ease;
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* =========================================================
+   GLOBAL GRID UTILITIES
+   ========================================================= */
+
+.grid-container {
+  max-width: var(--grid-max-width);
+  margin: 0 auto;
+  padding: 0 var(--grid-padding-desktop);
+}
+
+/* =========================================================
+   HEADER (FIXED / STICKY)
+   ========================================================= */
+
+.site-header-sticky {
+  position: fixed !important;
+  top: var(--announcement-bar-height) !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2147483647 !important;
+
+  background: var(--header-bg-top) !important;
+  border-bottom: 1px solid var(--header-border-top) !important;
+
+  transition:
+    top 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+body.is-scrolled .site-header-sticky {
+  background: var(--header-bg-scrolled) !important;
+  border-bottom-color: var(--header-border-scrolled) !important;
+
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+/*
+  Fixed headers break if any ancestor has transform/filter/perspective/contain.
+  These hard resets preserve working sticky behavior.
+*/
+html, body,
+#MainContent,
+.shopify-section,
+[id^="shopify-section-"] {
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+  contain: none !important;
+}
+
+/* =========================================================
+   HEADER â€” FIXED STICKY WRAPPER
+   ========================================================= */
+
+.site-header-sticky {
+  position: fixed;
+  top: var(--announcement-bar-height);
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+
+  background: var(--header-bg-top);
+  border-bottom: 1px solid var(--header-border-top);
+
+  transition:
+    top 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+body.is-scrolled .site-header-sticky {
+  background: var(--header-bg-scrolled);
+  border-bottom-color: var(--header-border-scrolled);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+body.is-scrolling .site-header-sticky {
+  background: rgba(255, 255, 255, 0.38);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+/* =========================================================
+   HEADER â€” INNER LAYOUT
+   flex + space-between gives clean left/right clusters
+   with no absolute trickery needed
+   ========================================================= */
+
+.site-header {
+  width: 100%;
+  height: 80px;
+  padding: 0 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Base link style */
+.site-header a {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-black);
+  text-decoration: none;
+  transition: opacity 220ms ease;
+}
+
+/* =========================================================
+   LEFT CLUSTER
+   ========================================================= */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Header title â€” height-locked, width flows naturally */
+.header-title {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-title__logo {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+Shop link â€” desktop only
+.header-shop-link {
+  display: none !important;
+}
+
+/* Cart */
+.header-cart {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   CART PILL â€” STRAWBERRY BACKDROP
+   ========================================================= */
+
+.header-cart-badge__pill {
+  width: 20px;
+  height: 24px;
+  margin-left: 0px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: url("/cdn/shop/files/strawberry.png");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  padding-top: 7px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   RIGHT CLUSTER
+   ========================================================= */
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-order-emblem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-order-emblem img {
+  display: block;
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 749px) {
+  .site-header {
+    padding: 0 16px;
+  }
+
+  .header-left {
+    gap: 16px;
+  }
+
+  /* Hide Shop/Home link on mobile â€” copyright bar handles nav there */
+  .header-shop-link {
+    display: none !important;
+  }
+
+  .header-title__logo {
+    height: 22px;
+  }
+
+  .header-order-emblem img {
+    height: 30px;
+  }
+}
+
+
+/* =========================================================
+   HERO TITLE (CLEAN, NO MORPH)
+   ========================================================= */
+
+.hero-title {
+  /* scale-locked rhythm (no one-offs) */
+  padding: var(--space-4) 0 var(--space-5);
+  position: relative;
+  z-index: 2;
+}
+
+
+.hero-title h1 {
+  margin: 0;
+  font-size: 180px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-black);
+}
+
+.hero-title p {
+  margin-top: var(--space-1);
+  font-size: 18px;
+  color: var(--color-dark);
+}
+
+.hero-title__logo {
+  display: block;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  height: auto;
+}
+
+.hero-title__logo--svg {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  display: block;
+  height: clamp(140px, 18vw, 220px);
+}
+
+.hero-title__logo--svg .hero-title__logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* =========================================================
+   THREE COLUMN INFO
+   ========================================================= */
+
+.three-column-info {
+  display: none;
+}
+
+/* === INFORMATION SECTION === */
+
+.info-section-wrapper {
+  width: 100%;
+  background-color: #e8e4dc;
+}
+
+.info-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 8px,
+    #e0e0e0 8px,
+    #e0e0e0 9px
+  );
+  padding: 10px 12px;
+}
+
+.info-section-label-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+/* No white bg â€” emblem renders directly on stripe */
+.info-section-emblem {
+  height: 17px;
+  width: auto;
+  display: block;
+  opacity: 0.7;
+}
+
+.info-section-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  line-height: 1;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.info-section-toggle__icon {
+  font-family: sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  display: block;
+}
+
+.info-section-body--collapsible {
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.info-section-content {
+  padding: 48px 40px 56px;
+}
+
+@media (max-width: 767px) {
+  .info-section-content {
+    padding: 32px 20px 40px;
+  }
+}
+
+.info-section-title {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(52px, 12vw, 96px);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: #000;
+  margin: 0 0 32px;
+  text-transform: lowercase;
+}
+
+.info-section-body-text {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 3.5vw, 22px);
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  color: #000;
+  margin: 0;
+  text-align: justify;
+}
+
+
+/* =========================================================
+   FEATURED MEDIA GRID â€” DESKTOP 3-COL / MOBILE PORTRAIT RHYTHM
+   Mobile pattern:
+   - 1st tile (and every 5th): Portrait 3/4 and full-width (spans 2 cols)
+   - next 4 tiles: Portrait 3/4 (2x2)
+   ========================================================= */
+
+.featured-media-grid {
+  width: 100%;
+  display: grid;
+  gap: 0;
+  overflow-anchor: none;
+
+  border-top: 1px solid var(--color-line);
+
+  padding: 0;
+  margin: 0;
+
+  /* Mobile default: 2 columns */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  /* Helps avoid holes when span items appear */
+  grid-auto-flow: dense;
+}
+
+/* Desktop only: 3 columns */
+@media (min-width: 768px) {
+  .featured-media-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Each cell draws structure lines (desktop + larger) */
+.featured-media-grid .media-cell {
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+
+  padding: 0;
+  min-width: 0;
+  border-radius: 0;
+
+  overflow: hidden;
+}
+
+/* Media window default (desktop baseline + mobile portrait) */
+.featured-media-grid .media-cell__inner {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+/* =========================================================
+   MOBILE â€” PORTRAIT RHYTHM + EDITORIAL SPACING
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* Editorial breathing room */
+  .featured-media-grid {
+    gap: 1px;
+  }
+
+  /* Remove structural borders on mobile
+     (spacing replaces the grid line rhythm here) */
+  .featured-media-grid .media-cell {
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  /* Rhythm anchor spans full width (still 3/4) */
+  .featured-media-grid .media-cell--tall {
+    grid-column: span 2;
+  }
+}
+
+/* Desktop: tall behaves like a normal cell */
+@media (min-width: 768px) {
+  .featured-media-grid .media-cell--tall {
+    grid-column: auto;
+  }
+}
+
+/* Links block-fill */
+.featured-media-grid .media-cell__inner > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Media fills the window */
+.featured-media-grid .media-cell__inner > a,
+.featured-media-grid .media-cell__inner > .media-embed,
+.featured-media-grid .media-cell__inner > video,
+.featured-media-grid .media-cell__inner > iframe,
+.featured-media-grid .media-cell__inner > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Images */
+.featured-media-grid .media-cell__inner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Videos */
+.featured-media-grid .media-cell__inner video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-media-grid .media-cell__inner video.media-video--contain {
+  object-fit: contain;
+}
+
+/* Embeds */
+.featured-media-grid .media-embed {
+  width: 100%;
+  height: 100%;
+  background: var(--embed-bg, transparent);
+}
+
+/* Overlay inset */
+.featured-media-grid .media-badge,
+.featured-media-grid .media-meta {
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+}
+
+/* Hover zoom (restrained) */
+@media (hover: hover) and (pointer: fine) {
+  .featured-media-grid .media-cell__inner img {
+    transition: transform 0.3s ease;
+    will-change: transform;
+  }
+
+  .featured-media-grid .media-cell:hover .media-cell__inner img {
+    transform: scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-media-grid .media-cell__inner img {
+    transition: none;
+  }
+
+  .featured-media-grid .media-cell:hover .media-cell__inner img {
+    transform: none;
+  }
+}
+
+
+
+/* =========================================================
+   SIGN UP SECTION
+   ========================================================= */
+
+/* Editorial email input â€” calm, centered, intentional */
+.ai-signup-button-{{ ai_gen_id }} input[type="email"] {
+  display: block;
+  width: 100%;
+
+  /* Typography: inherit the themeâ€™s editorial voice */
+  font-family: var(--font-body-family, inherit);
+  font-size: var(--font-size-base, 1rem);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+
+  /* Centered, composed */
+  text-align: center;
+  color: inherit;
+
+  /* Remove all default input chrome */
+  background: transparent;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+
+  /* Match the previous CTAâ€™s vertical rhythm */
+  padding: {{ block.settings.button_padding }}px;
+}
+
+/* Placeholder: quieter, editorial */
+.ai-signup-button-{{ ai_gen_id }} input[type="email"]::placeholder {
+  color: currentColor;
+  opacity: 0.45;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* Focus state: subtle, no glow, no movement */
+.ai-signup-button-{{ ai_gen_id }} input[type="email"]:focus::placeholder {
+  opacity: 0.25;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.site-footer {
+  width: 100%;
+  border-top: 1px solid var(--color-line);
+  padding: 0;
+  text-align: center;
+  background: var(--bg-white);
+}
+
+.footer-location {
+  width: 100%;
+  padding: var(--space-4) var(--grid-padding-desktop);
+  border-bottom: 1px solid var(--color-line);
+  overflow: hidden;
+}
+
+.footer-location img {
+  width: 100%;
+  max-height: 600px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  background: var(--bg-white);
+  margin: 0 auto;
+}
+
+.footer-delivery-apps {
+  width: 100%;
+  padding: 28px var(--grid-padding-desktop);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.footer-delivery-apps__grid {
+  max-width: var(--grid-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-delivery-apps__item {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease;
+}
+
+.footer-delivery-apps__item:hover {
+  opacity: 0.6;
+}
+
+.footer-delivery-apps__item img {
+  width: 100%;
+  height: 36px;
+  object-fit: contain;
+}
+
+@media (max-width: 767px) {
+  .footer-delivery-apps {
+    padding: 20px 12px;
+  }
+  .footer-delivery-apps__grid {
+    gap: 8px;
+  }
+  .footer-delivery-apps__item img {
+    height: 22px;
+  }
+}
+
+/* Social handle (gradient link) */
+.site-footer .footer-social {
+  padding: 28px var(--grid-padding-desktop);
+  font-size: 22px;
+  color: var(--color-mid);
+  margin: 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.footer-social a {
+  display: inline-block;
+  text-decoration: none;
+
+  background: linear-gradient(
+    90deg,
+    #833ab4,
+    #c13584,
+    #e1306c,
+    #fd1d1d,
+    #f77737
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.footer-social a:hover,
+.footer-social a:focus-visible {
+  opacity: 0.8;
+}
+
+/* Footer links (if used) */
+.site-footer .footer-links {
+  padding: 18px var(--grid-padding-desktop) 32px;
+  font-size: 12px;
+}
+
+.site-footer .footer-links a {
+  color: var(--color-black);
+  text-decoration: none;
+  margin: 0 8px;
+}
+
+.site-footer .footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   COPYRIGHT + MODALS (FOOTER BAR)
+   Desktop: in-flow
+   Mobile: fixed bottom bar
+   ========================================================= */
+
+/* ---------- Base (all viewports) ---------- */
+
+.copyright {
+  width: 100%;
+  background: #000;
+  color: #fff;
+
+  padding: 14px var(--grid-padding-desktop);
+  text-align: center;
+
+  /* Anchor for desktop modals (they sit above the bar) */
+  position: relative;
+
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+/* Links container (desktop defaults to text links) */
+.copyright__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2.25rem);
+  margin: 0;
+}
+
+/* Links/buttons normalized */
+.copyright__link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  text-decoration: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Label text */
+.copyright__label {
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.85;
+  text-transform: lowercase;
+}
+
+/* Desktop: icons OFF by default */
+.copyright__icon {
+  display: none;
+}
+
+/* Bottom copyright line */
+.copyright__bottom {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.15;
+  opacity: 0.65;
+}
+
+/* ---------- Modals (desktop: anchored above bar) ---------- */
+
+.site-modal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 10px);
+  z-index: 40;
+  pointer-events: none;
+}
+
+.site-modal[hidden] { display: none; }
+
+/* If an overlay element exists in any older markup, keep it off */
+.site-modal__overlay { display: none; }
+
+.site-modal__dialog {
+  pointer-events: auto;
+
+  max-width: 640px;
+  margin: 0 auto;
+
+  background: #fff;
+  color: rgba(0, 0, 0, 0.88);
+
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 18px;
+
+  padding: 1.25rem 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+  position: relative;
+}
+
+.site-modal__title {
+  margin: 0 0 0.75rem 0;
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.site-modal__body {
+  max-width: 52ch;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+}
+
+.site-modal__body p {
+  margin: 0 0 1rem 0;
+}
+
+.site-modal__dialog a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.site-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: #fff;
+
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 18px;
+  line-height: 1;
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+}
+
+/* =========================================================
+   MOBILE (â‰¤ 768px) â€” FIXED TAB BAR (compact + translucent)
+   Single source of truth. Replace ALL other mobile footer-bar blocks.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  :root { --copyright-bar-h: 76px; }
+
+  /* Reserve space so page content never hides behind the fixed bar */
+  body {
+    padding-bottom: calc(var(--copyright-bar-h) + env(safe-area-inset-bottom, 0px) + 20px) !important;
+  }
+
+  /* Fixed bar: translucent like YouTube */
+  body .copyright {
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999 !important;
+
+    background: rgba(255, 255, 255, 0.88) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+
+    padding: 8px 16px !important;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0 !important;
+
+    text-align: center !important;
+  }
+
+  /* One-row tabs */
+  body .copyright .copyright__links {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+
+    width: 100% !important;
+    max-width: 520px !important;
+
+    align-items: end !important;
+    justify-items: center !important;
+    margin: 0 !important;
+  }
+
+  body .copyright .copyright__link {
+    width: 100% !important;
+    max-width: 108px !important;
+
+    padding: 6px 4px 4px !important;
+
+    display: grid !important;
+    grid-template-rows: 22px auto !important;
+    justify-items: center !important;
+    align-content: end !important;
+
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.10);
+  }
+
+  /* Icons ON */
+  body .copyright .copyright__icon {
+    display: block !important;
+    width: 22px !important;
+    height: 22px !important;
+    opacity: 0.92 !important;
+  }
+
+  body .copyright .copyright__icon svg {
+    width: 22px !important;
+    height: 22px !important;
+    display: block !important;
+  }
+
+  body .copyright .copyright__label {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0.01em !important;
+    text-transform: lowercase !important;
+    opacity: 0.85 !important;
+    text-align: center !important;
+  }
+
+  /* Remove second row to shrink height */
+  body .copyright .copyright__bottom {
+    display: none !important;
+  }
+
+  /* Modals: fixed, bottom edge sits just above the copyright nav bar */
+  body .site-modal {
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: calc(var(--copyright-bar-h) + env(safe-area-inset-bottom, 0px) + 12px) !important;
+    top: auto !important;
+    transform: none !important;
+    z-index: 1000 !important;
+    width: auto !important;
+    pointer-events: none;
+  }
+
+  body .site-modal__dialog {
+    width: 100% !important;
+    margin: 0 !important;
+    pointer-events: auto;
+  }
+}
+
+
+/* ---------- Desktop lock: icons always off ---------- */
+@media (min-width: 769px) {
+  .copyright__icon {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .copyright__icon { line-height: 0; }
+  .copyright__icon img { display: block; }
+}
+
+/* =========================================================
+   COPYRIGHT BAR â€” ICON NORMALIZATION (MOBILE ONLY)
+   Makes PNG icons render in a consistent 1:1 box and center.
+   ========================================================= */
+@media (max-width: 768px) {
+
+  /* Make each tab a centered stack (icon over label) */
+  .copyright__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* adjust if you want tighter */
+  }
+
+  /* A hard, uniform icon box */
+  .copyright__icon {
+    width: 24px;         /* bump from 22px for more consistency */
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;      /* kills baseline whitespace */
+    flex: 0 0 auto;
+  }
+
+  .copyright__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;      /* removes weird inline gaps */
+  }
+
+  /* Keep labels visually consistent */
+  .copyright__label {
+    line-height: 1;
+    display: block;
+  }
+}
+
+
+/* =========================================================
+   PRODUCT PAGE (EDITORIAL)
+   ========================================================= */
+
+.product {
+  padding: clamp(2rem, 4vw, 4rem) 1.25rem;
+}
+
+.product__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+@media (min-width: 900px) {
+  .product__inner {
+    grid-template-columns: 1.35fr 0.65fr;
+    align-items: start;
+  }
+}
+
+/* Media (desktop baseline) */
+.product__media {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Main image */
+.product__media-main img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Thumbs rail (desktop defaults are in your layout elsewhere; keep minimal here) */
+.product__thumb {
+  opacity: 0.6;
+  transition: opacity 160ms ease;
+}
+
+.product__thumb.is-active { opacity: 1; }
+
+/* Info column */
+.product__info { max-width: 520px; }
+
+.product__header { margin-bottom: 1.5rem; }
+
+.product__title {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  letter-spacing: 0.01em;
+}
+
+.product__price {
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+/* Form */
+.product__form {
+  margin-top: 1.75rem;
+  margin-bottom: 2.25rem;
+}
+
+/* Size select */
+.product__select-label {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.product__select-wrap {
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.5);
+}
+
+.product__select-wrap::after {
+  content: "";
+  width: 10px;
+  height: 6px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23000'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #000;
+  opacity: 0.8;
+}
+
+.product__select {
+  width: 100%;
+  padding: 0.9rem 2.5rem 0.9rem 1rem;
+  background: transparent;
+  border: 0;
+  appearance: none;
+  color: #000;
+  -webkit-text-fill-color: #000; /* iOS: prevent blue */
+}
+
+.product__select option { color: #000; }
+
+/* Add to cart â€” editorial (ALWAYS black text) */
+.product__add {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(0,0,0,0.5);
+  background: transparent;
+  color: #000;
+  border-color: #000;
+  cursor: pointer;
+}
+
+.product__add[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Inline purchase spacing */
+.product__purchase .product__add {
+  margin-top: 0.75rem;
+}
+
+/* Accordions */
+.product__accordions {
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.product__accordion {
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  padding: 1rem 0;
+}
+
+.product__accordion > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.product__accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+.product__accordion-body {
+  padding-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  opacity: 0.95;
+}
+
+/* =========================================================
+   MOBILE â€” PRODUCT MEDIA + STICKY PURCHASE
+   ========================================================= */
+
+@media (max-width: 767px) {
+  /* Media: vertical stack (main, then thumbs strip) */
+  .product__media {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5rem;
+  }
+
+  .product__media-main {
+    padding: 0;
+  }
+
+  .product__media-main img {
+    width: 100%;
+    height: auto;
+    max-height: 82vh;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+
+  /* Thumbs strip (scrollable) */
+  .product__media-thumbs {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    order: 2;
+  }
+
+  .product__thumb {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    opacity: 0.6;
+  }
+
+  .product__thumb.is-active { opacity: 1; }
+
+  .product__thumb img {
+    width: 72px;
+    height: auto;
+    display: block;
+  }
+
+  .product__media-thumbs::-webkit-scrollbar { display: none; }
+  .product__media-thumbs { scrollbar-width: none; }
+
+  /* Sticky bar disabled â€” purchase block stays in normal document flow */
+  .product-sticky { display: none !important; }
+}
+
+/* =========================================================
+   RESPONSIVE â€” GLOBAL
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  :root { --grid-padding-desktop: 40px; }
+
+  .hero-title h1 { font-size: 120px; }
+  .hero-title__logo { max-width: 800px; }
+
+  .three-column-info .info-heading {
+    font-size: 28px;
+    margin: 12px 0;
+  }
+
+  .three-column-info .info-subtext { font-size: 13px; }
+
+  .three-column-info .info-label {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .footer-location img { max-height: 520px; }
+
+  .footer-delivery-apps__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .footer-delivery-apps__item img { height: 52px; }
+}
+
+@media (max-width: 768px) {
+  :root { --grid-padding-desktop: 20px; }
+
+  .hero-title { padding: var(--space-3) 0; }
+  .hero-title h1 { font-size: 64px; }
+  .hero-title p { font-size: 16px; }
+  .hero-title__logo { max-width: 90%; }
+
+  .hero-title__logo--svg {
+    height: clamp(120px, 30vw, 180px);
+  }
+
+  .three-column-info {
+    padding: 40px 20px;
+  }
+
+  .three-column-info .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .three-column-info .info-column:not(:last-child) {
+    border-right: none;
+  }
+
+  .three-column-info .info-column {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+    text-align: center;
+  }
+
+  .three-column-info .info-column:last-child {
+    border-bottom: none;
+  }
+
+  .three-column-info .info-heading {
+    font-size: 26px;
+    margin: 10px 0;
+  }
+
+  .three-column-info .info-subtext {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .three-column-info .info-label {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .three-column-info .info-spacing { margin-top: 22px; }
+
+  @media (max-width: 767px) {
+  .featured-media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Remove right border on last column (mobile, 2-col) */
+  /* Use :nth-of-type on .media-cell only, ignoring .media-section-label rows */
+  .featured-media-grid .media-cell:nth-child(2n) {
+    border-right: 0;
+  }
+
+  /* Re-correct pairing after a full-width label row:
+     label spans 1 row, so cells after it continue naturally.
+     Force label to always start on a fresh row. */
+  .featured-media-grid .media-section-label {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+}
+
+
+  .footer-location {
+    padding: 28px var(--grid-padding-desktop);
+  }
+
+  .footer-location img { max-height: 420px; }
+
+  /* delivery app responsive â€” handled in base rule */
+
+  .site-footer .footer-social {
+    padding: 28px var(--grid-padding-desktop);
+    font-size: 22px;
+  }
+
+  .site-footer .footer-links {
+    padding: 14px var(--grid-padding-desktop) 26px;
+  }
+
+  .copyright { --copyright-height: 64px; }
+  .copyright__links { gap: 0.75rem; }
+
+  .site-modal__dialog { padding: 2.25rem 2.5rem; }
+
+  .site-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: 0;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 420px) {
+  .three-column-info .info-heading { font-size: 22px; }
+  .three-column-info .info-subtext { font-size: 12px; }
+
+  .three-column-info .info-column--right .info-heading {
+    word-break: keep-all;
+  }
+
+  .footer-location img { max-height: 320px; }
+
+  .footer-delivery-apps__grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .footer-delivery-apps__item img { height: 44px; }
+}
+
+/* =========================================================
+   PDP MEDIA â€” GALLERY LAYOUT (replaces old thumb-rail hotfix)
+   ========================================================= */
+
+.product__media {
+  /* Let the gallery fill the media column */
+  display: block;
+  max-width: 100%;
+  margin: 0;
+  min-width: 0;
+}
+
+.product__gallery {
+  width: 100%;
+  max-width: 100%;
+}
+
+.product__gallery-slide {
+  width: 100%;
+}
+
+.product__gallery-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Progress bars: thin long dashes, centered under the media */
+.product__gallery-progress {
+  width: 100%;
+  max-width: 680px; /* keeps it "editorial" vs full-bleed */
+  margin: 12px auto 0;
+  gap: 14px;
+}
+
+.product__progress-seg {
+  height: 2px;
+  border-radius: 0;
+  background: rgba(0,0,0,0.18);
+}
+
+.product__progress-seg.is-active {
+  background: rgba(0,0,0,0.85);
+}
+
+/* Desktop: large Margiela-ish media height */
+@media (min-width: 768px) {
+  .product__gallery-slide img {
+    max-height: 78vh;
+  }
+}
+
+/* Mobile: fit usable viewport above sticky purchase */
+@media (max-width: 767px) {
+  .product__gallery-slide img {
+    max-height: calc(100svh - 80px - 96px - 16px);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   Sticky bar CTA must NEVER become white text / black bg
+   (Overrides existing conflicting rule in base.css)
+   --------------------------------------------------------- */
+@media (max-width: 767px) {
+  .product-sticky .product__add {
+    background: transparent !important;
+    color: #000 !important;
+    border-color: rgba(0,0,0,0.5) !important;
+  }
+
+  .product-sticky .product__add[disabled] {
+    background: transparent !important;
+    color: #000 !important;
+    opacity: 0.45;
+  }
+
+  /* iOS select blue text prevention (sticky + inline) */
+  .product__select,
+  .product-sticky .product__select {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+  }
+}
+
+/* =========================================================
+   MOBILE PDP â€” iPhone viewport fit + floating sticky controls
+   Paste at VERY END of base.css
+   ========================================================= */
+@media (max-width: 767px) {
+  :root {
+    --header-h: 80px;        /* your fixed header height */
+    --sticky-h: 84px;        /* approx sticky controls height incl padding */
+    --sticky-gap: 14px;      /* breathing room above sticky */
+  }
+
+  /* Ensure media stack isn't visually fighting sticky area */
+  .product__media-main img {
+    /* Fit the image to the usable viewport (header + sticky accounted for) */
+    max-height: calc(100svh - var(--header-h) - var(--sticky-h) - var(--sticky-gap));
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Keep thumbs below, never overlay */
+  .product__media-thumbs {
+    margin-top: 0.5rem;
+  }
+
+  /* Sticky container stays clear (no bar), but controls float */
+  .product-sticky {
+    background: transparent !important;
+    border-top: 0 !important;
+  }
+
+  /* Floating button look (white tiles) */
+  .product-sticky .product__select-wrap,
+  .product-sticky .product__add {
+    background: #fff !important;
+    border: 1px solid rgba(0,0,0,0.18) !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.10) !important;
+  }
+
+  /* Keep select text black (prevents iOS blue) */
+  .product-sticky .product__select,
+  .product-sticky .product__select option {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+  }
+
+  /* If any earlier rule tries to turn CTA white, hard override */
+  .product-sticky .product__add {
+    color: #000 !important;
+  }
+
+  .product-sticky .product__add[disabled] {
+    opacity: 0.45;
+  }
+}
+
+/* =========================================================
+   MOBILE: clamp media area so thumbs donâ€™t extend page
+   + add â€œmoreâ€ arrow cue on the thumbs strip
+   ========================================================= */
+@media (max-width: 767px) {
+  :root {
+    --header-h: 80px;
+    --sticky-h: 84px;
+    --sticky-gap: 14px;
+
+    /* NEW: reserved height for the thumbs strip */
+    --thumbs-h: 112px;
+  }
+
+  /* Constrain the MAIN image so main + thumbs fit the viewport */
+  .product__media-main img {
+    max-height: calc(
+      100svh - var(--header-h) - var(--sticky-h) - var(--sticky-gap) - var(--thumbs-h)
+    );
+  }
+
+  /* Clamp the thumbs strip so it doesnâ€™t increase page height beyond the design */
+  .product__media-thumbs {
+    max-height: var(--thumbs-h);
+    overflow: hidden;            /* ðŸ‘ˆ this prevents the strip from â€œextendingâ€ */
+    position: relative;
+    padding-right: 3.5rem;       /* room for the arrow cue */
+  }
+
+  /* Subtle fade on the right edge (editorial â€œmoreâ€) */
+  .product__media-thumbs::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 64px;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+  }
+
+  /* Universal arrow cue (doesnâ€™t need JS) */
+  .product__media-thumbs::after {
+    content: "â€º";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.16);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+    color: #000;
+    opacity: 0.9;
+    pointer-events: none; /* purely visual cue */
+  }
+}
+
+/* =========================================================
+   MOBILE SWIPE GALLERY (Margiela-style)
+   ========================================================= */
+@media (max-width: 767px) {
+  /* Mobile uses swipe gallery only */
+  .product__media-thumbs,
+  .product__media-main {
+    display: none !important;
+  }
+
+  .product__media-swipe {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+
+    /* IMPORTANT: prevent page-width overflow */
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* each slide is exactly viewport width */
+  .product__swipe-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: start;
+
+    /* keep the image centered and clean */
+    display: grid;
+    place-items: center;
+  }
+
+  .product__swipe-slide img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+
+    /* Fit usable viewport (header + sticky accounted for) */
+    max-height: calc(100svh - 80px - 84px - 14px);
+  }
+
+  /* Optional: hide scrollbar */
+  .product__media-swipe::-webkit-scrollbar { display: none; }
+  .product__media-swipe { scrollbar-width: none; }
+
+  /* Kill any accidental horizontal overflow on page */
+  html, body {
+    overflow-x: hidden;
+  }
+}
+
+/* =========================================================
+   PDP Gallery (All breakpoints) + Progress bars
+   Paste at VERY END of base.css
+   ========================================================= */
+
+.product__gallery {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+
+  width: 100%;
+  max-width: 100%;
+
+  /* keep it calm */
+  scrollbar-width: none;
+}
+
+.product__gallery::-webkit-scrollbar { display: none; }
+
+.product__gallery-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  display: grid;
+  place-items: center;
+}
+
+.product__gallery-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Progress bars (Margiela-style dashes) */
+.product__media { position: relative; }
+
+/* =========================================================
+   Gallery progress â€” editorial dots
+   ========================================================= */
+
+.product__gallery-progress {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.product__progress-seg {
+  appearance: none;
+  border: 0;
+
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,0.22);
+  padding: 0;
+  cursor: pointer;
+
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.product__progress-seg.is-active {
+  background: rgba(0,0,0,0.9);
+  transform: scale(1.15);
+}
+
+
+/* give the progress room so it doesn't overlap the bottom edge */
+.product__gallery {
+  padding-bottom: 26px;
+}
+
+
+/* Desktop: set a composed gallery height (Margiela-ish) */
+@media (min-width: 768px) {
+  .product__gallery-slide img {
+    max-height: 78vh;
+  }
+}
+
+/* Mobile: fit usable viewport above sticky purchase */
+@media (max-width: 767px) {
+  .product__gallery-slide img {
+    max-height: calc(100svh - 80px - 96px - 16px);
+  }
+
+  /* Avoid accidental horizontal overflow anywhere */
+  html, body { overflow-x: hidden; }
+}
+
+/* =========================================================
+   DESKTOP: restore full-width product gallery
+   ========================================================= */
+@media (min-width: 768px) {
+  .product__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .product__media {
+    width: 100%;
+  }
+
+  .product__gallery {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product__gallery-slide {
+    width: 100%;
+  }
+
+  .product__gallery-slide img {
+    width: 100%;
+    max-height: 82vh;
+    object-fit: contain;
+  }
+}
+
+/* =========================================================
+   ADD TO CART â€” STATE STYLING (INLINE + STICKY)
+   ========================================================= */
+
+/* Base button (neutral, inactive look) */
+.product__add {
+  background: #fff;
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.35);
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+/* Disabled / inactive */
+.product__add:disabled,
+.product__add[disabled] {
+  background: #fff;
+  color: rgba(0,0,0,0.45);
+  border-color: rgba(0,0,0,0.25);
+  cursor: not-allowed;
+}
+
+/* Active (variant selected & available) */
+.product__add:not(:disabled) {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Ensure sticky bar inherits same behavior */
+.product-sticky .product__add {
+  background: #fff;
+  color: #000;
+  border-color: rgba(0,0,0,0.35);
+}
+
+.product-sticky .product__add:disabled {
+  background: #fff;
+  color: rgba(0,0,0,0.45);
+  border-color: rgba(0,0,0,0.25);
+}
+
+.product-sticky .product__add:not(:disabled) {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* =========================================================
+   FINAL PDP ADD TO CART STATE (wins over everything)
+   ========================================================= */
+
+/* Default / disabled */
+.product .product__add,
+.product .product-sticky .product__add {
+  background: #fff !important;
+  color: rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(0,0,0,0.35) !important;
+  opacity: 1 !important;
+}
+
+/* Enabled */
+.product .product__add:not(:disabled),
+.product .product-sticky .product__add:not(:disabled) {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+
+
+/* =========================================================
+   Gallery arrows â€” minimal, editorial (desktop only)
+   ========================================================= */
+
+.product__gallery-arrows {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .product__media {
+    position: relative;
+  }
+
+  .product__gallery-arrows {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    pointer-events: none;
+  }
+
+  .product__gallery-arrow {
+    pointer-events: auto;
+
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px 8px;
+
+    transition: color 160ms ease, transform 160ms ease;
+  }
+
+  .product__gallery-arrow:hover {
+    color: rgba(0,0,0,0.9);
+    transform: translateY(-1px);
+  }
+}
+
+/* =========================================================
+   COLLECTION â€” EDITORIAL GRID (LTTT RHYTHM) â€” CLEAN
+   Single source of truth (no duplicates, no conflicts)
+   ========================================================= */
+
+.collection {
+  padding: 0 0 var(--space-5);
+}
+
+/* Break out of container so grid is full-bleed */
+.collection .grid-container {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Grid with real grid lines */
+.collection-grid {
+  margin-top: -1px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2-up mobile */
+  gap: 0;
+
+  border-top: 1px solid var(--color-line);
+  border-left: 1px solid var(--color-line);
+}
+
+/* Desktop becomes 3 columns */
+@media (min-width: 1100px) {
+  .collection-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: row dense; /* important for spanning media */
+  }
+}
+
+/* =========================================================
+   CELL / PRODUCT TILE
+   ========================================================= */
+
+.collection-item {
+  display: block;
+  color: var(--color-black);
+  text-decoration: none;
+
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+
+  padding: var(--space-3);
+}
+
+/* Increase breathing room as screen grows */
+@media (min-width: 720px) {
+  .collection-item {
+    padding: calc(var(--space-4) * 1.05);
+  }
+}
+
+@media (min-width: 1100px) {
+  .collection-item {
+    padding: calc(var(--space-4) * 1.2);
+  }
+}
+
+/* Product media stage (default = product behavior) */
+.collection-item__media {
+  width: 100%;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+}
+
+/* Product image fills the stage without cropping */
+.collection-item__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Make product image slightly smaller inside the frame */
+.collection-grid--mobile 
+.collection-item:not(.collection-item--media) 
+.collection-item__image {
+  transform: scale(0.88);
+  transition: transform 0.3s ease;
+}
+
+
+/* Optional cover mode (clean crop if enabled) */
+.collection-item[data-fit="cover"] .collection-item__image {
+  object-fit: cover;
+}
+
+/* Meta */
+.collection-item__meta {
+  padding-top: var(--space-2);
+  display: grid;
+  gap: 10px;
+}
+
+.collection-item__title {
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.collection-item__price {
+  font-size: 0.92rem;
+  opacity: 0.7;
+  color: var(--color-dark);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.collection-item__soldout {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* Pagination */
+.collection-pagination {
+  padding: calc(var(--space-5) * 1.6) 0 0;
+}
+
+/* =========================================================
+   EDITORIAL IMAGE TILES â€” TRUE FULL FRAME (NO SQUISH)
+   Uses: .collection-item--media + is-media-hero/is-media-companion
+   ========================================================= */
+
+/* Editorial tiles remove padding */
+.collection-item--media {
+  padding: 0;
+}
+
+/* Editorial stage becomes a framed viewport (not flex-centered) */
+.collection-item--media .collection-item__media {
+  display: block;
+  position: relative;
+  overflow: hidden;
+
+  width: 100%;
+  min-height: 0; /* neutralizes product min-height */
+}
+
+/* Full-bleed cover */
+.collection-item--media .collection-item__image {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+
+  object-fit: cover;
+}
+
+/* =========================================================
+   MOBILE â€” VISUAL RHYTHM: 4 PRODUCTS (2x2) â†’ HERO â†’ REPEAT
+   Desktop markup remains unchanged (images first in DOM).
+   ========================================================= */
+
+@media (max-width: 719px) {
+
+  /* Let grid backfill around explicitly-placed hero rows */
+  .collection-grid {
+    grid-auto-flow: row dense;
+  }
+
+  /* Products only: consistent rectangle stage */
+  .collection-item:not(.collection-item--media) .collection-item__media {
+    min-height: 0;
+    aspect-ratio: 3 / 4;
+  }
+
+  .collection-item:not(.collection-item--media) .collection-item__image {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  /* Hero media spans full width */
+  .collection-item--media.is-large-mobile {
+    grid-column: 1 / -1;
+  }
+
+  /* Hero media height: stable editorial rectangle (NO viewport math) */
+  .collection-item--media.is-large-mobile .collection-item__media {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  /* Hide companion on mobile (desktop-only pairing) */
+  .collection-item--media.is-desktop-pair {
+    display: none;
+  }
+
+  /* ---------------------------------------------------------
+     FIX: last rows getting covered by fixed bottom bar
+     (prevents the hero/products from sitting behind it)
+     --------------------------------------------------------- */
+
+  .collection {
+    padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px) + 80px);
+  }
+
+  /* Mobile type tuning */
+  .collection-item__meta {
+    padding-top: var(--space-2);
+    gap: 6px;
+  }
+
+  .collection-item__title {
+    font-size: 0.92rem;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    max-width: 22ch;
+  }
+
+  .collection-item__price {
+    font-size: 0.88rem;
+    line-height: 1.2;
+  }
+}
+
+
+/* =========================================================
+   DESKTOP â€” FULL VIEWPORT SPLIT PANELS
+   2 equal tall images, then 4 products
+   ========================================================= */
+
+@media (min-width: 1100px) {
+
+  /* 4-column system so images can split 50/50 */
+  .collection-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-flow: row dense;
+  }
+
+  /* Both editorial images take half the row */
+  .collection-item--media.is-media-hero,
+  .collection-item--media.is-media-companion {
+    grid-column: span 2;
+  }
+
+  /* Full viewport height feeling */
+  .collection-item--media.is-media-hero .collection-item__media,
+  .collection-item--media.is-media-companion .collection-item__media {
+    height: 92vh;              /* nearly full screen */
+    min-height: 720px;         /* prevents short desktop collapse */
+    max-height: 1100px;        /* prevents ultra-tall monitors from stretching too far */
+  }
+
+  /* Ensure companion displays */
+  .collection-item--media.is-desktop-pair {
+    display: block;
+  }
+}
+
+/* =========================================================
+   COLLECTION â€” MID BREAKPOINT (TABLET / IN-BETWEEN)
+   Make it behave like mobile so thereâ€™s no â€œvoidâ€
+   ========================================================= */
+
+@media (min-width: 720px) and (max-width: 1099px) {
+  /* Ensure grid stays 2-up like mobile */
+  .collection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row; /* normal flow in mid-range */
+  }
+
+  /* Hide the companion tile in this range (mobile rhythm) */
+  .collection-item--media.is-desktop-pair {
+    display: none;
+  }
+
+  /* Hero spans full width */
+  .collection-item--media.is-media-hero {
+    grid-column: 1 / -1;
+  }
+
+  /* Use the mobile-style tall editorial frame */
+  .collection-item--media.is-media-hero .collection-item__media {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* =========================================================
+   COLLECTION GRID â€” MOBILE/DESKTOP TOGGLE
+   Keep desktop markup identical, use mobile-only pattern grid.
+   ========================================================= */
+
+.collection-grid--desktop { display: none; }
+.collection-grid--mobile  { display: grid; }
+
+@media (min-width: 1100px) {
+  .collection-grid--desktop { display: grid; }
+  .collection-grid--mobile  { display: none; }
+}
+
+/* =========================================================
+   MOBILE GRID â€” TRUE FULL-BLEED COVER (NO WHITE BAND)
+   Forces ANY media inside the frame to fill it.
+   ========================================================= */
+
+@media (max-width: 1099px) {
+
+  /* No inner padding for editorial tiles */
+  .collection-grid--mobile .collection-item--media {
+    padding: 0;
+  }
+
+  /* The frame must have height + be the containing block */
+  .collection-grid--mobile .collection-item--media .collection-item__media {
+    display: block !important;
+    position: relative !important;
+    overflow: hidden !important;
+
+    width: 100% !important;
+    min-height: 0 !important;
+
+    /* default image tile frame */
+    aspect-ratio: 3 / 4 !important;
+  }
+
+  /* HERO spans full width + taller */
+  .collection-grid--mobile .collection-item--media.is-hero {
+    grid-column: 1 / -1;
+  }
+
+  .collection-grid--mobile .collection-item--media.is-hero .collection-item__media {
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  /* Kill any inline/baseline gaps that can create â€œwhite stripsâ€ */
+  .collection-grid--mobile .collection-item--media,
+  .collection-grid--mobile .collection-item--media .collection-item__media {
+    font-size: 0 !important;
+    line-height: 0 !important;
+  }
+
+  /* Force ANY direct child (img or picture) to be an absolute fill layer */
+  .collection-grid--mobile .collection-item--media .collection-item__media > img,
+  .collection-grid--mobile .collection-item--media .collection-item__media > picture,
+  .collection-grid--mobile .collection-item--media .collection-item__media > picture > img {
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* And as a final â€œcatch-allâ€, any img anywhere inside the frame */
+  .collection-grid--mobile .collection-item--media .collection-item__media img {
+    height: 100% !important;     /* defeats global img { height:auto } */
+    object-fit: cover !important;
+  }
+}
+
+/* =========================================================
+   MOBILE GRID â€” MATCH PRODUCT HEIGHT TO IMAGE TILE HEIGHT
+   Wabi-Sabi Edge Caption (no gradient, no pill, no UI)
+   ========================================================= */
+
+@media (max-width: 1099px) {
+
+  /* Fixed rectangle tile */
+  .collection-grid--mobile .collection-item:not(.collection-item--media) {
+    position: relative;
+    padding: 0;
+  }
+
+  .collection-grid--mobile .collection-item:not(.collection-item--media) .collection-item__media {
+    aspect-ratio: 3 / 4;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .collection-grid--mobile .collection-item:not(.collection-item--media) .collection-item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Edge caption â€” sits comfortably at bottom */
+  .collection-grid--mobile .collection-item:not(.collection-item--media) .collection-item__meta {
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: 10px; /* slightly lower than before */
+
+    padding: 0;
+    margin: 0;
+
+    display: grid;
+    gap: 4px;
+
+    background: none;
+    border: none;
+  }
+
+  /* Typography refinement */
+  .collection-grid--mobile .collection-item:not(.collection-item--media) .collection-item__title {
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .collection-grid--mobile .collection-item:not(.collection-item--media) .collection-item__price {
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    opacity: 0.55;
+  }
+
+  /* Raise image slightly so it doesn't sit on the caption */
+  .collection-grid--mobile 
+  .collection-item:not(.collection-item--media) 
+  .collection-item__image {
+    object-position: center 22%;
+  }
+
+
+  /* Remove any previous overlay effects */
+  .collection-grid--mobile .collection-item:not(.collection-item--media) .collection-item__media::after {
+    content: none;
+  }
+  
+}
+
+
+
+
+/* =========================================================
+   CART (EDITORIAL, MINIMAL)
+   ========================================================= */
+
+.cart {
+  padding: var(--space-4) 0;
+}
+
+.cart__inner {
+  max-width: var(--grid-max-width);
+  margin: 0 auto;
+  padding: 0 var(--grid-padding-desktop);
+}
+
+/* Links: black, understated */
+.cart a {
+  color: var(--color-black);
+  text-decoration: none;
+}
+
+.cart a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Items list */
+.cart__items {
+  border-top: 1px solid rgba(0,0,0,0.14);
+}
+
+.cart__item {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid rgba(0,0,0,0.14);
+  align-items: start;
+}
+
+.cart__item-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.cart__item-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+
+.cart__item-variant {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--color-mid);
+  line-height: 1.3;
+}
+
+.cart__item-controls {
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Quantity stepper (editorial, minimal â€” no boxes) */
+.cart__item-quantity {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cart__qty-btn {
+  width: auto;
+  height: auto;
+  border: 0;
+  background: transparent;
+  color: #000;
+  font-size: 18px;
+  line-height: 1;
+  padding: 10px 8px; /* touch target without visual weight */
+  cursor: pointer;
+  transition: opacity 160ms ease;
+}
+
+.cart__qty-btn:hover {
+  opacity: 0.6;
+}
+
+.cart__qty-btn[disabled],
+.cart__qty-btn[aria-disabled="true"] {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* Quiet underline input */
+.cart__qty-input {
+  width: 52px;
+  height: auto;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.22);
+  background: transparent;
+  text-align: center;
+  font-size: 16px;
+  color: #000;
+  border-radius: 0;
+  appearance: textfield;
+}
+
+.cart__qty-input:focus {
+  outline: none;
+  border-bottom-color: rgba(0,0,0,0.55);
+}
+
+.cart__qty-input::-webkit-outer-spin-button,
+.cart__qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cart__item-remove {
+  font-size: 14px;
+  color: rgba(0,0,0,0.55);
+}
+
+.cart__item-remove:hover {
+  color: var(--color-black);
+}
+
+.cart__item-price {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Footer: aligned subtotal + amount + actions */
+.cart__footer {
+  padding-top: var(--space-3);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.cart__subtotal-label {
+  font-size: 16px;
+  line-height: 1.3;
+  color: var(--color-mid);
+}
+
+.cart__summary-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.cart__subtotal-amount {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Actions: two equal buttons */
+.cart__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+/* Shared button base (identical sizing for <button> and <a>) */
+.cart__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 160ms ease;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.cart__action-btn:hover {
+  opacity: 0.88;
+}
+
+/* Primary: checkout */
+.cart__action-btn--primary {
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+/* Secondary: keep shopping */
+.cart__action-btn--secondary {
+  background: #fff;
+  color: #000;
+  border: 1px solid #cccccc;
+}
+
+/* Empty state */
+.cart__empty {
+  padding: var(--space-4) 0;
+}
+
+.cart__empty p {
+  margin: 0;
+  font-size: 18px;
+  color: var(--color-mid);
+}
+
+/* Mobile refinements */
+@media (max-width: 767px) {
+  .cart {
+    padding: var(--space-3) 0;
+  }
+
+  .cart__inner {
+    padding: 0 18px;
+  }
+
+  .cart__item {
+    grid-template-columns: 96px 1fr;
+    gap: 16px;
+  }
+
+  .cart__item-price {
+    grid-column: 2 / -1;
+    text-align: left;
+    margin-top: 10px;
+  }
+
+  .cart__footer {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .cart__summary-right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .cart__subtotal-amount {
+    font-size: 18px;
+  }
+
+  .cart__actions {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cart__action-btn {
+    padding: 16px 18px;
+  }
+}
+
+/* =========================================================
+   HOMEPAGE â€” SIGNUP â€œOPEN FIELDâ€ (MINIMAL, SCALE-TRUE)
+   Keeps whitespace intentional and consistent with site rhythm.
+   ========================================================= */
+
+:root {
+  /* If you want one knob later */
+  --signup-field-y: var(--space-4); /* 52 desktop */
+  --signup-field-y-mobile: var(--space-3); /* 32 mobile */
+}
+
+/* Scope tight to homepage */
+body.template-index [class^="ai-signup-button__container-"],
+body.template-index [class*=" ai-signup-button__container-"] {
+  /* whitespace is the design */
+  padding-block: var(--signup-field-y);
+  padding-inline: var(--grid-padding-desktop);
+
+  /* no â€œbandâ€ treatment */
+  border: 0;
+  background: transparent;
+
+  /* prevent subtle centering drift */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prevent compounded gaps from default block margins */
+body.template-index [class^="ai-signup-button__container-"] > *,
+body.template-index [class*=" ai-signup-button__container-"] > * {
+  margin: 0;
+}
+
+/* Keep the line quiet + editorial */
+body.template-index [class^="ai-signup-button__link-"],
+body.template-index [class*=" ai-signup-button__link-"],
+body.template-index [class^="ai-signup-button__container-"] input[type="email"],
+body.template-index [class*=" ai-signup-button__container-"] input[type="email"] {
+  display: block;
+  text-align: center;
+
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--color-mid);
+
+  /* ensure the wrapper owns the spacing */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+}
+
+/* Mobile rhythm: same system, scaled down */
+@media (max-width: 768px) {
+  body.template-index [class^="ai-signup-button__container-"],
+  body.template-index [class*=" ai-signup-button__container-"] {
+    padding-block: var(--signup-field-y-mobile);
+  }
+}
+
+/* =========================================================
+   COPYRIGHT BAR â€” FINAL CONSOLIDATED VERSION
+   Desktop: links left / copyright right
+   Mobile: icon grid, more breathing room, copyright hidden
+   ========================================================= */
+
+/* ---------------- GLOBAL BAR ---------------- */
+
+.copyright {
+  background: #fff;
+  color: #000;
+  border-top: 1px solid rgba(255,255,255,0.14);
+  padding: 18px var(--grid-padding-desktop);
+}
+
+.copyright__links {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3vw, 52px);
+}
+
+.copyright__link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Hide icons on desktop */
+@media (min-width: 768px) {
+  .copyright__icon {
+    display: none;
+  }
+}
+
+/* Icon base sizing */
+.copyright__icon {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  opacity: 0.9;
+}
+
+.copyright__icon svg {
+  width: auto;
+  height: 24px;
+  display: block;
+}
+
+/* Contact envelope SVG sits higher in its viewBox â€” nudge down to baseline-align with PNG icons */
+.copyright__icon svg[viewBox="0 0 180.83 135.63"] {
+  margin-top: 4px;
+}
+
+.copyright__label {
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  opacity: 0.82;
+  text-transform: lowercase;
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .copyright {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .copyright__links {
+    justify-content: flex-start;
+  }
+
+  .copyright__bottom {
+    margin: 0;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    opacity: 0.6;
+  }
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 767px) {
+
+  .copyright {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 26px var(--grid-padding-mobile) 22px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .copyright__links {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    width: 100%;
+    max-width: 520px;
+    justify-items: center;
+  }
+
+  .copyright__link {
+    padding: 12px 6px 12px;
+    row-gap: 6px;
+  }
+
+  .copyright__icon {
+    height: 26px;
+  }
+
+  .copyright__icon svg {
+    width: 22px;
+    height: 22px;
+    transform: translateY(-1px); /* optical centering */
+  }
+
+  .copyright__label {
+    line-height: 1.2;
+  }
+
+  /* Hide copyright text on mobile */
+  .copyright__bottom {
+    display: none;
+  }
+}
+
+/* =========================================================
+   MODAL â€” EDITORIAL TUNING
+   ========================================================= */
+
+.site-modal__dialog {
+  color: rgba(0,0,0,0.88);
+  width: min(680px, calc(100vw - 32px));
+  margin: 0 auto;
+  border-radius: 22px;
+  padding: 28px 28px 24px;
+}
+
+.site-modal__title {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.site-modal__body {
+  max-width: 48ch;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.site-modal__body p {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 1.55;
+  opacity: 0.92;
+}
+
+.site-modal__close {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.14);
+  background: #fff;
+  color: rgba(0,0,0,0.65);
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.site-modal__close:focus-visible {
+  outline: 1px solid rgba(0,0,0,0.28);
+  outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .site-modal__dialog {
+    width: calc(100vw - 24px);
+    padding: 22px 18px 18px;
+  }
+}
+
+/* =========================================================
+   SITE SHELL â€” pin footer on short pages (cart, etc.)
+   ========================================================= */
+
+.site-shell {
+  min-height: calc(100vh - 80px); /* account for fixed header + body padding-top */
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1 0 auto;
+}
+
+/* Push copyright bar to bottom when content is short */
+.site-shell .copyright {
+  margin-top: auto;
+}
+
+/* =========================================================
+   MOBILE â€” KEEP PDP STICKY PURCHASE ABOVE COPYRIGHT BAR
+   ========================================================= */
+
+@media (max-width: 767px) {
+  :root {
+    /* Set this to your mobile copyright bar height */
+    --copyright-bar-h: 64px;
+  }
+
+  .product-sticky {
+    /* lift it above the fixed copyright bar + iOS safe area */
+    bottom: calc(var(--copyright-bar-h) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Make sure page content clears BOTH bars when sticky is active */
+  .has-product-sticky .product {
+    padding-bottom: calc(6rem + var(--copyright-bar-h));
+  }
+}
+
+/* =========================================================
+   FEATURED MEDIA GRID â€” SHARE BUTTON
+   Absolute-positioned inside .media-cell__inner (position:relative)
+   Outside all <a> tags. z-index:2 clears media content.
+   ========================================================= */
+
+.media-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  background: none;
+  border: none;
+
+  color: #000;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+
+  opacity: 0.85;
+  transition: opacity 160ms ease;
+}
+
+.media-share-btn:hover {
+  opacity: 1;
+}
+
+.media-share-btn__icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* "copied" confirmation label */
+.media-share-btn__label {
+  font-family: 'Booton', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .media-share-btn__icon {
+    width: 17px;
+    height: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-share-btn {
+    transition: none;
+  }
+}
+
+
+/* =========================================================
+   FEATURED MEDIA GRID â€” CAROUSEL MODE
+   Modifier: .media-grid--carousel on <section>
+   When active: overrides grid layout with horizontal scroll-snap.
+   When inactive: zero effect â€” all carousel CSS is scoped
+   entirely under .media-grid--carousel.
+   ========================================================= */
+
+.media-grid--carousel {
+  /* Override grid with scroll container */
+  display: flex;
+  flex-direction: row;
+
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  /* Hide scrollbar â€” scroll affordance is implied by partial tiles */
+  scrollbar-width: none;
+
+  /* Kill the gap that was 0 anyway, but be explicit */
+  gap: 0;
+
+  /* Prevent page-level overflow bleed */
+  max-width: 100%;
+}
+
+.media-grid--carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each cell in carousel: fixed width + snap */
+.media-grid--carousel .media-cell {
+  /* Mobile: show ~1.2 tiles (implies scroll) */
+  flex: 0 0 80vw;
+  width: 80vw;
+
+  scroll-snap-align: start;
+
+  /* Preserve structural border (right only â€” bottom stays) */
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+
+  /* Neutralize tall-cell span (irrelevant in flex row) */
+  /* grid-column: auto is inert in flex, so nothing to reset */
+}
+
+/* Inner aspect ratio: unchanged â€” 3/4 portrait preserved */
+.media-grid--carousel .media-cell__inner {
+  aspect-ratio: 3 / 4;
+}
+
+/* Desktop carousel: narrower tiles so 3 are visible */
+@media (min-width: 768px) {
+  .media-grid--carousel .media-cell {
+    flex: 0 0 34vw;
+    width: 34vw;
+  }
+}
+
+/* Large desktop: cap cell width so tiles don't become enormous */
+@media (min-width: 1200px) {
+  .media-grid--carousel .media-cell {
+    flex: 0 0 400px;
+    width: 400px;
+  }
+}
+
+/* Mobile: full-width tall cells revert to standard width in carousel
+   (span 2 has no meaning in flex row â€” keep it equal width) */
+@media (max-width: 767px) {
+  .media-grid--carousel .media-cell--tall {
+    flex: 0 0 80vw;
+    width: 80vw;
+    /* grid-column: span 2 is inert in flex â€” no reset needed */
+  }
+}
+
+/* Preserve hover zoom inside carousel */
+@media (hover: hover) and (pointer: fine) {
+  .media-grid--carousel .media-cell:hover .media-cell__inner img {
+    transform: scale(1.03);
+  }
+}
+
+/* =========================================================
+   DESKTOP FLOATING COPYRIGHT SYSTEM
+   Scoped entirely to min-width: 769px.
+   Zero effect on mobile. Zero conflict with .copyright mobile bar.
+   ========================================================= */
+
+#desktop-copyright-root,
+#dc-modal-root {
+  display: none;
+}
+
+@media (min-width: 769px) {
+
+  /* Reserve space for the fixed floating copyright pill */
+  body {
+    padding-bottom: 60px;
+  }
+
+  /* â”€â”€ Hide in-flow copyright bar on desktop â”€â”€ */
+  .site-shell .copyright,
+  .copyright {
+    position: fixed !important;
+    left: -9999px !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* â”€â”€ Show desktop float root â”€â”€ */
+  #desktop-copyright-root,
+  #dc-modal-root {
+    display: block;
+  }
+
+  /* â”€â”€ Trigger pill â”€â”€ */
+  .dc-trigger {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 9px 18px 9px 16px;
+
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 999px;
+
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.06),
+      0 8px 24px rgba(0, 0, 0, 0.07);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    color: rgba(0, 0, 0, 0.65);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: lowercase;
+    white-space: nowrap;
+
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
+  }
+
+  .dc-trigger:hover {
+    background: rgba(255, 255, 255, 0.99);
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.08),
+      0 12px 32px rgba(0, 0, 0, 0.10);
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  .dc-trigger[aria-expanded="true"] {
+    background: rgba(0, 0, 0, 0.88);
+    color: rgba(255, 255, 255, 0.90);
+    border-color: transparent;
+  }
+
+  .dc-trigger__label {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  .dc-trigger__caret {
+    font-size: 10px;
+    opacity: 0.7;
+  }
+
+  /* â”€â”€ Floating panel â”€â”€ */
+  .dc-panel {
+    position: fixed;
+    bottom: 68px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 499;
+
+    min-width: 280px;
+    max-width: 480px;
+
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-radius: 18px;
+
+    padding: 20px 24px 20px;
+
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.06),
+      0 16px 48px rgba(0, 0, 0, 0.10);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .dc-panel[hidden] {
+    display: none;
+  }
+
+  /* â”€â”€ Panel links row â”€â”€ */
+  .dc-panel__links {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  /* â”€â”€ Individual link â”€â”€ */
+  .dc-panel__link {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: rgba(0, 0, 0, 0.75);
+    text-decoration: none;
+    text-transform: lowercase;
+    line-height: 1;
+
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    white-space: nowrap;
+
+    transition: color 140ms ease;
+  }
+
+  /* â”€â”€ Icon above label â€” proportionate to mobile (22px icon / 10px label â‰ˆ 2.2Ã—) â”€â”€ */
+  .dc-panel__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  .dc-panel__icon svg {
+    width: auto;
+    height: 20px;
+    display: block;
+  }
+
+  .dc-panel__icon img {
+    width: auto;
+    height: 20px;
+    display: block;
+    opacity: 0.92;
+  }
+
+  .dc-panel__link:hover .dc-panel__icon img,
+  .dc-panel__link:hover .dc-panel__icon svg {
+    opacity: 1;
+  }
+
+  .dc-panel__link:hover {
+    color: rgba(0, 0, 0, 1);
+  }
+
+  /* â”€â”€ Active / current page state â”€â”€ */
+  .dc-panel__link.is-active {
+    color: #c0392b;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    position: relative;
+  }
+
+  /* Subtle underline dot beneath active link */
+  .dc-panel__link.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 999px;
+    background: #c0392b;
+  }
+
+  /* â”€â”€ Sub-modal root (contact, etc.) â”€â”€ */
+  #dc-modal-root {
+    position: fixed;
+    bottom: 120px;
+    left: 0;
+    right: 0;
+    z-index: 501;
+  }
+
+  .dc-submodal[hidden] {
+    display: none;
+  }
+
+}
+
+/* === BOOTON FONT === */
+@font-face {
+  font-family: 'Booton';
+  src: url('{{ "Booton-TRIAL-Regular.woff2" | asset_url }}') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === ANNOUNCEMENT BAR === */
+:root {
+  --announcement-bar-height: 38px;
+}
+
+.announcement-bar {
+  width: 100%;
+  height: var(--announcement-bar-height);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483648;
+  transform: translateY(0);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ab-hidden .announcement-bar {
+  transform: translateY(-100%);
+}
+
+/* Header sits below bar â€” moves in perfect sync via same transform + duration */
+.site-header-sticky {
+  top: var(--announcement-bar-height) !important;
+  transform: translateY(0) !important;
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease !important;
+}
+
+/* When bar hides, slide header up by exactly bar height â€” stays flush */
+.ab-hidden .site-header-sticky {
+  transform: translateY(calc(-1 * var(--announcement-bar-height))) !important;
+}
+
+/* Push page body down â€” stays constant so content never jumps */
+body {
+  padding-top: calc(var(--announcement-bar-height) + 80px) !important;
+}
+
+.announcement-bar__slides {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.announcement-bar__slide {
+  position: absolute;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 8px;
+
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.announcement-bar__slide.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.announcement-bar__slide a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.announcement-bar__slide a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.announcement-bar__playpause {
+  display: none !important;
+}
+
+.announcement-bar__playpause:hover {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .announcement-bar__slide {
+    font-size: 11px;
+  }
+  .announcement-bar__playpause {
+    padding: 0 8px 0 2px;
+  }
+}
+
+
+/* === HAMBURGER MENU === */
+
+/* Button */
+.header-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 0;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.header-hamburger__bar {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background-color: #000;
+  transition: opacity 0.2s ease;
+}
+
+.header-hamburger:hover .header-hamburger__bar {
+  opacity: 0.6;
+}
+
+
+
+/* Overlay */
+.hamburger-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: #fff;
+  z-index: 2147483646;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hamburger-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Prevent body scroll when menu is open */
+body.hamburger-open {
+  overflow: hidden;
+}
+
+/* X close button â€” editorial top-right placement */
+.hamburger-overlay__x {
+  position: fixed;
+  top: 24px;
+  right: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 28px;
+  line-height: 1;
+  color: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2147483647;
+}
+
+.hamburger-overlay.is-open .hamburger-overlay__x {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hamburger-overlay__x:hover {
+  opacity: 0.4;
+}
+
+/* Nav list â€” left edge aligns with logo (header padding 32px + hamburger 22px + gap 24px) */
+.hamburger-overlay__nav {
+  text-align: left;
+  padding: clamp(24px, 8vh, 80px) 78px clamp(24px, 6vh, 60px);
+  width: 100%;
+  max-width: none;
+  align-self: center;
+}
+
+.hamburger-overlay__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 2.5vw, 20px);
+}
+
+/* Reset button chrome on hamburger nav buttons (e.g. contact) */
+button.hamburger-overlay__link {
+  background: none;
+  border: none;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Nav items */
+.hamburger-overlay__link {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(36px, 6.5vh, 88px);
+  line-height: 1.0;
+  color: #000;
+  text-decoration: none;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  display: inline-block;
+  transition: opacity 0.15s ease;
+}
+
+.hamburger-overlay__link:hover {
+  opacity: 0.5;
+}
+
+/* Close item â€” muted grey, same font/size */
+.hamburger-overlay__link--close {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #c0bfbd;
+}
+
+.hamburger-overlay__link--close:hover {
+  opacity: 0.6;
+  color: #c0bfbd;
+}
+
+@media (max-width: 600px) {
+  .hamburger-overlay__nav {
+    padding: 0 54px;
+  }
+
+  .hamburger-overlay__x {
+    top: 20px;
+    right: 20px;
+  }
+}
+
+/* === HAMBURGER MENU: RESPONSIVE VISIBILITY === */
+
+/* Mobile button: hidden on desktop */
+@media (min-width: 768px) {
+  .header-hamburger:not(.header-hamburger--desktop) {
+    display: none;
+  }
+}
+
+/* Desktop button: hidden on mobile */
+@media (max-width: 767px) {
+  .header-hamburger--desktop {
+    display: none;
+  }
+}
+
+/* Desktop button sits left of logo, same margin as mobile button */
+.header-hamburger--desktop {
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+/* === GRID ACTION BUTTONS === */
+
+.media-cell__actions {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.media-cell__actions--bottom-left  { bottom: 16px; left: 16px; }
+.media-cell__actions--bottom-right { bottom: 16px; right: 16px; }
+.media-cell__actions--top-left     { top: 16px; left: 16px; }
+.media-cell__actions--top-right    { top: 16px; right: 16px; }
+
+@media (max-width: 600px) {
+  .media-cell__actions--bottom-left  { bottom: 8px; left: 8px; }
+  .media-cell__actions--bottom-right { bottom: 8px; right: 8px; }
+  .media-cell__actions--top-left     { top: 8px; left: 8px; }
+  .media-cell__actions--top-right    { top: 8px; right: 8px; }
+}
+
+.media-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: 'Booton', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.media-action-btn:hover { opacity: 0.75; }
+
+/* Dark theme (default) */
+.media-cell__actions--dark .media-action-btn {
+  background: #000;
+  color: #fff;
+}
+
+/* Light theme */
+.media-cell__actions--light .media-action-btn {
+  background: #fff;
+  color: #000;
+}
+
+.media-action-btn--cart {
+  padding: 6px 10px;
+}
+
+/* === INSTAGRAM BUTTON === */
+
+.media-ig-btn {
+  position: absolute;
+  top: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.media-ig-btn:hover { opacity: 0.75; }
+.media-ig-btn--right { right: 12px; }
+.media-ig-btn--left  { left: 12px; }
+
+/* === SECTION LABEL (media grid) === */
+
+.media-section-label {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 8px,
+    #e0e0e0 8px,
+    #e0e0e0 9px
+  );
+
+  padding: 10px 20px;
+}
+
+.media-section-label span {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(18px, 3vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #000;
+  text-transform: lowercase;
+}
+
+@media (min-width: 601px) {
+  .media-section-label {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .media-section-label {
+    padding: 10px 12px;
+  }
+}
+
+/* === NEWSLETTER ROW (media grid) === */
+
+.media-newsletter-row {
+  grid-column: 1 / -1;
+  width: 100%;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 8px,
+    #e0e0e0 8px,
+    #e0e0e0 9px
+  );
+  padding: 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-newsletter-row__inner {
+  width: 100%;
+  max-width: 100%;
+}
+
+.media-newsletter-form {
+  display: block;
+  width: 100%;
+}
+
+.media-newsletter-input {
+  display: block;
+  width: 100%;
+  font-family: var(--font-body-family, inherit);
+  font-size: var(--font-size-base, 1rem);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 10px 20px;
+}
+
+.media-newsletter-input::placeholder {
+  color: currentColor;
+  opacity: 0.45;
+  letter-spacing: 0.03em;
+}
+
+.media-newsletter-input:focus::placeholder {
+  opacity: 0.25;
+}
+
+.media-newsletter-success {
+  text-align: center;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
+  padding: 10px 20px;
+  margin: 0;
+}
+
+.media-newsletter-error {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin: 0;
+  padding: 0 20px 8px;
+}
+
+/* === GRID ACTION BUTTONS: SVG INLINE BUTTONS === */
+
+.media-action-svg-btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.media-action-svg-btn:hover { opacity: 0.85; }
+
+.media-action-svg-btn svg {
+  display: block;
+  height: 30px;
+  width: auto;
+}
+
+@media (max-width: 600px) {
+  .media-action-svg-btn svg {
+    height: 28px;
+  }
+}
+
+/* Cart button â€” matches share button style */
+.media-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 160ms ease;
+  text-decoration: none;
+}
+
+.media-cart-btn:hover {
+  opacity: 1;
+}
+
+.media-cart-btn__icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .media-cart-btn__icon {
+    width: 17px;
+    height: 17px;
+  }
+}
+
+/* Cart */
+.media-action-btn__img--cart {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+}
+
+/* Fallback */
+.media-action-btn__img {
+  display: block;
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* IG PNG */
+.media-ig-btn:has(.media-action-btn__img) {
+  background: none;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  padding: 0;
+}
+
+.media-ig-btn .media-action-btn__img {
+  height: 32px;
+  width: auto;
+}
+
+/* === LOCATIONS SECTION === */
+
+.locations-grid {
+  width: 100%;
+  padding: 60px var(--grid-padding-desktop, 60px);
+  background-color: #1a3cff !important;
+  background: #1a3cff !important;
+}
+
+.locations-grid__heading-wrap {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.locations-grid__emblem {
+  height: 28px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.locations-grid__heading {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(52px, 12vw, 96px);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-transform: lowercase;
+  margin: 0;
+  color: #fff;
+}
+
+.locations-grid__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+
+.locations-grid__item {
+  padding: 10px 0;
+}
+
+@media (min-width: 601px) {
+  .locations-grid__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .locations-grid__item {
+    padding: 14px 0;
+  }
+}
+
+.locations-grid__link {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(14px, 2.5vw, 18px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+a.locations-grid__link:hover {
+  opacity: 0.5;
+}
+
+@media (max-width: 600px) {
+  .locations-grid {
+    padding: 40px 20px;
+  }
+
+  .locations-grid__heading-wrap {
+    margin-bottom: 28px;
+  }
+}
+
+/* === INFO SECTION: LABEL + COLLAPSIBLE === */
+
+.info-section-wrapper {
+  width: 100%;
+}
+
+.info-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 8px,
+    #e0e0e0 8px,
+    #e0e0e0 9px
+  );
+  padding: 10px 12px;
+}
+
+.info-section-label-row {
+  display: flex;
+  align-items: center;
+}
+
+.info-section-label-text {
+  font-family: 'Booton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(18px, 3vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-transform: lowercase;
+  color: #000;
+}
+
+.info-section-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  line-height: 1;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.info-section-toggle__icon {
+  font-family: sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  display: block;
+}
+
+.info-section-body--collapsible {
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+/* =========================================================
+   SHOP GRID â€” page.shop-grid template
+   Mobile: 4-up (2Ã—2) then 1 full-width, repeat.
+   Desktop: 3 columns.
+   Inherits media-cell__actions, media-share-btn, media-action-svg-btn,
+   media-cart-btn, media-ig-btn from featured-media-grid styles.
+   ========================================================= */
+
+.shop-grid {
+  width: 100%;
+  display: grid;
+  gap: 0;
+  overflow-anchor: none;
+  border-top: 1px solid var(--color-line);
+  padding: 0;
+  margin: 0;
+
+  /* Mobile: 2 columns, wide cells span both */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: dense;
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 768px) {
+  .shop-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* â”€â”€ Cell â”€â”€ */
+.shop-grid__cell {
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  padding: 0;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Wide cell â€” full width on mobile, normal on desktop */
+.shop-grid__cell--wide {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 768px) {
+  .shop-grid__cell--wide {
+    grid-column: auto;
+  }
+}
+
+/* â”€â”€ Inner media window â”€â”€ */
+.shop-grid__inner {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+/* Wide cell â€” same aspect ratio as regular cells, contain so full image shows */
+.shop-grid__cell--wide .shop-grid__inner {
+  aspect-ratio: 3 / 4;
+  background: #f2f2f2;
+}
+
+@media (min-width: 768px) {
+  .shop-grid__cell--wide .shop-grid__inner {
+    aspect-ratio: 3 / 4;
+    background: transparent;
+  }
+}
+
+/* â”€â”€ Media fills the window â”€â”€ */
+.shop-grid__inner > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.shop-grid__inner img,
+.shop-grid__inner > a img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Wide cell images show full â€” no cropping */
+.shop-grid__cell--wide .shop-grid__inner img,
+.shop-grid__cell--wide .shop-grid__inner > a img {
+  object-fit: contain;
+}
+
+.shop-grid__inner video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shop-grid__inner video.shop-grid__video--contain {
+  object-fit: contain;
+}
+
+/* â”€â”€ Product link fills window â”€â”€ */
+.shop-grid__product-link,
+.shop-grid__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Coming soon â€” tile is non-interactive */
+.shop-grid__tile--inert {
+  cursor: default;
+  pointer-events: none;
+}
+
+.shop-grid__cell:has(.shop-grid__tile--inert):hover .shop-grid__inner img {
+  transform: none;
+}
+
+/* â”€â”€ Badge â”€â”€ */
+.shop-grid__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #000;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* â”€â”€ Section label row â”€â”€ */
+.shop-grid__section-label {
+  grid-column: 1 / -1;
+  border-bottom: 1px solid var(--color-line);
+  border-right: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 8px,
+    #e0e0e0 8px,
+    #e0e0e0 9px
+  );
+}
+
+.shop-grid__section-label span {
+  font-family: 'Booton', sans-serif;
+  font-size: clamp(18px, 3vw, 36px);
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* â”€â”€ Newsletter row â”€â”€ */
+.shop-grid__newsletter-row {
+  grid-column: 1 / -1;
+  border-bottom: 1px solid var(--color-line);
+  border-right: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+}
+
+.shop-grid__newsletter-inner {
+  width: 100%;
+  max-width: 480px;
+}
+
+.shop-grid__newsletter-form {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.shop-grid__newsletter-input {
+  flex: 1;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fff;
+  outline: none;
+}
+
+.shop-grid__newsletter-input:focus {
+  border-color: rgba(0,0,0,0.5);
+}
+
+.shop-grid__newsletter-success,
+.shop-grid__newsletter-error {
+  font-size: 13px;
+  text-align: center;
+  margin: 0;
+}
+
+/* â”€â”€ Hover zoom (cover cells only) â”€â”€ */
+@media (hover: hover) and (pointer: fine) {
+  .shop-grid__inner img {
+    transition: transform 0.3s ease;
+    will-change: transform;
+  }
+  .shop-grid__cell:not(.shop-grid__cell--wide):hover .shop-grid__inner img {
+    transform: scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-grid__inner img { transition: none; }
+  .shop-grid__cell:hover .shop-grid__inner img { transform: none; }
+}
+
+/* â”€â”€ Mobile gap rhythm â”€â”€ */
+@media (max-width: 767px) {
+  .shop-grid {
+    gap: 1px;
+  }
+  .shop-grid__cell {
+    border-right: 0;
+    border-bottom: 0;
+  }
+}
+
+/* â”€â”€ Bottom safe area â”€â”€ */
+@media (max-width: 719px) {
+  .shop-grid {
+    padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px) + 80px);
+  }
+}
+
+/* =========================================================
+   NOTIFY ME MODAL
+   ========================================================= */
+
+/* =========================================================
+   NOTIFY ME MODAL
+   Full-screen on mobile, centered dialog on desktop.
+   ========================================================= */
+
+.notify-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.notify-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.notify-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* â”€â”€ Dialog â€” full-screen mobile â”€â”€ */
+.notify-modal__dialog {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  width: 100%;
+  max-height: 100dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.notify-modal.is-open .notify-modal__dialog {
+  transform: translateY(0);
+}
+
+/* â”€â”€ Header bar â”€â”€ */
+.notify-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 18px 56px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.notify-modal__header-label {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.notify-modal__close {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  color: #000;
+  line-height: 1;
+  transition: opacity 0.15s ease;
+}
+
+.notify-modal__close:hover { opacity: 0.5; }
+
+/* â”€â”€ Body â”€â”€ */
+.notify-modal__body {
+  padding: 32px 24px 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.notify-modal__sub {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+  margin: 0 0 32px;
+  text-align: center;
+}
+
+/* â”€â”€ Field â”€â”€ */
+.notify-modal__field-wrap {
+  margin-bottom: 28px;
+}
+
+.notify-modal__field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.notify-modal__label {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.notify-modal__required {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.notify-modal__input {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  padding: 14px 12px;
+  font-size: 16px;
+  font-family: inherit;
+  background: #fff;
+  color: #000;
+  outline: none;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  /* Use inset box-shadow â€” iOS Safari cannot strip this */
+  box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.15s ease;
+}
+
+.notify-modal__input:focus,
+.notify-modal__input:active {
+  box-shadow: inset 0 0 0 2px #000;
+}
+
+/* Keep border visible when autofilled */
+.notify-modal__input:-webkit-autofill,
+.notify-modal__input:-webkit-autofill:focus,
+.notify-modal__input:-webkit-autofill:active {
+  box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, 0.35), inset 0 0 0 999px #fff;
+  -webkit-text-fill-color: #000;
+}
+
+/* Keep border when input has a value (not empty) */
+.notify-modal__input:not(:placeholder-shown) {
+  box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, 0.35);
+}
+
+.notify-modal__input:not(:placeholder-shown):focus {
+  box-shadow: inset 0 0 0 2px #000;
+}
+
+/* â”€â”€ Checkboxes â”€â”€ */
+.notify-modal__checkbox-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.notify-modal__checkbox {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #000;
+  cursor: pointer;
+}
+
+.notify-modal__checkbox-label {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* â”€â”€ Submit â€” full width, at bottom â”€â”€ */
+.notify-modal__submit {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 20px;
+  font-size: 16px;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  cursor: pointer;
+  margin-top: auto;
+  transition: background 0.15s ease;
+}
+
+.notify-modal__submit:hover { background: #252023; }
+
+/* â”€â”€ States â”€â”€ */
+.notify-modal__success {
+  font-size: 16px;
+  color: #000;
+  text-align: center;
+  margin: 0 0 20px;
+  font-family: 'Booton', sans-serif;
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+}
+
+.notify-modal__error {
+  font-size: 13px;
+  color: #c0392b;
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+body.notify-modal-open {
+  overflow: hidden;
+}
+
+/* â”€â”€ Desktop: centered modal, not full-screen â”€â”€ */
+@media (min-width: 600px) {
+  .notify-modal {
+    align-items: center;
+  }
+
+  .notify-modal__dialog {
+    width: min(520px, calc(100vw - 48px));
+    max-height: calc(100dvh - 80px);
+    border-radius: 4px;
+    transform: translateY(16px) scale(0.98);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+  }
+
+  .notify-modal.is-open .notify-modal__dialog {
+    transform: translateY(0) scale(1);
+  }
+
+  .notify-modal__body {
+    padding: 32px 40px 40px;
+  }
+
+  .notify-modal__submit {
+    border-radius: 4px;
+  }
+}
+
+/* =============================================
+   [SEO] Visually hidden H1
+   ============================================= */
+.seo-h1-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   SHOP GRID â€” PRODUCT TILE META (title + price overlay)
+   ========================================================= */
+
+.media-meta {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  pointer-events: none;
+}
+
+.media-meta__title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #000;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.media-meta__price {
+  font-size: 0.8rem;
+  color: rgba(0,0,0,0.6);
+  margin-top: 2px;
+}
+
+/* ── Featured Media Grid — Carousel Block ──────────────────────────────────
+   Replace the previous version of this block at the bottom of base.css.
+   ─────────────────────────────────────────────────────────────────────── */
+
+.fmg-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;   /* resolves against .media-cell__inner aspect-ratio height */
+  overflow: hidden;
+}
+
+/*
+  ALL slides are position:absolute at all times.
+  Never switch to position:relative — that causes a white flash
+  as the layout briefly has no in-flow children between frames.
+  The parent .media-cell__inner (aspect-ratio: 3/4) holds the height.
+*/
+.fmg-carousel__slide {
+  position: absolute;
+  inset: 0;
+  transform: translateX(100%);  /* default: parked off-screen right */
+  transition: transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+/* Active slide: centered. Position stays absolute. */
+.fmg-carousel__slide.is-active {
+  transform: translateX(0);
+}
+
+.fmg-carousel__slide img,
+.fmg-carousel__slide video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/*
+  Disable hover zoom on carousel images.
+  The global rule (.media-cell:hover .media-cell__inner img { scale(1.03) })
+  matches carousel images too — including off-screen slides at translateX(100%).
+  will-change:transform promotes those to compositing layers that escape
+  .fmg-carousel's overflow:hidden clip, causing a right-side bleed on hover.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .fmg-carousel__slide img {
+    transition: none;
+    will-change: auto;
+  }
+
+  .featured-media-grid .media-cell:hover .fmg-carousel__slide img {
+    transform: none;
+  }
+}
+
+/* Dots */
+.fmg-carousel__dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.fmg-carousel__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.fmg-carousel__dot.is-active {
+  background: #fff;
+  transform: scale(1.25);
+}
+
+.fmg-carousel__dot:only-child {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+
+
+Copy
+
+/* ── Shop Grid — Product Collab Tile ────────────────────────────────────────
+   Replace all previous versions of this block at the bottom of base.css.
+   Transparent overlay bar — burned-in logo shows through left box.
+   All bar dimensions fixed in px — no responsive scaling.
+   ─────────────────────────────────────────────────────────────────────── */
+ 
+.shop-grid__cell--collab {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #f2f2f2;
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+ 
+.shop-grid__collab-img-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+ 
+.shop-grid__collab-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+ 
+/*
+  Bar: fixed height, transparent, pinned to bottom.
+  Nothing inside can stretch it — height is absolute.
+*/
+.shop-grid__collab-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: stretch;
+  height: 72px;           /* fixed — never grows or shrinks */
+  border-top: 1px solid var(--color-line);
+  background: transparent;
+}
+ 
+/* Left box: fixed pixel width — vertical divider never shifts */
+.shop-grid__collab-logo-box {
+  flex-shrink: 0;
+  width: 120px;           /* fixed — change this to align with burned-in logo */
+  border-right: 1px solid var(--color-line);
+}
+ 
+/* Right box: fixed font size — text never scales */
+.shop-grid__collab-cta {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-family: 'Booton', sans-serif;
+  font-size: 13px;        /* fixed — no clamp, no vw */
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: #000;
+  line-height: 1.3;
+  overflow: hidden;
+}
+ 
+.shop-grid__collab-cta a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;    /* prevent text wrapping at narrow widths */
+  transition: opacity 0.15s ease;
+}
+ 
+.shop-grid__collab-cta a:hover {
+  opacity: 0.55;
+}
+ 
+@media (max-width: 767px) {
+  .shop-grid__cell--collab {
+    border-right: 0;
+    border-bottom: 0;
+  }
+}
+ 
+/* ── Shop Grid — Product Collab Tile ────────────────────────────────────────
+   Replace all previous versions of this block at the bottom of base.css.
+   Full-size clickable image — opens notify-me modal. No bar, no overlays.
+   ─────────────────────────────────────────────────────────────────────── */
+ 
+.shop-grid__cell--collab {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #f2f2f2;
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+ 
+/* Full-tile button — resets all browser button chrome */
+.shop-grid__collab-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+ 
+/* Contain so all burned-in content (title, swatch, logo, CTA) is visible */
+.shop-grid__collab-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+ 
+@media (max-width: 767px) {
+  .shop-grid__cell--collab {
+    border-right: 0;
+    border-bottom: 0;
+  }
+}
+ 
+/* ─────────────────────────────────────────────────────────────────────── */

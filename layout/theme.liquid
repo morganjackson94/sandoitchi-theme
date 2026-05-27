@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N7VTTCPJ');</script>
+<!-- End Google Tag Manager -->
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  {% if template contains 'blog' %}
+  <meta name="robots" content="noindex, follow">
+{% endif %}
+  <title>{{ page_title }}</title>
+  {{ content_for_header }}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {% comment %} <meta name="theme-color" content="#0000"> {% endcomment %}
+</head>
+
+<body{% if request.path == '/collections/all' %} class="is-collection-all"{% endif %}>
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N7VTTCPJ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  {% if template == 'index' %}
+  <h1 class="seo-h1-hidden">Japanese sando and matcha café — Dallas &amp; Denver</h1>{% endif %}
+  {% if template == 'page' and page.handle == 'dallas' %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Sandoitchi Dallas",
+    "url": "https://www.sandoitchi.com/pages/dallas",
+    "image": "https://www.sandoitchi.com/cdn/shop/files/hero-01.png",
+    "servesCuisine": "Japanese",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1604 Main St Suite 110",
+      "addressLocality": "Dallas",
+      "addressRegion": "TX",
+      "postalCode": "75201",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 32.7822,
+      "longitude": -96.7985
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "10:00",
+        "closes": "15:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Friday","Saturday"],
+        "opens": "10:00",
+        "closes": "16:00"
+      }
+    ],
+    "sameAs": [
+      "https://www.instagram.com/sando.itchi",
+      "https://www.ubereats.com/store/sandoitchi/ZSikv13fUy2T82ocvFgPqQ",
+      "https://www.doordash.com/business/Sandoitchi-11517363",
+      "https://www.grubhub.com/restaurant/sandoitchi-1604-main-st-dallas/9026056"
+    ]
+  }
+  </script>
+{% endif %}
+
+{% if template == 'page' and page.handle == 'denver' %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Sandoitchi Denver",
+    "url": "https://www.sandoitchi.com/pages/denver",
+    "image": "https://www.sandoitchi.com/cdn/shop/files/hero-01.png",
+    "servesCuisine": "Japanese",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1950 35th St",
+      "addressLocality": "Denver",
+      "addressRegion": "CO",
+      "postalCode": "80216",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 39.77195288294272,
+      "longitude": -104.98056050115635
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "10:00",
+        "closes": "16:00"
+      }
+    ],
+    "sameAs": [
+      "https://www.instagram.com/sando.itchi"
+    ]
+  }
+  </script>
+{% endif %}
+{% if template == 'product' %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "description": {{ product.description | strip_html | truncate: 300 | json }},
+    "url": {{ shop.url | append: product.url | json }},
+    "image": [
+      {% for image in product.images limit: 3 %}
+        {{ image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ],
+    "brand": {
+      "@type": "Brand",
+      "name": "Sandoitchi"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "lowPrice": {{ product.price_min | money_without_currency }},
+      "highPrice": {{ product.price_max | money_without_currency }},
+      "offerCount": {{ product.variants.size }},
+      "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+    }
+  }
+  </script>
+{% endif %}
+  <div class="page-fade" aria-hidden="true"></div>
+
+  {% section 'announcement-bar' %}
+  {% section 'header-minimal' %}
+
+<div class="site-shell">
+  <main class="site-main" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'copyright-bar' %}
+</div>
+
+
+
+  <!-- Sticky header emblem shrink: scroll state -->
+  <script>
+    (function () {
+      function getY() {
+        return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      }
+
+      function apply() {
+        document.body.classList.toggle('is-scrolled', getY() > 0);
+      }
+
+      function start() {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            apply();
+            window.addEventListener('scroll', apply, { passive: true });
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start, { once: true });
+      } else {
+        start();
+      }
+    })();
+  </script>
+
+  <!-- Hero title: random variant on refresh -->
+  <script>
+(function () {
+  function pickRandomHeroVariant() {
+    var img = document.querySelector('.header-title');
+    if (!img) return;
+
+    var list = img.getAttribute('data-variants') || '';
+    var variants = list
+      .split('|')
+      .map(function (s) { return s.trim(); })
+      .filter(Boolean);
+
+    if (variants.length < 2) return;
+
+    var choice = variants[Math.floor(Math.random() * variants.length)];
+
+    if (img.src !== choice) {
+      img.src = choice;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', pickRandomHeroVariant);
+  } else {
+    pickRandomHeroVariant();
+  }
+})();
+</script>
+
+
+  <!-- Section reveal on first viewport entry (opt-in) -->
+  <script>
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll('[data-reveal]').forEach(function (el) {
+          el.classList.add('is-visible');
+        });
+        return;
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('[data-reveal]').forEach(function (el) {
+          el.classList.add('is-visible');
+        });
+        return;
+      }
+
+      var els = document.querySelectorAll('[data-reveal]');
+      if (!els.length) return;
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        threshold: 0.12,
+        rootMargin: '0px 0px -8% 0px'
+      });
+
+      els.forEach(function (el) {
+        io.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Page fade: remove white veil on load -->
+  <script>
+    (function () {
+      function markLoaded() { document.documentElement.classList.add('is-loaded'); }
+      if (document.readyState === 'complete') markLoaded();
+      else window.addEventListener('load', markLoaded, { once: true });
+    })();
+  </script>
+
+<!-- ── Notify Me Modal ── -->
+<div id="notify-modal" class="notify-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="notify-modal-title">
+  <div class="notify-modal__backdrop"></div>
+  <div class="notify-modal__dialog">
+    <div class="notify-modal__header">
+      <span class="notify-modal__header-label">NOTIFY ME</span>
+      <button class="notify-modal__close" type="button" aria-label="Close">&#x2715;</button>
+    </div>
+    <div class="notify-modal__body">
+      <p class="notify-modal__sub">Enter your information and we will notify you when the item becomes available.</p>
+
+      <form class="notify-modal__form" id="NotifyModalForm" action="/contact#contact_form" method="post" target="notify-iframe">
+        <input type="hidden" name="form_type" value="contact">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[subject]" value="notify-me">
+        <input type="hidden" name="contact[body]" value="[notify-me] Please notify me when this item becomes available.">
+
+        <div class="notify-modal__field-wrap">
+          <div class="notify-modal__field-row">
+            <label class="notify-modal__label" for="NotifyModalEmail">Email *</label>
+            <span class="notify-modal__required">*required fields</span>
+          </div>
+          <input
+            type="email"
+            name="contact[email]"
+            autocomplete="email"
+            required
+            class="notify-modal__input"
+            id="NotifyModalEmail"
+          >
+        </div>
+
+        <label class="notify-modal__checkbox-wrap">
+          <input type="checkbox" class="notify-modal__checkbox" name="contact[consent]" value="yes" checked>
+          <span class="notify-modal__checkbox-label">With your consent, Sandoitchi will use your contact information (E-mail address) to alert you of the product availability.</span>
+        </label>
+
+        <label class="notify-modal__checkbox-wrap">
+          <input type="checkbox" class="notify-modal__checkbox" name="contact[marketing]" value="yes">
+          <span class="notify-modal__checkbox-label">I agree to stay in touch with Sandoitchi</span>
+        </label>
+
+        <p class="notify-modal__success" aria-live="polite" hidden>you're on the list ✦</p>
+        <p class="notify-modal__error" aria-live="polite" hidden>something went wrong — try again.</p>
+
+        <button type="submit" class="notify-modal__submit">notify me</button>
+      </form>
+    </div>
+  </div>
+</div>
+<iframe name="notify-iframe" id="notify-iframe" style="display:none" aria-hidden="true"></iframe>
+
+<script>
+(function () {
+  var modal   = document.getElementById('notify-modal');
+  if (!modal) return;
+
+  var form    = document.getElementById('NotifyModalForm');
+  var success = modal.querySelector('.notify-modal__success');
+  var error   = modal.querySelector('.notify-modal__error');
+  var input   = document.getElementById('NotifyModalEmail');
+
+  function openModal() {
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('is-open');
+    document.body.classList.add('notify-modal-open');
+    setTimeout(function () { if (input) input.focus(); }, 80);
+  }
+
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('is-open');
+    document.body.classList.remove('notify-modal-open');
+    if (success) success.hidden = true;
+    if (error)   error.hidden   = true;
+    if (form)    form.reset();
+    var submitBtn = form ? form.querySelector('.notify-modal__submit') : null;
+    if (submitBtn) submitBtn.hidden = false;
+    var fieldWrap = form ? form.querySelector('.notify-modal__field-wrap') : null;
+    if (fieldWrap) fieldWrap.style.display = '';
+  }
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-notify]');
+    if (btn) { e.preventDefault(); openModal(); }
+  });
+
+  modal.querySelector('.notify-modal__backdrop').addEventListener('click', closeModal);
+  modal.querySelector('.notify-modal__close').addEventListener('click', closeModal);
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Escape' || e.keyCode === 27) && modal.classList.contains('is-open')) closeModal();
+  });
+
+  if (form) {
+    // Submit into hidden iframe — avoids page navigation, works reliably with Shopify /contact
+    var iframe = document.getElementById('notify-iframe');
+
+    form.addEventListener('submit', function (e) {
+      var email = input ? input.value.trim() : '';
+      if (!email) { e.preventDefault(); return; }
+
+      var submitBtn = form.querySelector('.notify-modal__submit');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'sending...'; }
+
+      // Let the form submit natively into the iframe
+      // Listen for iframe load as success signal
+      if (iframe) {
+        iframe.onload = function () {
+          if (success) success.hidden = false;
+          if (error)   error.hidden   = true;
+          var fieldWrap = form.querySelector('.notify-modal__field-wrap');
+          if (fieldWrap) fieldWrap.style.display = 'none';
+          var checkboxes = form.querySelectorAll('.notify-modal__checkbox-wrap');
+          checkboxes.forEach(function(c){ c.style.display = 'none'; });
+          if (submitBtn) submitBtn.hidden = true;
+          iframe.onload = null;
+        };
+      }
+      // Form submits natively — don't preventDefault
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

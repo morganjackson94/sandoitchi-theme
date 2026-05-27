@@ -1,0 +1,92 @@
+<section class="hero-title">
+  <div class="hero-title__logo hero-title__logo--svg">
+    {%- assign variants_raw = '' -%}
+
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_1  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_2  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_3  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_4  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_5  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_6  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_7  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_8  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_9  | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_10 | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_11 | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_12 | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_13 | append: '|' -%}
+    {%- assign variants_raw = variants_raw | append: section.settings.hero_variant_14 | append: '|' -%}
+
+    {%- assign variants_list = variants_raw | split: '|' -%}
+
+    {%- comment -%}
+      Build a clean, unique list:
+      - remove blanks
+      - remove duplicates using delimiter-guard: |value|
+    {%- endcomment -%}
+
+    {%- assign seen = '|' -%}
+    {%- assign variants_joined = '' -%}
+    {%- assign first_variant = '' -%}
+
+    {%- for v in variants_list -%}
+      {%- assign vv = v | strip -%}
+      {%- if vv != blank -%}
+        {%- assign token = '|' | append: vv | append: '|' -%}
+        {%- unless seen contains token -%}
+          {%- assign seen = seen | append: vv | append: '|' -%}
+          {%- assign variants_joined = variants_joined | append: vv | append: '|' -%}
+          {%- if first_variant == blank -%}
+            {%- assign first_variant = vv -%}
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- assign variants_clean = variants_joined | split: '|' -%}
+
+    {% if first_variant != blank %}
+      <img
+        class="hero-title__logo-img js-hero-title-variant"
+        src="{{ first_variant | asset_url }}"
+        alt="{{ section.settings.heading | escape }}"
+        loading="eager"
+        data-variants="{%- for x in variants_clean -%}{%- assign xx = x | strip -%}{%- if xx != blank -%}{{ xx | escape }}{%- unless forloop.last -%}|{%- endunless -%}{%- endif -%}{%- endfor -%}"
+      >
+    {% else %}
+      <h1 class="hero-title__heading">{{ section.settings.heading }}</h1>
+    {% endif %}
+  </div>
+
+  {% if section.settings.subheading != blank %}
+    <p class="hero-title__subheading">{{ section.settings.subheading }}</p>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Hero Title",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading text (fallback)", "default": "SANDOITCHI" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Fresh Japanese Sandwiches" },
+    { "type": "header", "content": "Hero title variants (Assets filenames)" },
+
+    { "type": "text", "id": "hero_variant_1",  "label": "Variant 1 filename (in /assets)",  "default": "hero-01.png" },
+    { "type": "text", "id": "hero_variant_2",  "label": "Variant 2 filename (in /assets)",  "default": "hero-02.png" },
+    { "type": "text", "id": "hero_variant_3",  "label": "Variant 3 filename (in /assets)",  "default": "hero-03.png" },
+    { "type": "text", "id": "hero_variant_4",  "label": "Variant 4 filename (in /assets)",  "default": "hero-04.png" },
+    { "type": "text", "id": "hero_variant_5",  "label": "Variant 5 filename (in /assets)",  "default": "hero-05.png" },
+    { "type": "text", "id": "hero_variant_6",  "label": "Variant 6 filename (in /assets)",  "default": "hero-06.png" },
+    { "type": "text", "id": "hero_variant_7",  "label": "Variant 7 filename (in /assets)",  "default": "hero-07.png" },
+
+    { "type": "text", "id": "hero_variant_8",  "label": "Variant 8 filename (in /assets)",  "default": "hero-01-A.png" },
+    { "type": "text", "id": "hero_variant_9",  "label": "Variant 9 filename (in /assets)",  "default": "hero-02-A.png" },
+    { "type": "text", "id": "hero_variant_10", "label": "Variant 10 filename (in /assets)", "default": "hero-03-A.png" },
+    { "type": "text", "id": "hero_variant_11", "label": "Variant 11 filename (in /assets)", "default": "hero-04-A.png" },
+    { "type": "text", "id": "hero_variant_12", "label": "Variant 12 filename (in /assets)", "default": "hero-05-A.png" },
+    { "type": "text", "id": "hero_variant_13", "label": "Variant 13 filename (in /assets)", "default": "hero-06-A.png" },
+    { "type": "text", "id": "hero_variant_14", "label": "Variant 14 filename (in /assets)", "default": "hero-07-A.png" }
+  ],
+  "presets": [{ "name": "Hero Title" }]
+}
+{% endschema %}

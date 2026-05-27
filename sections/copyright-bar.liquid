@@ -1,0 +1,378 @@
+<section class="copyright" role="contentinfo">
+  {%- comment -%}
+    Global section render (theme.liquid) — fallback to 'footer' menu handle.
+  {%- endcomment -%}
+
+  {%- assign menu_handle = section.settings.menu | default: 'footer' -%}
+  {%- assign footer_menu = linklists[menu_handle] -%}
+
+  {% if footer_menu != blank and footer_menu.links.size > 0 %}
+    <nav class="copyright__links" aria-label="Footer links">
+      {%- assign menu_links = footer_menu.links -%}
+
+      {% for link in menu_links %}
+        {% assign handle = link.title | handle %}
+        {%- assign modal_id = '' -%}
+        {%- assign icon_file = '' -%}
+
+        {% if handle contains 'contact' %}
+          {%- assign modal_id = 'contact' -%}
+          {%- assign icon_file = '' -%}
+        {% elsif handle contains 'home' %}
+          {%- assign icon_file = 'sando-home.png' -%}
+        {% elsif handle contains 'order' %}
+          {%- assign icon_file = 'sando-order.png' -%}
+        {% elsif handle contains 'shop' %}
+          {%- assign icon_file = 'sando-shop.png' -%}
+        {% endif %}
+
+        {% if modal_id != '' %}
+          <button
+            type="button"
+            class="copyright__link"
+            data-modal-trigger="{{ modal_id }}"
+            aria-haspopup="dialog"
+            aria-controls="site-modal-{{ modal_id }}"
+          >
+            <span class="copyright__icon" aria-hidden="true">
+              {%- if handle contains 'contact' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180.83 135.63" fill="currentColor" aria-hidden="true"><path d="M15.16.06C.36,2.16-5.41,19.85,6.24,29.94l74.49,55.85c5.23,3.6,12.18,4.03,17.79.99l75.82-56.63c11.98-10.06,6.38-28.25-8.86-30.15L15.16.06ZM180.79,46.81l-72.37,54.08c-11.18,6.74-25.29,6.51-36.38-.3L.01,46.6v67.18c.68,12.24,10.44,21.54,22.67,21.83,46.05-.16,92.14.28,138.17-.22,9.05-.39,19.94-10.82,19.94-19.93V46.81Z"/></svg>
+              {%- else -%}
+                <img src="{{ icon_file | file_url }}" alt="" loading="lazy">
+              {%- endif -%}
+            </span>
+            <span class="copyright__label">{{ link.title }}</span>
+          </button>
+        {% else %}
+          <a href="{{ link.url }}" class="copyright__link" data-link-handle="{{ handle }}"{% if handle contains 'order' %} target="_blank" rel="noopener"{% endif %}>
+            <span class="copyright__icon" aria-hidden="true">
+              {%- if handle contains 'contact' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180.83 135.63" fill="currentColor" aria-hidden="true"><path d="M15.16.06C.36,2.16-5.41,19.85,6.24,29.94l74.49,55.85c5.23,3.6,12.18,4.03,17.79.99l75.82-56.63c11.98-10.06,6.38-28.25-8.86-30.15L15.16.06ZM180.79,46.81l-72.37,54.08c-11.18,6.74-25.29,6.51-36.38-.3L.01,46.6v67.18c.68,12.24,10.44,21.54,22.67,21.83,46.05-.16,92.14.28,138.17-.22,9.05-.39,19.94-10.82,19.94-19.93V46.81Z"/></svg>
+              {%- elsif icon_file != blank -%}
+                <img src="{{ icon_file | file_url }}" alt="" loading="lazy">
+              {%- endif -%}
+            </span>
+            <span class="copyright__label">{{ link.title }}</span>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  <div class="copyright__bottom">
+    © {{ "now" | date: "%Y" }} {{ shop.name }}
+  </div>
+
+  <div class="site-modal" id="site-modal-about" data-modal-id="about" hidden>
+    <div class="site-modal__dialog" role="dialog" aria-modal="true" aria-label="About">
+      <button class="site-modal__close" type="button" data-modal-close aria-label="Close">×</button>
+      <h2 class="site-modal__title">About</h2>
+      <div class="site-modal__body">
+        <p>Sandoitchi is a study in precision and restraint.</p>
+        <p>We focus on clean execution, thoughtful ingredients, and a quiet but deliberate aesthetic.</p>
+        <p>No excess. No noise. Just craft.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-modal" id="site-modal-contact" data-modal-id="contact" hidden>
+    <div class="site-modal__dialog" role="dialog" aria-modal="true" aria-label="Contact">
+      <button class="site-modal__close" type="button" data-modal-close aria-label="Close">×</button>
+      <h2 class="site-modal__title">Let's Talk Sandoitchi</h2>
+      <div class="site-modal__body">
+        <p>press, partnerships, wholesale, catering, big ideas or real talk — we're all ears.</p>
+        {% if shop.email != blank %}
+          <p><a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="site-modal" id="site-modal-privacy" data-modal-id="privacy" hidden>
+    <div class="site-modal__dialog" role="dialog" aria-modal="true" aria-label="Privacy">
+      <button class="site-modal__close" type="button" data-modal-close aria-label="Close">×</button>
+      <h2 class="site-modal__title">Privacy</h2>
+      <div class="site-modal__body">
+        <p>We collect only what we need to fulfill orders and improve the experience.</p>
+        <p>We do not sell personal information. Data is handled responsibly and kept as minimal as possible.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-modal" id="site-modal-terms" data-modal-id="terms" hidden>
+    <div class="site-modal__dialog" role="dialog" aria-modal="true" aria-label="Terms">
+      <button class="site-modal__close" type="button" data-modal-close aria-label="Close">×</button>
+      <h2 class="site-modal__title">Terms</h2>
+      <div class="site-modal__body">
+        <p>All purchases are subject to availability.</p>
+        <p>Prices and offerings may change without notice.</p>
+        <p>If something is off, contact us — we'll make it right.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     DESKTOP FLOATING COPYRIGHT
+     Hidden on mobile via CSS. Zero interference with mobile bar.
+     ============================================================ -->
+
+<div id="desktop-copyright-root" aria-hidden="true">
+
+  <div id="desktop-copyright-panel" class="dc-panel" hidden>
+    <nav class="dc-panel__links" aria-label="Site links">
+      {%- assign menu_handle2 = section.settings.menu | default: 'footer' -%}
+      {%- assign footer_menu2 = linklists[menu_handle2] -%}
+
+      {% if footer_menu2 != blank %}
+        {% for link in footer_menu2.links %}
+          {% assign handle = link.title | handle %}
+          {%- assign modal_id = '' -%}
+          {%- assign icon_file = '' -%}
+
+          {% if handle contains 'contact' %}
+            {%- assign modal_id = 'contact' -%}
+          {% elsif handle contains 'home' %}
+            {%- assign icon_file = 'sando-home.png' -%}
+          {% elsif handle contains 'order' %}
+            {%- assign icon_file = 'sando-order.png' -%}
+          {% elsif handle contains 'shop' %}
+            {%- assign icon_file = 'sando-shop.png' -%}
+          {% endif %}
+
+          {% if modal_id != '' %}
+            <button
+              type="button"
+              class="dc-panel__link"
+              data-dc-modal-trigger="{{ modal_id }}"
+            >
+              <span class="dc-panel__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180.83 135.63" fill="currentColor"><path d="M15.16.06C.36,2.16-5.41,19.85,6.24,29.94l74.49,55.85c5.23,3.6,12.18,4.03,17.79.99l75.82-56.63c11.98-10.06,6.38-28.25-8.86-30.15L15.16.06ZM180.79,46.81l-72.37,54.08c-11.18,6.74-25.29,6.51-36.38-.3L.01,46.6v67.18c.68,12.24,10.44,21.54,22.67,21.83,46.05-.16,92.14.28,138.17-.22,9.05-.39,19.94-10.82,19.94-19.93V46.81Z"/></svg>
+              </span>
+              {{ link.title }}
+            </button>
+          {% else %}
+            <a href="{{ link.url }}" class="dc-panel__link" data-link-handle="{{ handle }}"{% if handle contains 'order' %} target="_blank" rel="noopener"{% endif %}>
+              {% if icon_file != blank %}
+                <span class="dc-panel__icon" aria-hidden="true">
+                  <img src="{{ icon_file | file_url }}" alt="">
+                </span>
+              {% endif %}
+              {{ link.title }}
+            </a>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </nav>
+  </div>
+
+  <button
+    id="desktop-copyright-trigger"
+    class="dc-trigger"
+    type="button"
+    aria-expanded="true"
+    aria-controls="desktop-copyright-panel"
+    aria-label="Site info"
+  >
+    <span class="dc-trigger__label">hide</span>
+    <span class="dc-trigger__caret" aria-hidden="true">↓</span>
+  </button>
+
+</div>
+
+<div id="dc-modal-root"></div>
+
+
+<script>
+(function () {
+
+  /* ── MOBILE: wire up contact button in the fixed copyright bar ── */
+  function initMobileModals() {
+    var copyrightSection = document.querySelector('.copyright');
+    if (!copyrightSection) return;
+
+    copyrightSection.addEventListener('click', function (e) {
+      var trigger = e.target.closest('[data-modal-trigger]');
+      if (!trigger) return;
+      var id = trigger.getAttribute('data-modal-trigger');
+      var modal = copyrightSection.querySelector('.site-modal[data-modal-id="' + id + '"]');
+      if (!modal) return;
+
+      // close any open modal first
+      copyrightSection.querySelectorAll('.site-modal').forEach(function (m) { m.hidden = true; });
+
+      modal.hidden = false;
+      modal.removeAttribute('hidden');
+      modal.style.pointerEvents = 'auto';
+
+      var closeBtn = modal.querySelector('[data-modal-close]');
+      if (closeBtn) {
+        closeBtn.onclick = function () {
+          modal.hidden = true;
+        };
+      }
+
+      // close on outside tap
+      setTimeout(function () {
+        document.addEventListener('click', function handler(ev) {
+          if (!modal.contains(ev.target) && ev.target !== trigger) {
+            modal.hidden = true;
+            document.removeEventListener('click', handler);
+          }
+        });
+      }, 10);
+    });
+  }
+
+  initMobileModals();
+
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  if (window.__desktopCopyright) return;
+  window.__desktopCopyright = true;
+
+  var root             = document.getElementById('desktop-copyright-root');
+  var trigger          = document.getElementById('desktop-copyright-trigger');
+  var panel            = document.getElementById('desktop-copyright-panel');
+  var copyrightSection = document.querySelector('.copyright');
+  var subModalRoot     = document.getElementById('dc-modal-root');
+
+  if (!root || !trigger || !panel) return;
+
+  var labelEl = trigger.querySelector('.dc-trigger__label');
+  var caretEl = trigger.querySelector('.dc-trigger__caret');
+
+  /* ── Panel open / close ── */
+  function openPanel() {
+    panel.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    labelEl.textContent = 'hide';
+    caretEl.textContent = '↓';
+  }
+
+  function closePanel() {
+    panel.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+    labelEl.textContent = 'menu';
+    caretEl.textContent = '↑';
+    closeSubModal();
+  }
+
+  function togglePanel() {
+    panel.hidden ? openPanel() : closePanel();
+  }
+
+  /* ── Open by default ── */
+  openPanel();
+
+  trigger.addEventListener('click', togglePanel);
+
+  /* ── Close on scroll down, reopen when back near top ── */
+  var lastScrollY = window.scrollY;
+  var scrollTicking = false;
+
+  window.addEventListener('scroll', function () {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(function () {
+      var currentY = window.scrollY;
+      var scrolledDown = currentY > lastScrollY && currentY > 80;
+      var backAtTop = currentY < 40;
+
+      if (scrolledDown && !panel.hidden) {
+        closePanel();
+      } else if (backAtTop && panel.hidden) {
+        openPanel();
+      }
+
+      lastScrollY = currentY;
+      scrollTicking = false;
+    });
+  }, { passive: true });
+
+  /* ── Sub-modal (contact, etc.) ── */
+  function closeSubModal() {
+    if (!subModalRoot) return;
+    subModalRoot.querySelectorAll('.dc-submodal').forEach(function (m) {
+      m.hidden = true;
+    });
+  }
+
+  function openSubModal(id) {
+    if (!subModalRoot) return;
+    var existing = subModalRoot.querySelector('.dc-submodal[data-dc-id="' + id + '"]');
+    if (!existing) {
+      var source = copyrightSection
+        ? copyrightSection.querySelector('.site-modal[data-modal-id="' + id + '"]')
+        : null;
+      if (!source) return;
+      var clone   = source.querySelector('.site-modal__dialog').cloneNode(true);
+      var wrapper = document.createElement('div');
+      wrapper.className = 'dc-submodal';
+      wrapper.setAttribute('data-dc-id', id);
+      wrapper.appendChild(clone);
+      subModalRoot.appendChild(wrapper);
+      existing = wrapper;
+    }
+    subModalRoot.querySelectorAll('.dc-submodal').forEach(function (m) {
+      m.hidden = true;
+    });
+    existing.hidden = false;
+    existing.querySelectorAll('[data-modal-close]').forEach(function (btn) {
+      btn.onclick = function (e) { e.stopPropagation(); closeSubModal(); };
+    });
+  }
+
+  /* ── Panel click delegation ── */
+  panel.addEventListener('click', function (e) {
+    var dcTrigger = e.target.closest('[data-dc-modal-trigger]');
+    if (dcTrigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      openSubModal(dcTrigger.getAttribute('data-dc-modal-trigger'));
+    }
+  });
+
+  /* ── Outside click ── */
+  document.addEventListener('click', function (e) {
+    if (panel.hidden) return;
+    if (root.contains(e.target)) return;
+    if (subModalRoot && subModalRoot.contains(e.target)) return;
+    closePanel();
+  });
+
+  /* ── Escape key ── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closePanel();
+  });
+
+  /* ── Resize guard ── */
+  window.matchMedia('(max-width: 768px)').addEventListener('change', function (e) {
+    if (e.matches) {
+      root.style.display = 'none';
+      closePanel();
+    } else {
+      root.style.display = '';
+      openPanel();
+    }
+  });
+
+})();
+</script>
+
+
+{% schema %}
+{
+  "name": "Copyright Bar",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu under copyright"
+    }
+  ],
+  "presets": [
+    { "name": "Copyright Bar" }
+  ]
+}
+{% endschema %}

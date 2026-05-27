@@ -1,0 +1,173 @@
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-signup-wrap-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: #fff;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      #fff,
+      #fff 8px,
+      #e0e0e0 8px,
+      #e0e0e0 9px
+    );
+    padding: 16px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-signup-button-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 3px;
+  }
+
+  .ai-signup-button__container-{{ ai_gen_id }} {
+    padding-left: {{ block.settings.horizontal_padding }}px;
+    padding-right: {{ block.settings.horizontal_padding }}px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .ai-signup-button-{{ ai_gen_id }} input[type="email"] {
+    display: block;
+    width: 100%;
+    font-family: var(--font-body-family, inherit);
+    font-size: var(--font-size-base, 1rem);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 10px {{ block.settings.field_padding }}px;
+  }
+
+  .ai-signup-button-{{ ai_gen_id }} input[type="email"]::placeholder {
+    color: currentColor;
+    opacity: 0.45;
+    letter-spacing: 0.03em;
+  }
+
+  .ai-signup-button-{{ ai_gen_id }} input[type="email"]:focus::placeholder {
+    opacity: 0.25;
+  }
+
+  .ai-signup-success-{{ ai_gen_id }} {
+    text-align: center;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    opacity: 0.75;
+    padding: 10px {{ block.settings.field_padding }}px;
+  }
+
+  .ai-signup-error-{{ ai_gen_id }} {
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+{% endstyle %}
+
+<div class="ai-signup-wrap-{{ ai_gen_id }}">
+  <ai-signup-button-{{ ai_gen_id }}
+    class="ai-signup-button-{{ ai_gen_id }}"
+    {{ block.shopify_attributes }}
+  >
+    <div class="ai-signup-button__container-{{ ai_gen_id }}">
+
+      {% form 'customer', class: 'ai-signup-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        {% if form.posted_successfully? %}
+          <p class="ai-signup-success-{{ ai_gen_id }}">
+            {{ block.settings.success_message }}
+          </p>
+        {% else %}
+
+          <input
+            type="email"
+            name="contact[email]"
+            autocomplete="email"
+            placeholder="enter your email for updates"
+            aria-label="enter your email for updates"
+            required
+          >
+
+          {% if form.errors %}
+            <p class="ai-signup-error-{{ ai_gen_id }}">
+              {{ form.errors.messages.email }}
+            </p>
+          {% endif %}
+
+        {% endif %}
+      {% endform %}
+
+    </div>
+  </ai-signup-button-{{ ai_gen_id }}>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter field",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "field_padding",
+      "label": "Field padding",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Success"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "you're subscribed."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter field"
+    }
+  ]
+}
+{% endschema %}

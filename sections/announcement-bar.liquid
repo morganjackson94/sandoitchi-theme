@@ -1,0 +1,307 @@
+{%- assign msg_keys   = 'text|text_2|text_3|text_4|text_5'                                       | split: '|' -%}
+{%- assign url_keys   = 'link_url|link_url_2|link_url_3|link_url_4|link_url_5'                   | split: '|' -%}
+{%- assign color_keys = 'theme_color_1|theme_color_2|theme_color_3|theme_color_4|theme_color_5'  | split: '|' -%}
+
+{%- assign slide_count = 0 -%}
+{%- for key in msg_keys -%}
+  {%- if section.settings[key] != blank -%}
+    {%- assign slide_count = slide_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if slide_count > 0 -%}
+<div
+  class="announcement-bar"
+  style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }};"
+  aria-label="Announcements"
+  data-ab-speed="{{ section.settings.speed }}"
+>
+
+  <div class="announcement-bar__slides">
+    {%- assign slide_index = 0 -%}
+    {%- for key in msg_keys -%}
+      {%- assign msg = section.settings[key] -%}
+      {%- if msg != blank -%}
+        {%- assign url_key   = url_keys[forloop.index0] -%}
+        {%- assign color_key = color_keys[forloop.index0] -%}
+        {%- assign msg_url   = section.settings[url_key] -%}
+        {%- assign slide_color = section.settings[color_key] | default: '#000000' -%}
+        <div
+          class="announcement-bar__slide{% if slide_index == 0 %} is-active{% endif %}"
+          aria-hidden="{% if slide_index == 0 %}false{% else %}true{% endif %}"
+          data-theme-color="{{ slide_color }}"
+        >
+          {%- if msg_url != blank -%}
+            <a href="{{ msg_url }}" style="color: {{ section.settings.text_color }};"{% if section.settings.link_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ msg }}</a>
+          {%- else -%}
+            {{ msg }}
+          {%- endif -%}
+        </div>
+        {%- assign slide_index = slide_index | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- if slide_count > 1 -%}
+  <button class="announcement-bar__playpause" aria-label="Pause announcements" type="button">
+    <span class="ab-pause-icon">&#9646;&#9646;</span>
+    <span class="ab-play-icon" hidden>&#9654;</span>
+  </button>
+  {%- endif -%}
+
+</div>
+
+<script>
+/* ── Theme-color helper — shared between slide + scroll IIFEs ── */
+window._abSlideColor = (function () {
+  var first = document.querySelector('.announcement-bar__slide[data-theme-color]');
+  return first ? first.getAttribute('data-theme-color') : '#000000';
+})();
+
+function _abSetThemeColor(color) {
+  /* Remove ALL theme-color meta tags — Shopify injects one via content_for_header
+     from the section's bg_color setting, creating a duplicate that wins over ours.
+     Nuking all of them and appending a fresh one guarantees Safari reads the right value. */
+  document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+    m.parentNode.removeChild(m);
+  });
+  var meta = document.createElement('meta');
+  meta.setAttribute('name', 'theme-color');
+  meta.setAttribute('content', color);
+  document.head.appendChild(meta);
+}
+
+/* Set initial color immediately */
+_abSetThemeColor(window._abSlideColor);
+
+/* ── Slide rotation ── */
+(function () {
+  var bar    = document.querySelector('.announcement-bar');
+  if (!bar) return;
+
+  var slides = bar.querySelectorAll('.announcement-bar__slide');
+
+  /* Single slide — theme color already set above, nothing else to do */
+  if (slides.length <= 1) return;
+
+  var current = 0;
+  var speed   = parseInt(bar.getAttribute('data-ab-speed'), 10) || 4;
+  var timer   = null;
+  var paused  = false;
+
+  function goTo(index) {
+    slides[current].classList.remove('is-active');
+    slides[current].setAttribute('aria-hidden', 'true');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('is-active');
+    slides[current].setAttribute('aria-hidden', 'false');
+
+    /* Update shared color + meta (only when bar is visible) */
+    var color = slides[current].getAttribute('data-theme-color') || '#000000';
+    window._abSlideColor = color;
+    if (!document.documentElement.classList.contains('ab-hidden')) {
+      _abSetThemeColor(color);
+    }
+  }
+
+  function next() { goTo(current + 1); }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, speed * 1000);
+  }
+
+  function stopTimer() { clearInterval(timer); }
+
+  var btnPP = bar.querySelector('.announcement-bar__playpause');
+  if (btnPP) {
+    btnPP.addEventListener('click', function () {
+      paused = !paused;
+      var pauseIcon = btnPP.querySelector('.ab-pause-icon');
+      var playIcon  = btnPP.querySelector('.ab-play-icon');
+      if (paused) {
+        stopTimer();
+        btnPP.setAttribute('aria-label', 'Play announcements');
+        if (pauseIcon) pauseIcon.hidden = true;
+        if (playIcon)  playIcon.hidden  = false;
+      } else {
+        startTimer();
+        btnPP.setAttribute('aria-label', 'Pause announcements');
+        if (pauseIcon) pauseIcon.hidden = false;
+        if (playIcon)  playIcon.hidden  = true;
+      }
+    });
+  }
+
+  startTimer();
+})();
+
+/* ── Hide bar on scroll, reveal at top — updates theme-color too ── */
+(function () {
+  var bar = document.querySelector('.announcement-bar');
+  if (!bar) return;
+
+  var barH    = bar.offsetHeight;
+  var lastY   = window.scrollY || window.pageYOffset;
+  var hidden  = false;
+  var ticking = false;
+
+  function setHidden(shouldHide) {
+    if (shouldHide === hidden) return;
+    hidden = shouldHide;
+    document.documentElement.classList.toggle('ab-hidden', hidden);
+
+    /* Safari theme-color: white when bar is hidden, slide color when visible */
+    _abSetThemeColor(hidden ? '#ffffff' : window._abSlideColor);
+  }
+
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var y = window.scrollY || window.pageYOffset;
+
+      if (y <= 2) {
+        setHidden(false);
+      } else if (y > lastY && y > barH) {
+        setHidden(true);
+      } else if (y < lastY - 4) {
+        setHidden(false);
+      }
+
+      lastY   = y;
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Messages"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Message 1",
+      "default": "now open in dallas — order online"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Message 1 link URL"
+    },
+    {
+      "type": "color",
+      "id": "theme_color_1",
+      "label": "Message 1 browser tint",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "text_2",
+      "label": "Message 2"
+    },
+    {
+      "type": "url",
+      "id": "link_url_2",
+      "label": "Message 2 link URL"
+    },
+    {
+      "type": "color",
+      "id": "theme_color_2",
+      "label": "Message 2 browser tint",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "text_3",
+      "label": "Message 3"
+    },
+    {
+      "type": "url",
+      "id": "link_url_3",
+      "label": "Message 3 link URL"
+    },
+    {
+      "type": "color",
+      "id": "theme_color_3",
+      "label": "Message 3 browser tint",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "text_4",
+      "label": "Message 4"
+    },
+    {
+      "type": "url",
+      "id": "link_url_4",
+      "label": "Message 4 link URL"
+    },
+    {
+      "type": "color",
+      "id": "theme_color_4",
+      "label": "Message 4 browser tint",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "text_5",
+      "label": "Message 5"
+    },
+    {
+      "type": "url",
+      "id": "link_url_5",
+      "label": "Message 5 link URL"
+    },
+    {
+      "type": "color",
+      "id": "theme_color_5",
+      "label": "Message 5 browser tint",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "link_new_tab",
+      "label": "Open links in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Seconds per slide",
+      "min": 2,
+      "max": 60,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,29 @@
+<section class="three-column-info">
+  <div class="grid-container">
+
+    <div class="info-column">
+      <div class="info-label">{{ label_1 }}</div>
+      <div class="info-heading">{{ heading_1 }}</div>
+      <div class="info-subtext">{{ subtext_1 }}</div>
+    </div>
+
+    <div class="info-column info-column--center">
+      <div class="info-label">{{ label_2 }}</div>
+      <div class="info-heading">{{ heading_2 }}</div>
+      <div class="info-subtext">{{ subtext_2 }}</div>
+
+      {% if heading_2_alt != blank or subtext_2_alt != blank %}
+        <div class="info-spacing"></div>
+        <div class="info-heading">{{ heading_2_alt }}</div>
+        <div class="info-subtext">{{ subtext_2_alt }}</div>
+      {% endif %}
+    </div>
+
+    <div class="info-column info-column--right">
+      <div class="info-label">{{ label_3 }}</div>
+      <div class="info-heading">{{ heading_3 }}</div>
+      <div class="info-subtext">{{ subtext_3 }}</div>
+    </div>
+
+  </div>
+</section>
