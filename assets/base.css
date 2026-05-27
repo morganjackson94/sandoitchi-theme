@@ -1035,6 +1035,13 @@ Shop link â€” desktop only
     gap: 0 !important;
 
     text-align: center !important;
+
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  body .copyright.copyright--visible {
+    transform: translateY(0);
   }
 
   /* One-row tabs */
@@ -3276,6 +3283,13 @@ Shop link â€” desktop only
     gap: 0 !important;
 
     text-align: center !important;
+
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  body .copyright.copyright--visible {
+    transform: translateY(0);
   }
 
   /* One-row tabs */

@@ -227,7 +227,20 @@
 
   initMobileModals();
 
-  if (window.matchMedia('(max-width: 768px)').matches) return;
+  /* ── MOBILE: reveal bar on first interaction ── */
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    var mobileBar = document.querySelector('.copyright');
+    if (mobileBar) {
+      function showMobileBar() {
+        mobileBar.classList.add('copyright--visible');
+        window.removeEventListener('scroll', showMobileBar);
+        window.removeEventListener('touchstart', showMobileBar);
+      }
+      window.addEventListener('scroll', showMobileBar, { passive: true });
+      window.addEventListener('touchstart', showMobileBar, { passive: true });
+    }
+    return;
+  }
   if (window.__desktopCopyright) return;
   window.__desktopCopyright = true;
 

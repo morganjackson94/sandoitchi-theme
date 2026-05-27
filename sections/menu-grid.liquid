@@ -57,6 +57,7 @@
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1;
+  text-transform: lowercase;
   color: #c0c0c0;
   background: none;
   border: none;
@@ -105,13 +106,16 @@
 
 @media (max-width: 749px) {
   .menu-filter {
-    padding: 2rem 2rem 0;
+    padding: 1.6rem 2rem 0;
     gap: 0;
+    justify-content: space-between;
+    overflow-x: hidden;
   }
 
   .menu-filter__btn {
-    font-size: 2.2rem;
-    padding: 0 2.4rem 1.2rem 0;
+    font-size: 1.5rem;
+    letter-spacing: 0;
+    padding: 0 0 1.2rem 0;
   }
 
   .menu-grid {
@@ -163,20 +167,6 @@
   opacity: 0.15;
 }
 
-.menu-grid__item-info {
-  padding: 0.9rem 1.2rem 1.1rem;
-  border-top: 1px solid #e8e8e8;
-}
-
-.menu-grid__item-name {
-  display: block;
-  font-size: 1rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: #111;
-  line-height: 1.35;
-}
 
 /* ── Modal ── */
 
@@ -392,9 +382,7 @@
                 {{ 'image' | placeholder_svg_tag: 'menu-grid__img menu-grid__img--placeholder' }}
               {%- endif -%}
             </div>
-            <div class="menu-grid__item-info">
-              <span class="menu-grid__item-name">{{ block.settings.name }}</span>
-            </div>
+
           </button>
         </div>
       {%- endif -%}
