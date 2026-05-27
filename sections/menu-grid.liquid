@@ -1,0 +1,689 @@
+{% comment %}
+  Section: menu-grid
+  Page: /pages/menu
+  
+  Displays full Sandoitchi menu with:
+  - Editorial category filter (Yeezy-style)
+  - Filterable image grid
+  - Item detail modal
+  - MenuItem JSON-LD schema for SEO + AI discoverability
+
+  CSS: uses {% stylesheet %} tag (section-scoped).
+       Exception to base.css convention — justified by section complexity.
+  
+  TOAST INTEGRATION PATH:
+  Phase 1 (now)   — static section blocks, images set via theme editor
+  Phase 2         — migrate items to Shopify products with metafields:
+                    custom.toast_item_id, custom.menu_category, custom.ingredients
+  Phase 3         — fetch products by collection handle 'menu' via Liquid,
+                    replace section.blocks loop with collection.products loop
+  Phase 4         — connect Toast API via middleware (webhook or Shopify app)
+                    to sync availability, pricing, and item status in real time
+  Phase 5         — modal CTA routes to deep-linked Toast item URL
+                    format: https://order.toasttab.com/online/sandoitchi/v3/item/{toast_item_id}
+{% endcomment %}
+
+{% stylesheet %}
+
+/* ─────────────────────────────────────────
+   SECTION: menu-grid
+───────────────────────────────────────── */
+
+.menu-page {
+  padding: 0;
+  min-height: 60vh;
+}
+
+/* ── Filter Bar ── */
+
+.menu-filter {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 3.2rem 3.2rem 0;
+  border-bottom: 1px solid #e0e0e0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.menu-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-filter__btn {
+  font-family: 'Booton', serif;
+  font-size: clamp(2.4rem, 3.6vw, 4.2rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #c0c0c0;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0 3.2rem 1.6rem 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  margin-bottom: -1px;
+}
+
+.menu-filter__btn:first-child {
+  padding-left: 0;
+}
+
+.menu-filter__btn:hover {
+  color: #111;
+}
+
+.menu-filter__btn.is-active {
+  color: #111;
+  border-bottom-color: #111;
+}
+
+/* ── Grid ── */
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background-color: #e0e0e0;
+  border-top: none;
+}
+
+@media (max-width: 1199px) {
+  .menu-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 899px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 749px) {
+  .menu-filter {
+    padding: 2rem 2rem 0;
+    gap: 0;
+  }
+
+  .menu-filter__btn {
+    font-size: 2.2rem;
+    padding: 0 2.4rem 1.2rem 0;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.menu-grid__item {
+  background: #fff;
+  overflow: hidden;
+  transition: opacity 0.25s ease;
+}
+
+.menu-grid__item.is-hidden {
+  display: none;
+}
+
+.menu-grid__trigger {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.menu-grid__img-wrap {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f2f2f0;
+  position: relative;
+}
+
+.menu-grid__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.menu-grid__trigger:hover .menu-grid__img {
+  transform: scale(1.04);
+}
+
+.menu-grid__img--placeholder {
+  padding: 20%;
+  opacity: 0.15;
+}
+
+.menu-grid__item-info {
+  padding: 0.9rem 1.2rem 1.1rem;
+  border-top: 1px solid #e8e8e8;
+}
+
+.menu-grid__item-name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #111;
+  line-height: 1.35;
+}
+
+/* ── Modal ── */
+
+.menu-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.menu-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.72);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+.menu-modal__panel {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  width: 90vw;
+  max-width: 960px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.menu-modal.is-open .menu-modal__panel {
+  transform: translateY(0) scale(1);
+}
+
+.menu-modal__image-wrap {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f2f2f0;
+  align-self: stretch;
+}
+
+.menu-modal__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.menu-modal__details {
+  padding: 4rem 3.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.menu-modal__eyebrow {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #aaa;
+  font-weight: 400;
+}
+
+.menu-modal__name {
+  font-family: 'Booton', serif;
+  font-size: clamp(2rem, 2.8vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #111;
+  margin: 0;
+}
+
+.menu-modal__description {
+  font-size: 1.35rem;
+  line-height: 1.7;
+  color: #666;
+  margin: 0;
+}
+
+.menu-modal__order-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #111;
+  color: #fff;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 1.3rem 2.4rem;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: background 0.2s ease;
+  margin-top: 0.4rem;
+}
+
+.menu-modal__order-btn:hover {
+  background: #333;
+  color: #fff;
+}
+
+.menu-modal__close {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  cursor: pointer;
+  padding: 0.7rem;
+  z-index: 2;
+  color: #111;
+  line-height: 0;
+  border-radius: 50%;
+  width: 3.6rem;
+  height: 3.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.menu-modal__close:hover {
+  background: #fff;
+}
+
+/* Modal mobile — bottom sheet */
+@media (max-width: 749px) {
+  .menu-modal {
+    align-items: flex-end;
+  }
+
+  .menu-modal__panel {
+    grid-template-columns: 1fr;
+    width: 100vw;
+    max-width: 100%;
+    max-height: 88vh;
+    border-radius: 1.6rem 1.6rem 0 0;
+    transform: translateY(100%);
+  }
+
+  .menu-modal.is-open .menu-modal__panel {
+    transform: translateY(0);
+  }
+
+  .menu-modal__image-wrap {
+    aspect-ratio: 16 / 9;
+    border-radius: 1.6rem 1.6rem 0 0;
+    overflow: hidden;
+  }
+
+  .menu-modal__details {
+    padding: 2.4rem 2.4rem 4rem;
+    gap: 1.4rem;
+  }
+
+  .menu-modal__name {
+    font-size: 2.4rem;
+  }
+}
+
+{% endstylesheet %}
+
+<div class="menu-page">
+
+  {%- comment -%} ── Category Filter ── {%- endcomment -%}
+  <nav class="menu-filter" aria-label="Filter menu by category">
+    <button class="menu-filter__btn is-active" data-filter="all">All</button>
+    <button class="menu-filter__btn" data-filter="sando">Sandos</button>
+    <button class="menu-filter__btn" data-filter="bowl">Bowls</button>
+    <button class="menu-filter__btn" data-filter="side">Sides</button>
+    <button class="menu-filter__btn" data-filter="drink">Drinks</button>
+  </nav>
+
+  {%- comment -%} ── Grid ── {%- endcomment -%}
+  <div class="menu-grid" id="menuGrid">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'item' -%}
+        {%- assign item_image_url = '' -%}
+        {%- if block.settings.image != blank -%}
+          {%- assign item_image_url = block.settings.image | image_url: width: 900 -%}
+        {%- endif -%}
+        <div class="menu-grid__item"
+             data-category="{{ block.settings.category }}"
+             data-name="{{ block.settings.name | escape }}"
+             data-description="{{ block.settings.description | escape }}"
+             data-image="{{ item_image_url }}"
+             {{ block.shopify_attributes }}>
+          <button class="menu-grid__trigger" aria-label="View {{ block.settings.name | escape }}">
+            <div class="menu-grid__img-wrap">
+              {%- if block.settings.image != blank -%}
+                {{- block.settings.image | image_url: width: 600
+                    | image_tag:
+                      loading: 'lazy',
+                      alt: block.settings.name,
+                      class: 'menu-grid__img',
+                      widths: '300, 450, 600',
+                      sizes: '(max-width: 749px) 50vw, (max-width: 899px) 33vw, (max-width: 1199px) 25vw, 20vw' -}}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'menu-grid__img menu-grid__img--placeholder' }}
+              {%- endif -%}
+            </div>
+            <div class="menu-grid__item-info">
+              <span class="menu-grid__item-name">{{ block.settings.name }}</span>
+            </div>
+          </button>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} ── Modal ── {%- endcomment -%}
+  <div class="menu-modal"
+       id="menuModal"
+       role="dialog"
+       aria-modal="true"
+       aria-hidden="true"
+       aria-labelledby="modalItemName">
+    <div class="menu-modal__overlay" id="modalOverlay"></div>
+    <div class="menu-modal__panel">
+      <button class="menu-modal__close" id="modalClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.5 1.5L14.5 14.5M14.5 1.5L1.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="menu-modal__image-wrap">
+        <img class="menu-modal__image" id="modalImage" src="" alt="" loading="lazy">
+      </div>
+      <div class="menu-modal__details">
+        <span class="menu-modal__eyebrow" id="modalEyebrow"></span>
+        <h2 class="menu-modal__name" id="modalItemName"></h2>
+        <p class="menu-modal__description" id="modalDescription"></p>
+        <a class="menu-modal__order-btn"
+           href="{{ section.settings.order_url | default: 'https://order.toasttab.com/online/sandoitchi' }}"
+           target="_blank"
+           rel="noopener noreferrer">
+          Order Now
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{%- comment -%} ── MenuItem JSON-LD — AI + SEO discoverability ── {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  "name": "Sandoitchi Menu",
+  "url": "{{ shop.url }}/pages/menu",
+  "hasMenuSection": [
+    {
+      "@type": "MenuSection",
+      "name": "Sandos",
+      "hasMenuItem": [
+        {%- assign comma = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.category == 'sando' -%}
+            {%- if comma -%},{%- endif -%}
+            {
+              "@type": "MenuItem",
+              "name": {{ block.settings.name | json }},
+              "description": {{ block.settings.description | json }}
+            }
+            {%- assign comma = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    },
+    {
+      "@type": "MenuSection",
+      "name": "Bowls",
+      "hasMenuItem": [
+        {%- assign comma = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.category == 'bowl' -%}
+            {%- if comma -%},{%- endif -%}
+            {
+              "@type": "MenuItem",
+              "name": {{ block.settings.name | json }},
+              "description": {{ block.settings.description | json }}
+            }
+            {%- assign comma = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    },
+    {
+      "@type": "MenuSection",
+      "name": "Sides",
+      "hasMenuItem": [
+        {%- assign comma = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.category == 'side' -%}
+            {%- if comma -%},{%- endif -%}
+            {
+              "@type": "MenuItem",
+              "name": {{ block.settings.name | json }},
+              "description": {{ block.settings.description | json }}
+            }
+            {%- assign comma = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    },
+    {
+      "@type": "MenuSection",
+      "name": "Drinks",
+      "hasMenuItem": [
+        {%- assign comma = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.category == 'drink' -%}
+            {%- if comma -%},{%- endif -%}
+            {
+              "@type": "MenuItem",
+              "name": {{ block.settings.name | json }},
+              "description": {{ block.settings.description | json }}
+            }
+            {%- assign comma = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    }
+  ]
+}
+</script>
+
+{% javascript %}
+(function () {
+
+  // ── Filter ──────────────────────────────────────
+  var filterBtns = document.querySelectorAll('.menu-filter__btn');
+  var gridItems  = document.querySelectorAll('.menu-grid__item');
+
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var filter = btn.getAttribute('data-filter');
+
+      filterBtns.forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+
+      gridItems.forEach(function (item) {
+        var matches = filter === 'all' || item.getAttribute('data-category') === filter;
+        item.classList.toggle('is-hidden', !matches);
+      });
+    });
+  });
+
+  // ── Modal ──────────────────────────────────────
+  var modal       = document.getElementById('menuModal');
+  var overlay     = document.getElementById('modalOverlay');
+  var closeBtn    = document.getElementById('modalClose');
+  var modalImage  = document.getElementById('modalImage');
+  var modalEyebrow = document.getElementById('modalEyebrow');
+  var modalName   = document.getElementById('modalItemName');
+  var modalDesc   = document.getElementById('modalDescription');
+  var lastFocused = null;
+
+  var categoryLabels = {
+    sando: 'Sando',
+    bowl:  'Bowl',
+    side:  'Side',
+    drink: 'Drink'
+  };
+
+  function openModal(item) {
+    lastFocused = document.activeElement;
+
+    var name  = item.getAttribute('data-name')  || '';
+    var desc  = item.getAttribute('data-description') || '';
+    var image = item.getAttribute('data-image') || '';
+    var cat   = item.getAttribute('data-category') || '';
+
+    modalName.textContent    = name;
+    modalDesc.textContent    = desc;
+    modalEyebrow.textContent = categoryLabels[cat] || cat;
+
+    if (image) {
+      modalImage.src = image;
+      modalImage.alt = name;
+      modalImage.parentElement.style.display = '';
+    } else {
+      modalImage.src = '';
+      modalImage.parentElement.style.display = 'none';
+    }
+
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  // Bind grid triggers
+  document.querySelectorAll('.menu-grid__trigger').forEach(function (trigger) {
+    trigger.addEventListener('click', function () {
+      openModal(trigger.closest('.menu-grid__item'));
+    });
+  });
+
+  // Close on overlay / button / ESC
+  overlay.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
+
+  // Focus trap
+  modal.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    var focusable = modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    var first = focusable[0];
+    var last  = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+    }
+  });
+
+}());
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Menu Grid",
+  "tag": "section",
+  "class": "section-menu-grid",
+  "settings": [
+    {
+      "type": "url",
+      "id": "order_url",
+      "label": "Order URL",
+      "info": "Toast ordering URL. Update per location or when deep-link integration is live."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Menu Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Item Name"
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category",
+          "options": [
+            { "value": "sando", "label": "Sando" },
+            { "value": "bowl",  "label": "Bowl"  },
+            { "value": "side",  "label": "Side"  },
+            { "value": "drink", "label": "Drink" }
+          ],
+          "default": "sando"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Ingredients / Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Item Image"
+        },
+        {
+          "type": "text",
+          "id": "toast_item_id",
+          "label": "Toast Item ID",
+          "info": "Phase 4: used to deep-link modal CTA to the exact Toast item. Format: item GUID from Toast API."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Menu Grid" }
+  ]
+}
+{% endschema %}
