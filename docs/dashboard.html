@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sandoitchi — Progress Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f5f5f3;
+      --text-primary: #111111;
+      --text-secondary: #888880;
+      --border: rgba(0,0,0,0.1);
+      --border-secondary: rgba(0,0,0,0.18);
+      --green: #2d7a2d;
+      --amber: #c07800;
+      --red: #b83232;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --bg-secondary: #242424;
+        --text-primary: #f0f0ed;
+        --text-secondary: #888880;
+        --border: rgba(255,255,255,0.1);
+        --border-secondary: rgba(255,255,255,0.18);
+        --green: #4aad4a;
+        --amber: #e09020;
+        --red: #d94f4f;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      padding: 2.5rem 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    header h1 {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    header span {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .score-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+
+    .score-card .label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .score-card .value {
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .score-card .bar-wrap {
+      margin-top: 8px;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .score-card .bar-fill {
+      height: 100%;
+      border-radius: 2px;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 620px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border-secondary);
+      background: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .filter-btn:hover { color: var(--text-primary); }
+
+    .filter-btn.active {
+      background: var(--text-primary);
+      color: var(--bg);
+      border-color: var(--text-primary);
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .check-item .icon {
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: 15px;
+    }
+
+    .check-item.done .label-text {
+      color: var(--text-secondary);
+      text-decoration: line-through;
+      text-decoration-color: var(--text-secondary);
+    }
+
+    .check-item.pending .label-text,
+    .check-item.inprog .label-text {
+      color: var(--text-primary);
+    }
+
+    .roadmap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phase {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .phase:last-child { border-bottom: none; }
+
+    .phase-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .phase-content .phase-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .phase-content .phase-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .phase-badge {
+      display: inline-block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 0.5px solid var(--border);
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>sandoitchi.com — progress dashboard</h1>
+    <span>Last updated: May 2026</span>
+  </header>
+
+  <!-- ── SEO & Analytics ── -->
+  <p class="section-label">SEO &amp; Analytics</p>
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="label">Technical</div>
+      <div class="value" style="color:var(--green)">82</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:82%;background:var(--green)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">On-Page</div>
+      <div class="value" style="color:var(--green)">78</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:78%;background:var(--green)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Local</div>
+      <div class="value" style="color:var(--green)">75</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:75%;background:var(--green)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Content</div>
+      <div class="value" style="color:var(--amber)">55</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:55%;background:var(--amber)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Structured data</div>
+      <div class="value" style="color:var(--green)">80</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:80%;background:var(--green)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Attribution</div>
+      <div class="value" style="color:var(--green)">85</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:85%;background:var(--green)"></div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── AI Readiness ── -->
+  <p class="section-label">AI Readiness</p>
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="label">Overall</div>
+      <div class="value" style="color:var(--amber)">38</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:38%;background:var(--amber)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Data unification</div>
+      <div class="value" style="color:var(--red)">15</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:15%;background:var(--red)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Signal capture</div>
+      <div class="value" style="color:var(--amber)">45</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:45%;background:var(--amber)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Customer identity</div>
+      <div class="value" style="color:var(--red)">10</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:10%;background:var(--red)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Operational data</div>
+      <div class="value" style="color:var(--red)">20</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:20%;background:var(--red)"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="label">Content &amp; brand</div>
+      <div class="value" style="color:var(--green)">60</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:60%;background:var(--green)"></div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── Two column ── -->
+  <div class="two-col">
+
+    <!-- Action items -->
+    <div>
+      <p class="section-label">Action items</p>
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterItems('all',this)">All</button>
+        <button class="filter-btn" onclick="filterItems('inprog',this)">In progress</button>
+        <button class="filter-btn" onclick="filterItems('pending',this)">Pending</button>
+        <button class="filter-btn" onclick="filterItems('done',this)">Done</button>
+      </div>
+      <div class="checklist" id="checklist">
+        <div class="check-item done" data-status="done">
+          <i class="ti ti-circle-check icon" style="color:var(--green)" aria-hidden="true"></i>
+          <span class="label-text">All 12 SEO actions complete</span>
+        </div>
+        <div class="check-item done" data-status="done">
+          <i class="ti ti-circle-check icon" style="color:var(--green)" aria-hidden="true"></i>
+          <span class="label-text">GTM + GA4 installed and verified</span>
+        </div>
+        <div class="check-item done" data-status="done">
+          <i class="ti ti-circle-check icon" style="color:var(--green)" aria-hidden="true"></i>
+          <span class="label-text">Order click conversion tracking live</span>
+        </div>
+        <div class="check-item done" data-status="done">
+          <i class="ti ti-circle-check icon" style="color:var(--green)" aria-hidden="true"></i>
+          <span class="label-text">LocalBusiness + Product schema live</span>
+        </div>
+        <div class="check-item done" data-status="done">
+          <i class="ti ti-circle-check icon" style="color:var(--green)" aria-hidden="true"></i>
+          <span class="label-text">Menu page with MenuItem JSON-LD live</span>
+        </div>
+        <div class="check-item inprog" data-status="inprog">
+          <i class="ti ti-clock icon" style="color:var(--amber)" aria-hidden="true"></i>
+          <span class="label-text">Monitor GSC indexing (3–5 days)</span>
+        </div>
+        <div class="check-item inprog" data-status="inprog">
+          <i class="ti ti-clock icon" style="color:var(--amber)" aria-hidden="true"></i>
+          <span class="label-text">Monitor GA4 order_click volume</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">Mark order_click as GA4 Key Event</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">Claim + optimize Google Business Profiles</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">UTM params on Instagram + delivery links</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">Install Klaviyo + activate email list</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">Enable Toast Loyalty + POS email capture</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">Start daily ops log (Google Sheet)</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">Aggregate reviews via Birdeye / Grade.us</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">Redirect Square legacy site</span>
+        </div>
+        <div class="check-item pending" data-status="pending">
+          <i class="ti ti-circle icon" style="color:var(--text-secondary)" aria-hidden="true"></i>
+          <span class="label-text">PageSpeed Insights + TinyIMG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI readiness roadmap -->
+    <div>
+      <p class="section-label">AI readiness roadmap</p>
+      <div class="roadmap">
+        <div class="phase">
+          <div class="phase-num" style="background:var(--red);color:#fff">1</div>
+          <div class="phase-content">
+            <span class="phase-badge" style="background:#fce8e8;color:#7a1f1f">This week</span>
+            <div class="phase-title">Install Klaviyo</div>
+            <div class="phase-desc">Shopify App Store → sync list → welcome flow</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num" style="background:var(--red);color:#fff">2</div>
+          <div class="phase-content">
+            <span class="phase-badge" style="background:#fce8e8;color:#7a1f1f">This week</span>
+            <div class="phase-title">Toast Loyalty + POS email capture</div>
+            <div class="phase-desc">Bridges in-store behavior to digital identity</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num" style="background:var(--green);color:#fff">3</div>
+          <div class="phase-content">
+            <span class="phase-badge" style="background:#e8f5e8;color:#1f5a1f">Done</span>
+            <div class="phase-title">Menu + MenuItem schema</div>
+            <div class="phase-desc">/pages/menu with full JSON-LD live</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num" style="background:var(--red);color:#fff">4</div>
+          <div class="phase-content">
+            <span class="phase-badge" style="background:#fce8e8;color:#7a1f1f">This week</span>
+            <div class="phase-title">Daily ops log</div>
+            <div class="phase-desc">Google Sheet: location, covers, top 3 items, weather</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num" style="background:#888;color:#fff">5</div>
+          <div class="phase-content">
+            <span class="phase-badge" style="background:#f0f0ee;color:#555">This month</span>
+            <div class="phase-title">Review aggregation</div>
+            <div class="phase-desc">Google Alerts + Birdeye or Grade.us</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num" style="background:#ccc;color:#555">6</div>
+          <div class="phase-content">
+            <span class="phase-badge" style="background:#f0f0ee;color:#555">6–12 months</span>
+            <div class="phase-title">Unified data warehouse</div>
+            <div class="phase-desc">BigQuery + Shopify + Toast + TapTap Eat + Klaviyo + GA4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>sandoitchi.com — AFRA Visibility</span>
+    <span>Update scores in docs/seo-status.md and docs/ai-readiness.md, then regenerate this file</span>
+  </footer>
+
+  <script>
+    function filterItems(status, btn) {
+      document.querySelectorAll('.filter-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+      document.querySelectorAll('.check-item').forEach(function(item) {
+        item.style.display = (status === 'all' || item.dataset.status === status) ? 'flex' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>
