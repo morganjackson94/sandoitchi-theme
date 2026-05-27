@@ -1,18 +1,24 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "menu_grid": {
       "type": "menu-grid",
-      "settings": {
-        "order_url": "https://order.toasttab.com/online/sandoitchi"
-      },
       "blocks": {
-
         "egg-salad-sando": {
           "type": "item",
           "settings": {
             "name": "Egg Salad Sando",
             "category": "sando",
             "description": "Scrambled Egg Salad, Soft Boiled Egg, Kewpie Mayo",
+            "image": "shopify://shop_images/GRID_3.jpg",
             "toast_item_id": ""
           }
         },
@@ -22,6 +28,7 @@
             "name": "Strawberry Cream Sando",
             "category": "sando",
             "description": "Strawberries, Chantilly Cream",
+            "image": "shopify://shop_images/GRID_1.jpg",
             "toast_item_id": ""
           }
         },
@@ -31,6 +38,7 @@
             "name": "Raspberry Hazelnut-Hojicha Cream Sando",
             "category": "sando",
             "description": "Fresh Raspberries, Raspberry Jam, Hazelnut Syrup, Hojicha Chantilly Cream",
+            "image": "shopify://shop_images/GRID_5.jpg",
             "toast_item_id": ""
           }
         },
@@ -40,6 +48,7 @@
             "name": "Classic Chicken Katsu Sando",
             "category": "sando",
             "description": "Koji Chicken, Cabbage, Tonkatsu Sauce, Karashi Kewpie Mayo",
+            "image": "shopify://shop_images/GRID_5.jpg",
             "toast_item_id": ""
           }
         },
@@ -49,6 +58,7 @@
             "name": "Spicy Truffle Chicken Katsu Sando",
             "category": "sando",
             "description": "Koji Chicken, Cabbage, Truffle Hot Sauce, Truffle Kewpie Mayo",
+            "image": "shopify://shop_images/GRID_6.jpg",
             "toast_item_id": ""
           }
         },
@@ -58,6 +68,7 @@
             "name": "Wagyu Burger Katsu Sando",
             "category": "sando",
             "description": "Akaushi Beef, Cheddar, Pickles, Special Sando Sauce",
+            "image": "shopify://shop_images/GRID_9.jpg",
             "toast_item_id": ""
           }
         },
@@ -67,6 +78,7 @@
             "name": "Roasted Chicken Club Sando",
             "category": "sando",
             "description": "Spiced Brined Whole Roasted Chicken, Bacon, Provolone, Lettuce, Tomato, Karashi Honey Mustard, Yuzu Ranch",
+            "image": "shopify://shop_images/GRID_7.jpg",
             "toast_item_id": ""
           }
         },
@@ -76,6 +88,7 @@
             "name": "Ebi Shrimp Katsu Sando",
             "category": "sando",
             "description": "Nori Wrapped Shrimp Patty, Cabbage, Tonkatsu Sauce, Karashi Kewpie Mayo",
+            "image": "shopify://shop_images/GRID_8.jpg",
             "toast_item_id": ""
           }
         },
@@ -85,16 +98,17 @@
             "name": "\"Lobster Roll\"",
             "category": "sando",
             "description": "Poached Lobster, Yuzu Crème Fraîche, Herbs, Chili Oil",
+            "image": "shopify://shop_images/GRID_10.jpg",
             "toast_item_id": ""
           }
         },
-
         "chicken-karaage": {
           "type": "item",
           "settings": {
             "name": "Chicken Karaage",
             "category": "bowl",
             "description": "Soy Marinated Chicken Thighs, Potato Starch, Yuzu Kosho Kewpie Mayo",
+            "image": "shopify://shop_images/GRID_14.jpg",
             "toast_item_id": ""
           }
         },
@@ -104,6 +118,7 @@
             "name": "Shiso Ebi Dango",
             "category": "bowl",
             "description": "Shiso, Shrimp Farce, Kimchi Sauce, Lime",
+            "image": "shopify://shop_images/GRID_15.jpg",
             "toast_item_id": ""
           }
         },
@@ -113,6 +128,7 @@
             "name": "Tori Maze Ramen",
             "category": "bowl",
             "description": "Poached Chicken, Ramen, Salted Cabbage, Ginger Scallion Dressing",
+            "image": "shopify://shop_images/GRID_12.jpg",
             "toast_item_id": ""
           }
         },
@@ -122,6 +138,7 @@
             "name": "Chicken Katsu Don",
             "category": "bowl",
             "description": "Koji Chicken Katsu, Koshihikari Rice, Scrambled Eggs, Scallions, Soy Dashi",
+            "image": "shopify://shop_images/GRID_11.jpg",
             "toast_item_id": ""
           }
         },
@@ -131,6 +148,7 @@
             "name": "Gyu Don",
             "category": "bowl",
             "description": "Soy Braised Brisket, Koshihikari Rice, Onions, Soft Boiled Egg, Scallions, Pickled Mustard Greens",
+            "image": "shopify://shop_images/GRID_13.jpg",
             "toast_item_id": ""
           }
         },
@@ -140,16 +158,17 @@
             "name": "Matcha Tres Leches Parfait",
             "category": "bowl",
             "description": "Earl Grey Milk Cake, Matcha Mascarpone Cream, Fresh Berries",
+            "image": "shopify://shop_images/GRID_31.jpg",
             "toast_item_id": ""
           }
         },
-
         "friend-fries": {
           "type": "item",
           "settings": {
             "name": "Friend Fries",
             "category": "side",
             "description": "Mixed Fries, Spicy Ketchup",
+            "image": "shopify://shop_images/GRID_16.jpg",
             "toast_item_id": ""
           }
         },
@@ -159,6 +178,7 @@
             "name": "Smacked Cucumber Salad",
             "category": "side",
             "description": "Sesame Dressing, Togarashi Chili Crisp",
+            "image": "shopify://shop_images/GRID_17.jpg",
             "toast_item_id": ""
           }
         },
@@ -168,6 +188,7 @@
             "name": "\"Elote\" Corn Karaage",
             "category": "side",
             "description": "Fried Baby Corn, Tajin Salt, Cotija Cheese, Yuzu Kewpie Mayo, Micro Cilantro",
+            "image": "shopify://shop_images/GRID_18.jpg",
             "toast_item_id": ""
           }
         },
@@ -180,13 +201,13 @@
             "toast_item_id": ""
           }
         },
-
         "yuzu-arnold-palmer": {
           "type": "item",
           "settings": {
             "name": "Yuzu Arnold Palmer",
             "category": "drink",
             "description": "Sweet Tea, Yuzu",
+            "image": "shopify://shop_images/GRID_26.jpg",
             "toast_item_id": ""
           }
         },
@@ -196,6 +217,7 @@
             "name": "Banana Milk",
             "category": "drink",
             "description": "Bananas, Coconut Milk, Oat Milk",
+            "image": "shopify://shop_images/GRID_27.jpg",
             "toast_item_id": ""
           }
         },
@@ -205,6 +227,7 @@
             "name": "Mango Ube Lassi",
             "category": "drink",
             "description": "Mango Puree, Yogurt Lassi, Ube Sea Salt Cream, Oat Milk",
+            "image": "shopify://shop_images/GRID_25.jpg",
             "toast_item_id": ""
           }
         },
@@ -214,6 +237,7 @@
             "name": "Hazelnut Hojicha Latte",
             "category": "drink",
             "description": "Rocky's Hojicha, Hazelnut Syrup, Sea Salt Cream, Toffee Crumble, Oat Milk",
+            "image": "shopify://shop_images/GRID_28.jpg",
             "toast_item_id": ""
           }
         },
@@ -223,6 +247,7 @@
             "name": "Matcha Latte",
             "category": "drink",
             "description": "Rocky's Matcha, Honey Vanilla Syrup, Oat Milk",
+            "image": "shopify://shop_images/GRID_20.jpg",
             "toast_item_id": ""
           }
         },
@@ -232,6 +257,7 @@
             "name": "Strawberry Matcha Latte",
             "category": "drink",
             "description": "Rocky's Matcha, Strawberry Jam, Oat Milk",
+            "image": "shopify://shop_images/GRID_19.jpg",
             "toast_item_id": ""
           }
         },
@@ -241,6 +267,7 @@
             "name": "Blueberry Cream Matcha Latte",
             "category": "drink",
             "description": "Rocky's Matcha, Blueberry Jam, Yuzu Honey Syrup, Sea Salt Cream, Oat Milk",
+            "image": "shopify://shop_images/GRID_24.jpg",
             "toast_item_id": ""
           }
         },
@@ -250,6 +277,7 @@
             "name": "Earl Grey Matcha Latte",
             "category": "drink",
             "description": "Rocky's Matcha, Earl Grey Syrup, Sea Salt Cream, Oat Milk",
+            "image": "shopify://shop_images/GRID_22.jpg",
             "toast_item_id": ""
           }
         },
@@ -259,6 +287,7 @@
             "name": "Black Sesame Chai Matcha Latte",
             "category": "drink",
             "description": "Rocky's Matcha, Chai Spiced Black Sesame Syrup, Sea Salt Cream, Oat Milk",
+            "image": "shopify://shop_images/GRID_23.jpg",
             "toast_item_id": ""
           }
         },
@@ -268,6 +297,7 @@
             "name": "Horchata Matcha Latte",
             "category": "drink",
             "description": "Ceremonial Matcha, Oat Milk, Cinnamon",
+            "image": "shopify://shop_images/GRID_21.jpg",
             "toast_item_id": ""
           }
         },
@@ -277,6 +307,7 @@
             "name": "Tokyo Cold Brew",
             "category": "drink",
             "description": "Cold Brew Coffee, Horchata Cream",
+            "image": "shopify://shop_images/GRID_29.jpg",
             "toast_item_id": ""
           }
         },
@@ -286,10 +317,10 @@
             "name": "Matcha Float",
             "category": "drink",
             "description": "Rocky's Matcha, Matcha Soft Serve Ice Cream, Oat Milk, Matcha Syrup",
+            "image": "shopify://shop_images/GRID_30.jpg",
             "toast_item_id": ""
           }
         }
-
       },
       "block_order": [
         "egg-salad-sando",
@@ -323,8 +354,13 @@
         "horchata-matcha-latte",
         "tokyo-cold-brew",
         "matcha-float"
-      ]
+      ],
+      "settings": {
+        "order_url": "https://order.toasttab.com/online/sandoitchi"
+      }
     }
   },
-  "order": ["menu_grid"]
+  "order": [
+    "menu_grid"
+  ]
 }
