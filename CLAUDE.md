@@ -60,6 +60,23 @@ These are the key custom sections built for this theme:
 
 ---
 
+## Shopify Store
+
+- **Store URL:** `sando-itchi.myshopify.com`
+- **Shopify CLI commands:**
+  ```bash
+  # Local dev preview
+  shopify theme dev --store=sando-itchi.myshopify.com
+
+  # Push changes live
+  shopify theme push --store=sando-itchi.myshopify.com
+
+  # Pull latest from Shopify
+  shopify theme pull --store=sando-itchi.myshopify.com
+  ```
+
+---
+
 ## Ordering / External URLs
 
 - **Toast order URL:** `https://order.toasttab.com/online/sandoitchi`
@@ -119,6 +136,48 @@ Detailed status files live in `/docs/`. Reference these before making decisions 
 |---|---|
 | `docs/seo-status.md` | All 12 SEO actions + analytics stack status, pending items, future work, key IDs (GTM, GA4) |
 | `docs/ai-readiness.md` | AI readiness scores, data source gaps, 5-step foundation roadmap, 6–12 month intelligence layer |
+
+---
+
+## Dev Workflow
+
+**Starting a session:**
+```bash
+# Terminal tab 1 — dev server
+cd ~/Desktop/sandoitchi-theme
+shopify theme dev --store sando-itchi.myshopify.com
+# Open http://127.0.0.1:9292 in browser
+
+# Terminal tab 2 — Claude Code
+cd ~/Desktop/sandoitchi-theme
+claude
+```
+
+**Ending a session:**
+```bash
+# In Claude Code tab
+/exit
+
+# In dev server tab
+Ctrl+C
+
+# Commit and push
+git add .
+git commit -m "your message"
+git push
+```
+
+**Quick reference:**
+
+| Action | Command |
+|---|---|
+| Start dev server | `shopify theme dev --store sando-itchi.myshopify.com` |
+| Start Claude Code | `claude` |
+| Preview URL | `http://127.0.0.1:9292` |
+| Exit Claude Code | `/exit` |
+| Stop dev server | `Ctrl+C` |
+| Push to GitHub | `git push` |
+| Push to Shopify live | `shopify theme push --store sando-itchi.myshopify.com` |
 
 ---
 
