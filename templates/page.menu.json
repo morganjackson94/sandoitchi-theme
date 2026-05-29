@@ -106,7 +106,7 @@
           "type": "item",
           "settings": {
             "name": "Chicken Karaage",
-            "category": "bowl",
+            "category": "side",
             "description": "Soy Marinated Chicken Thighs, Potato Starch, Yuzu Kosho Kewpie Mayo",
             "image": "shopify://shop_images/GRID_14.jpg",
             "toast_item_id": ""
@@ -116,7 +116,7 @@
           "type": "item",
           "settings": {
             "name": "Shiso Ebi Dango",
-            "category": "bowl",
+            "category": "side",
             "description": "Shiso, Shrimp Farce, Kimchi Sauce, Lime",
             "image": "shopify://shop_images/GRID_15.jpg",
             "toast_item_id": ""
@@ -126,7 +126,7 @@
           "type": "item",
           "settings": {
             "name": "Tori Maze Ramen",
-            "category": "bowl",
+            "category": "side",
             "description": "Poached Chicken, Ramen, Salted Cabbage, Ginger Scallion Dressing",
             "image": "shopify://shop_images/GRID_12.jpg",
             "toast_item_id": ""
@@ -136,7 +136,7 @@
           "type": "item",
           "settings": {
             "name": "Chicken Katsu Don",
-            "category": "bowl",
+            "category": "side",
             "description": "Koji Chicken Katsu, Koshihikari Rice, Scrambled Eggs, Scallions, Soy Dashi",
             "image": "shopify://shop_images/GRID_11.jpg",
             "toast_item_id": ""
@@ -146,7 +146,7 @@
           "type": "item",
           "settings": {
             "name": "Gyu Don",
-            "category": "bowl",
+            "category": "side",
             "description": "Soy Braised Brisket, Koshihikari Rice, Onions, Soft Boiled Egg, Scallions, Pickled Mustard Greens",
             "image": "shopify://shop_images/GRID_13.jpg",
             "toast_item_id": ""
@@ -156,7 +156,7 @@
           "type": "item",
           "settings": {
             "name": "Matcha Tres Leches Parfait",
-            "category": "bowl",
+            "category": "side",
             "description": "Earl Grey Milk Cake, Matcha Mascarpone Cream, Fresh Berries",
             "image": "shopify://shop_images/GRID_31.jpg",
             "toast_item_id": ""
@@ -342,18 +342,18 @@
         "smacked-cucumber-salad",
         "elote-corn-karaage",
         "shio-konbu-cabbage",
-        "yuzu-arnold-palmer",
-        "banana-milk",
-        "mango-ube-lassi",
-        "hazelnut-hojicha-latte",
+        "tokyo-cold-brew",
         "matcha-latte",
         "strawberry-matcha-latte",
         "blueberry-cream-matcha-latte",
         "earl-grey-matcha-latte",
         "black-sesame-chai-matcha-latte",
         "horchata-matcha-latte",
-        "tokyo-cold-brew",
-        "matcha-float"
+        "matcha-float",
+        "hazelnut-hojicha-latte",
+        "mango-ube-lassi",
+        "yuzu-arnold-palmer",
+        "banana-milk"
       ],
       "settings": {
         "order_url": "https://order.toasttab.com/online/sandoitchi"
