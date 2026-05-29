@@ -198,46 +198,17 @@
             "name": "Shio Konbu Cabbage",
             "category": "side",
             "description": "Salted Cabbage, Garlic, Japanese Seaweed",
+            "image": "shopify://shop_images/shiso_4x-100.jpg",
             "toast_item_id": ""
           }
         },
-        "yuzu-arnold-palmer": {
+        "tokyo-cold-brew": {
           "type": "item",
           "settings": {
-            "name": "Yuzu Arnold Palmer",
+            "name": "Tokyo Cold Brew",
             "category": "drink",
-            "description": "Sweet Tea, Yuzu",
-            "image": "shopify://shop_images/GRID_26.jpg",
-            "toast_item_id": ""
-          }
-        },
-        "banana-milk": {
-          "type": "item",
-          "settings": {
-            "name": "Banana Milk",
-            "category": "drink",
-            "description": "Bananas, Coconut Milk, Oat Milk",
-            "image": "shopify://shop_images/GRID_27.jpg",
-            "toast_item_id": ""
-          }
-        },
-        "mango-ube-lassi": {
-          "type": "item",
-          "settings": {
-            "name": "Mango Ube Lassi",
-            "category": "drink",
-            "description": "Mango Puree, Yogurt Lassi, Ube Sea Salt Cream, Oat Milk",
-            "image": "shopify://shop_images/GRID_25.jpg",
-            "toast_item_id": ""
-          }
-        },
-        "hazelnut-hojicha-latte": {
-          "type": "item",
-          "settings": {
-            "name": "Hazelnut Hojicha Latte",
-            "category": "drink",
-            "description": "Rocky's Hojicha, Hazelnut Syrup, Sea Salt Cream, Toffee Crumble, Oat Milk",
-            "image": "shopify://shop_images/GRID_28.jpg",
+            "description": "Cold Brew Coffee, Horchata Cream",
+            "image": "shopify://shop_images/GRID_29.jpg",
             "toast_item_id": ""
           }
         },
@@ -301,16 +272,6 @@
             "toast_item_id": ""
           }
         },
-        "tokyo-cold-brew": {
-          "type": "item",
-          "settings": {
-            "name": "Tokyo Cold Brew",
-            "category": "drink",
-            "description": "Cold Brew Coffee, Horchata Cream",
-            "image": "shopify://shop_images/GRID_29.jpg",
-            "toast_item_id": ""
-          }
-        },
         "matcha-float": {
           "type": "item",
           "settings": {
@@ -318,6 +279,46 @@
             "category": "drink",
             "description": "Rocky's Matcha, Matcha Soft Serve Ice Cream, Oat Milk, Matcha Syrup",
             "image": "shopify://shop_images/GRID_30.jpg",
+            "toast_item_id": ""
+          }
+        },
+        "hazelnut-hojicha-latte": {
+          "type": "item",
+          "settings": {
+            "name": "Hazelnut Hojicha Latte",
+            "category": "drink",
+            "description": "Rocky's Hojicha, Hazelnut Syrup, Sea Salt Cream, Toffee Crumble, Oat Milk",
+            "image": "shopify://shop_images/GRID_28.jpg",
+            "toast_item_id": ""
+          }
+        },
+        "mango-ube-lassi": {
+          "type": "item",
+          "settings": {
+            "name": "Mango Ube Lassi",
+            "category": "drink",
+            "description": "Mango Puree, Yogurt Lassi, Ube Sea Salt Cream, Oat Milk",
+            "image": "shopify://shop_images/GRID_25.jpg",
+            "toast_item_id": ""
+          }
+        },
+        "yuzu-arnold-palmer": {
+          "type": "item",
+          "settings": {
+            "name": "Yuzu Arnold Palmer",
+            "category": "drink",
+            "description": "Sweet Tea, Yuzu",
+            "image": "shopify://shop_images/GRID_26.jpg",
+            "toast_item_id": ""
+          }
+        },
+        "banana-milk": {
+          "type": "item",
+          "settings": {
+            "name": "Banana Milk",
+            "category": "drink",
+            "description": "Bananas, Coconut Milk, Oat Milk",
+            "image": "shopify://shop_images/GRID_27.jpg",
             "toast_item_id": ""
           }
         }
