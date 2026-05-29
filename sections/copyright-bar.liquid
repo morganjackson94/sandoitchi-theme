@@ -120,7 +120,7 @@
 
 <div id="desktop-copyright-root" aria-hidden="true">
 
-  <div id="desktop-copyright-panel" class="dc-panel" hidden>
+  <div id="desktop-copyright-panel" class="dc-panel">
     <nav class="dc-panel__links" aria-label="Site links">
       {%- assign menu_handle2 = section.settings.menu | default: 'footer' -%}
       {%- assign footer_menu2 = linklists[menu_handle2] -%}
@@ -227,18 +227,21 @@
 
   initMobileModals();
 
-  /* ── MOBILE: reveal bar on first interaction ── */
-  if (window.matchMedia('(max-width: 768px)').matches) {
-    var mobileBar = document.querySelector('.copyright');
-    if (mobileBar) {
-      function showMobileBar() {
-        mobileBar.classList.add('copyright--visible');
-        window.removeEventListener('scroll', showMobileBar);
-        window.removeEventListener('touchstart', showMobileBar);
-      }
-      window.addEventListener('scroll', showMobileBar, { passive: true });
-      window.addEventListener('touchstart', showMobileBar, { passive: true });
+  /* ── reveal bar on first interaction (all viewports) ── */
+  var mobileBar = document.querySelector('.copyright');
+  if (mobileBar) {
+    function showMobileBar() {
+      mobileBar.classList.add('copyright--visible');
+      window.removeEventListener('scroll', showMobileBar);
+      window.removeEventListener('touchstart', showMobileBar);
+      window.removeEventListener('mousemove', showMobileBar);
     }
+    window.addEventListener('scroll', showMobileBar, { passive: true });
+    window.addEventListener('touchstart', showMobileBar, { passive: true });
+    window.addEventListener('mousemove', showMobileBar, { passive: true });
+  }
+
+  if (window.matchMedia('(max-width: 768px)').matches) {
     return;
   }
   if (window.__desktopCopyright) return;
@@ -257,51 +260,29 @@
 
   /* ── Panel open / close ── */
   function openPanel() {
-    panel.hidden = false;
+    panel.classList.add('dc-panel--open');
     trigger.setAttribute('aria-expanded', 'true');
     labelEl.textContent = 'hide';
     caretEl.textContent = '↓';
   }
 
   function closePanel() {
-    panel.hidden = true;
+    panel.classList.remove('dc-panel--open');
     trigger.setAttribute('aria-expanded', 'false');
-    labelEl.textContent = 'menu';
+    labelEl.textContent = 'navigation';
     caretEl.textContent = '↑';
     closeSubModal();
   }
 
   function togglePanel() {
-    panel.hidden ? openPanel() : closePanel();
+    panel.classList.contains('dc-panel--open') ? closePanel() : openPanel();
   }
 
-  /* ── Open by default ── */
-  openPanel();
+  /* ── Start collapsed ── */
+  closePanel();
 
   trigger.addEventListener('click', togglePanel);
 
-  /* ── Close on scroll down, reopen when back near top ── */
-  var lastScrollY = window.scrollY;
-  var scrollTicking = false;
-
-  window.addEventListener('scroll', function () {
-    if (scrollTicking) return;
-    scrollTicking = true;
-    requestAnimationFrame(function () {
-      var currentY = window.scrollY;
-      var scrolledDown = currentY > lastScrollY && currentY > 80;
-      var backAtTop = currentY < 40;
-
-      if (scrolledDown && !panel.hidden) {
-        closePanel();
-      } else if (backAtTop && panel.hidden) {
-        openPanel();
-      }
-
-      lastScrollY = currentY;
-      scrollTicking = false;
-    });
-  }, { passive: true });
 
   /* ── Sub-modal (contact, etc.) ── */
   function closeSubModal() {
@@ -348,7 +329,7 @@
 
   /* ── Outside click ── */
   document.addEventListener('click', function (e) {
-    if (panel.hidden) return;
+    if (!panel.classList.contains('dc-panel--open')) return;
     if (root.contains(e.target)) return;
     if (subModalRoot && subModalRoot.contains(e.target)) return;
     closePanel();
