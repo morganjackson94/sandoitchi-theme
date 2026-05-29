@@ -1,1 +1,111 @@
-{"current":{"sections":{"header-minimal":{"type":"header-minimal","settings":{"hero_variant_1":"shopify:\/\/shop_images\/hero-01.png","hero_variant_2":"shopify:\/\/shop_images\/hero-02.png","hero_variant_3":"shopify:\/\/shop_images\/hero-03.png","hero_variant_4":"shopify:\/\/shop_images\/hero-04.png","hero_variant_5":"shopify:\/\/shop_images\/hero-05.png","hero_variant_6":"shopify:\/\/shop_images\/hero-06.png","hero_variant_7":"shopify:\/\/shop_images\/hero-07.png","hero_variant_8":"shopify:\/\/shop_images\/hero-01-A_png.png","hero_variant_9":"shopify:\/\/shop_images\/hero-02-A_png.png","hero_variant_10":"shopify:\/\/shop_images\/hero-03-A_png.png","hero_variant_11":"shopify:\/\/shop_images\/hero-04-A-2.png","hero_variant_12":"shopify:\/\/shop_images\/hero-05-A_png.png","hero_variant_13":"shopify:\/\/shop_images\/hero-06-A_png.png","hero_variant_14":"shopify:\/\/shop_images\/hero-07-A.png","menu":"top-menu","order_variant_1":"shopify:\/\/shop_images\/sando_shop_sizing-21.png","order_variant_2":"shopify:\/\/shop_images\/sando_shop_sizing-22.png","order_variant_3":"shopify:\/\/shop_images\/sando_shop_sizing-23.png","order_variant_4":"shopify:\/\/shop_images\/sando_shop_sizing-24.png","order_variant_5":"shopify:\/\/shop_images\/sando_shop_sizing-25.png","show_hamburger":true,"order_url":"shopify:\/\/pages\/order","shop_url":"https:\/\/www.sandoitchi.com\/pages\/catering?view=shop-grid"}},"hero-title":{"type":"hero-title","settings":{}},"three-column-info":{"type":"three-column-info","settings":{}},"media":{"type":"featured-media-grid","settings":{}},"footer-content":{"type":"footer-content","settings":{"social_handle":"@sando.itchi"}},"copyright-bar":{"type":"copyright-bar","settings":{"menu":""}},"announcement-bar":{"type":"announcement-bar","settings":{"text":"denver: sandoitchi rino artpark residency ⭢","link_url":"https:\/\/www.sandoitchi.com\/pages\/denver-order","theme_color_1":"#5a9e52","text_2":"dallas: sandoitchi @ the joule ⭢","link_url_2":"https:\/\/order.toasttab.com\/online\/sandoitchi","theme_color_2":"#c0392b","text_3":"follow us on instagram!","link_url_3":"https:\/\/Instagram.com\/sando.itchi","theme_color_3":"#1d1d1d","text_4":"","link_url_4":"","theme_color_4":"#000000","text_5":"","link_url_5":"","theme_color_5":"#000000","link_new_tab":true,"speed":10,"bg_color":"#1d1d1d","text_color":"#ffffff"}}},"content_for_index":["header-minimal","hero-title","three-column-info","media","footer-content","copyright-bar"],"blocks":{"7607994013135356531":{"type":"shopify:\/\/apps\/annify-announcement-bar\/blocks\/app-embed\/b7f3deb1-f754-4527-8fe4-1ecb66093650","disabled":true,"settings":{}},"pagefly-page-builder":{"type":"shopify:\/\/apps\/pagefly-page-builder\/blocks\/app-embed\/83e179f7-59a0-4589-8c66-c0dddf959200","disabled":false,"settings":{}}}}}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "sections": {
+      "header-minimal": {
+        "type": "header-minimal",
+        "settings": {
+          "hero_variant_1": "shopify://shop_images/hero-01.png",
+          "hero_variant_2": "shopify://shop_images/hero-02.png",
+          "hero_variant_3": "shopify://shop_images/hero-03.png",
+          "hero_variant_4": "shopify://shop_images/hero-04.png",
+          "hero_variant_5": "shopify://shop_images/hero-05.png",
+          "hero_variant_6": "shopify://shop_images/hero-06.png",
+          "hero_variant_7": "shopify://shop_images/hero-07.png",
+          "hero_variant_8": "shopify://shop_images/hero-01-A_png.png",
+          "hero_variant_9": "shopify://shop_images/hero-02-A_png.png",
+          "hero_variant_10": "shopify://shop_images/hero-03-A_png.png",
+          "hero_variant_11": "shopify://shop_images/hero-04-A-2.png",
+          "hero_variant_12": "shopify://shop_images/hero-05-A_png.png",
+          "hero_variant_13": "shopify://shop_images/hero-06-A_png.png",
+          "hero_variant_14": "shopify://shop_images/hero-07-A.png",
+          "menu": "top-menu",
+          "order_variant_1": "shopify://shop_images/sando_shop_sizing-21.png",
+          "order_variant_2": "shopify://shop_images/sando_shop_sizing-22.png",
+          "order_variant_3": "shopify://shop_images/sando_shop_sizing-23.png",
+          "order_variant_4": "shopify://shop_images/sando_shop_sizing-24.png",
+          "order_variant_5": "shopify://shop_images/sando_shop_sizing-25.png",
+          "show_hamburger": true,
+          "order_url": "shopify://pages/order",
+          "shop_url": "https://www.sandoitchi.com/pages/catering?view=shop-grid"
+        }
+      },
+      "hero-title": {
+        "type": "hero-title",
+        "settings": {}
+      },
+      "three-column-info": {
+        "type": "three-column-info",
+        "settings": {}
+      },
+      "media": {
+        "type": "featured-media-grid",
+        "settings": {}
+      },
+      "footer-content": {
+        "type": "footer-content",
+        "settings": {
+          "social_handle": "@sando.itchi"
+        }
+      },
+      "copyright-bar": {
+        "type": "copyright-bar",
+        "settings": {
+          "menu": ""
+        }
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "text": "denver: sandoitchi rino artpark residency ⭢",
+          "link_url": "https://www.sandoitchi.com/pages/denver-order",
+          "theme_color_1": "#5a9e52",
+          "text_2": "dallas: sandoitchi @ the joule ⭢",
+          "link_url_2": "https://order.toasttab.com/online/sandoitchi",
+          "theme_color_2": "#c0392b",
+          "text_3": "follow us on instagram!",
+          "link_url_3": "https://Instagram.com/sando.itchi",
+          "theme_color_3": "#1d1d1d",
+          "text_4": "",
+          "link_url_4": "",
+          "theme_color_4": "#000000",
+          "text_5": "",
+          "link_url_5": "",
+          "theme_color_5": "#000000",
+          "link_new_tab": true,
+          "speed": 10,
+          "bg_color": "#c0392b",
+          "text_color": "#ffffff"
+        }
+      }
+    },
+    "content_for_index": [
+      "header-minimal",
+      "hero-title",
+      "three-column-info",
+      "media",
+      "footer-content",
+      "copyright-bar"
+    ],
+    "blocks": {
+      "7607994013135356531": {
+        "type": "shopify://apps/annify-announcement-bar/blocks/app-embed/b7f3deb1-f754-4527-8fe4-1ecb66093650",
+        "disabled": true,
+        "settings": {}
+      },
+      "pagefly-page-builder": {
+        "type": "shopify://apps/pagefly-page-builder/blocks/app-embed/83e179f7-59a0-4589-8c66-c0dddf959200",
+        "disabled": false,
+        "settings": {}
+      }
+    }
+  }
+}
