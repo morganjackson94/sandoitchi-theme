@@ -392,5 +392,51 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 </script>
 
+<script>
+/* ── Scroll reveal: fade-up sections, stagger grids ── */
+(function () {
+  if (!window.IntersectionObserver) return;
+
+  var STAGGER_STEP = 80;   /* ms between each staggered child */
+  var STAGGER_CAP  = 8;    /* max stagger index (640ms) */
+
+  var GRID_SELECTORS = '.shop-grid, .locations-grid__list, .menu-grid';
+
+  function inViewport(el) {
+    var r = el.getBoundingClientRect();
+    return r.top < window.innerHeight && r.bottom > 0;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('sr-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  /* Stagger grid children */
+  document.querySelectorAll(GRID_SELECTORS).forEach(function (container) {
+    if (inViewport(container)) return;
+    Array.from(container.children).forEach(function (child, i) {
+      child.classList.add('sr-stagger');
+      child.style.setProperty('--sr-i', Math.min(i, STAGGER_CAP));
+    });
+    container.classList.add('sr-group');
+    observer.observe(container);
+  });
+
+  /* Fade-up remaining section roots */
+  document.querySelectorAll('.shopify-section > *').forEach(function (el) {
+    if (inViewport(el)) return;
+    if (el.matches(GRID_SELECTORS) || el.querySelector(GRID_SELECTORS)) return;
+    if (window.getComputedStyle(el).position === 'fixed') return;
+    if (el.getBoundingClientRect().height === 0) return;
+    el.classList.add('sr-fade');
+    observer.observe(el);
+  });
+})();
+</script>
+
 </body>
 </html>
