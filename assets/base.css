@@ -5982,7 +5982,7 @@ button.hamburger-overlay__link {
 .hamburger-overlay__link {
   font-family: 'Booton', sans-serif;
   font-weight: 400;
-  font-size: clamp(36px, 6.5vh, 88px);
+  font-size: clamp(30px, 5.5vh, 72px);
   line-height: 1.0;
   color: #000;
   text-decoration: none;

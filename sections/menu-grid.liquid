@@ -351,7 +351,8 @@
   {%- comment -%} ── Category Filter ── {%- endcomment -%}
   <nav class="menu-filter" aria-label="Filter menu by category">
     <button class="menu-filter__btn is-active" data-filter="all">All</button>
-    <button class="menu-filter__btn" data-filter="sando">Sandos</button>
+    <button class="menu-filter__btn" data-filter="sando">Sando</button>
+    <button class="menu-filter__btn" data-filter="special">Specials</button>
     <button class="menu-filter__btn" data-filter="side">Sides</button>
     <button class="menu-filter__btn" data-filter="drink">Drinks</button>
   </nav>
@@ -437,11 +438,29 @@
   "hasMenuSection": [
     {
       "@type": "MenuSection",
-      "name": "Sandos",
+      "name": "Sando",
       "hasMenuItem": [
         {%- assign comma = false -%}
         {%- for block in section.blocks -%}
           {%- if block.settings.category == 'sando' -%}
+            {%- if comma -%},{%- endif -%}
+            {
+              "@type": "MenuItem",
+              "name": {{ block.settings.name | json }},
+              "description": {{ block.settings.description | json }}
+            }
+            {%- assign comma = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    },
+    {
+      "@type": "MenuSection",
+      "name": "Specials",
+      "hasMenuItem": [
+        {%- assign comma = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.category == 'special' -%}
             {%- if comma -%},{%- endif -%}
             {
               "@type": "MenuItem",
@@ -525,10 +544,11 @@
   var lastFocused = null;
 
   var categoryLabels = {
-    sando: 'Sando',
-    bowl:  'Bowl',
-    side:  'Side',
-    drink: 'Drink'
+    sando:   'Sando',
+    bowl:    'Bowl',
+    special: 'Special',
+    side:    'Side',
+    drink:   'Drink'
   };
 
   function openModal(item) {
@@ -628,10 +648,11 @@
           "id": "category",
           "label": "Category",
           "options": [
-            { "value": "sando", "label": "Sando" },
-            { "value": "bowl",  "label": "Bowl"  },
-            { "value": "side",  "label": "Side"  },
-            { "value": "drink", "label": "Drink" }
+            { "value": "sando",   "label": "Sando"   },
+            { "value": "bowl",    "label": "Bowl"    },
+            { "value": "special", "label": "Special" },
+            { "value": "side",    "label": "Side"    },
+            { "value": "drink",   "label": "Drink"   }
           ],
           "default": "sando"
         },

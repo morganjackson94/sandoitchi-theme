@@ -126,7 +126,7 @@
           "type": "item",
           "settings": {
             "name": "Tori Maze Ramen",
-            "category": "side",
+            "category": "special",
             "description": "Poached Chicken, Ramen, Salted Cabbage, Ginger Scallion Dressing",
             "image": "shopify://shop_images/GRID_12.jpg",
             "toast_item_id": ""
@@ -136,7 +136,7 @@
           "type": "item",
           "settings": {
             "name": "Chicken Katsu Don",
-            "category": "side",
+            "category": "special",
             "description": "Koji Chicken Katsu, Koshihikari Rice, Scrambled Eggs, Scallions, Soy Dashi",
             "image": "shopify://shop_images/GRID_11.jpg",
             "toast_item_id": ""
@@ -146,7 +146,7 @@
           "type": "item",
           "settings": {
             "name": "Gyu Don",
-            "category": "side",
+            "category": "special",
             "description": "Soy Braised Brisket, Koshihikari Rice, Onions, Soft Boiled Egg, Scallions, Pickled Mustard Greens",
             "image": "shopify://shop_images/GRID_13.jpg",
             "toast_item_id": ""
