@@ -172,6 +172,16 @@
             "toast_item_id": ""
           }
         },
+        "item_KeDHPN": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "name": "",
+            "category": "sando",
+            "description": "",
+            "toast_item_id": ""
+          }
+        },
         "smacked-cucumber-salad": {
           "type": "item",
           "settings": {
@@ -340,6 +350,7 @@
         "gyu-don",
         "matcha-tres-leches-parfait",
         "friend-fries",
+        "item_KeDHPN",
         "smacked-cucumber-salad",
         "elote-corn-karaage",
         "shio-konbu-cabbage",
