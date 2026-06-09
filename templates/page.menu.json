@@ -212,6 +212,60 @@
             "toast_item_id": ""
           }
         },
+        "mango-ube-donut": {
+          "type": "item",
+          "settings": {
+            "name": "Mango Ube Donut",
+            "category": "side",
+            "description": "Japanese Sweet Potato Donut, Ube Glaze, Yuzu Mango Cream",
+            "toast_item_id": ""
+          }
+        },
+        "kinako-salted-sweet-cream-donut": {
+          "type": "item",
+          "settings": {
+            "name": "Kinako Salted Sweet Cream Donut",
+            "category": "side",
+            "description": "Japanese Sweet Potato Donut, Roasted Soybean Crumble, Salted Sweet Cream Filling",
+            "toast_item_id": ""
+          }
+        },
+        "japanese-sugar-donut": {
+          "type": "item",
+          "settings": {
+            "name": "Japanese Sugar Donut",
+            "category": "side",
+            "description": "Japanese Sweet Potato Donut, Yuzu Cream",
+            "toast_item_id": ""
+          }
+        },
+        "matcha-glazed-donut": {
+          "type": "item",
+          "settings": {
+            "name": "Matcha Glazed Donut",
+            "category": "side",
+            "description": "Japanese Sweet Potato Donut, Ceremonial Matcha Glaze",
+            "toast_item_id": ""
+          }
+        },
+        "black-sesame-banana-bread": {
+          "type": "item",
+          "settings": {
+            "name": "Black Sesame Banana Bread",
+            "category": "side",
+            "description": "Bananas, Black Sesame Streusel",
+            "toast_item_id": ""
+          }
+        },
+        "japanese-milk-bread": {
+          "type": "item",
+          "settings": {
+            "name": "Japanese Milk Bread",
+            "category": "side",
+            "description": "Pillowy Shokupan, baked fresh daily — the bread behind every sando",
+            "toast_item_id": ""
+          }
+        },
         "tokyo-cold-brew": {
           "type": "item",
           "settings": {
@@ -331,7 +385,22 @@
             "image": "shopify://shop_images/GRID_27.jpg",
             "toast_item_id": ""
           }
-        }
+        },
+        "spacer-1":  { "type": "spacer", "settings": {} },
+        "spacer-2":  { "type": "spacer", "settings": {} },
+        "spacer-3":  { "type": "spacer", "settings": {} },
+        "spacer-4":  { "type": "spacer", "settings": {} },
+        "spacer-5":  { "type": "spacer", "settings": {} },
+        "spacer-6":  { "type": "spacer", "settings": {} },
+        "spacer-7":  { "type": "spacer", "settings": {} },
+        "spacer-8":  { "type": "spacer", "settings": {} },
+        "spacer-9":  { "type": "spacer", "settings": {} },
+        "spacer-10": { "type": "spacer", "settings": {} },
+        "spacer-11": { "type": "spacer", "settings": {} },
+        "spacer-12": { "type": "spacer", "settings": {} },
+        "spacer-13": { "type": "spacer", "settings": {} },
+        "spacer-14": { "type": "spacer", "settings": {} },
+        "spacer-15": { "type": "spacer", "settings": {} }
       },
       "block_order": [
         "egg-salad-sando",
@@ -343,17 +412,38 @@
         "roasted-chicken-club-sando",
         "ebi-shrimp-katsu-sando",
         "lobster-roll",
+        "spacer-1",
+        "spacer-2",
+        "spacer-3",
+        "spacer-4",
+        "spacer-5",
         "chicken-karaage",
         "shiso-ebi-dango",
         "tori-maze-ramen",
         "chicken-katsu-don",
         "gyu-don",
         "matcha-tres-leches-parfait",
+        "spacer-6",
+        "spacer-7",
+        "spacer-8",
+        "spacer-9",
+        "spacer-10",
         "friend-fries",
         "item_KeDHPN",
         "smacked-cucumber-salad",
         "elote-corn-karaage",
         "shio-konbu-cabbage",
+        "mango-ube-donut",
+        "kinako-salted-sweet-cream-donut",
+        "japanese-sugar-donut",
+        "matcha-glazed-donut",
+        "black-sesame-banana-bread",
+        "japanese-milk-bread",
+        "spacer-11",
+        "spacer-12",
+        "spacer-13",
+        "spacer-14",
+        "spacer-15",
         "tokyo-cold-brew",
         "matcha-latte",
         "strawberry-matcha-latte",

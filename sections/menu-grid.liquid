@@ -131,6 +131,15 @@
   display: none;
 }
 
+.menu-grid__spacer {
+  background: #fff;
+  aspect-ratio: 1 / 1;
+}
+
+.menu-grid__spacer.is-hidden {
+  display: none;
+}
+
 .menu-grid__trigger {
   display: block;
   width: 100%;
@@ -355,6 +364,7 @@
     <button class="menu-filter__btn" data-filter="special">Specials</button>
     <button class="menu-filter__btn" data-filter="side">Sides</button>
     <button class="menu-filter__btn" data-filter="drink">Drinks</button>
+    <button class="menu-filter__btn" data-filter="bakery">Bakery</button>
   </nav>
 
   {%- comment -%} ── Grid ── {%- endcomment -%}
@@ -388,6 +398,8 @@
 
           </button>
         </div>
+      {%- elsif block.type == 'spacer' -%}
+        <div class="menu-grid__spacer" data-category="spacer" {{ block.shopify_attributes }}></div>
       {%- endif -%}
     {%- endfor -%}
   </div>
@@ -517,7 +529,7 @@
 
   // ── Filter ──────────────────────────────────────
   var filterBtns = document.querySelectorAll('.menu-filter__btn');
-  var gridItems  = document.querySelectorAll('.menu-grid__item');
+  var gridItems  = document.querySelectorAll('.menu-grid__item, .menu-grid__spacer');
 
   filterBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -527,6 +539,10 @@
       btn.classList.add('is-active');
 
       gridItems.forEach(function (item) {
+        if (item.classList.contains('menu-grid__spacer')) {
+          item.classList.toggle('is-hidden', filter !== 'all');
+          return;
+        }
         var matches = filter === 'all' || item.getAttribute('data-category') === filter;
         item.classList.toggle('is-hidden', !matches);
       });
@@ -634,6 +650,11 @@
     }
   ],
   "blocks": [
+    {
+      "type": "spacer",
+      "name": "Category Spacer",
+      "settings": []
+    },
     {
       "type": "item",
       "name": "Menu Item",
