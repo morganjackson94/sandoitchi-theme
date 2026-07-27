@@ -7,7 +7,8 @@
       <span class="order-select__address">1604 Main St Suite 110<br>Dallas, TX 75201</span>
     </a>
 
-    <a class="order-select__card order-select__card--denver" href="https://taptapeat.com/sandoitchi/#/app/home">
+    {%- assign denver_url = shop.metafields.custom.denver_order_url.value | default: "https://order.toasttab.com/online/sandoitchi-denver" -%}
+    <a class="order-select__card order-select__card--denver" href="{{ denver_url }}">
       <span class="order-select__city">Denver</span>
       <span class="order-select__address">1950 35th St<br>Denver, CO 80216</span>
     </a>
