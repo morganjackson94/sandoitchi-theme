@@ -5,7 +5,7 @@
 # Starts Shopify dev server + opens Claude Code in a new terminal tab
 # ─────────────────────────────────────────
 
-THEME_DIR=~/Desktop/sandoitchi-theme
+THEME_DIR=~/sandoitchi-theme
 STORE=sando-itchi.myshopify.com
 
 cd "$THEME_DIR" || { echo "Theme directory not found: $THEME_DIR"; exit 1; }
