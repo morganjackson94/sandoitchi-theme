@@ -164,11 +164,26 @@
                     loading="lazy"
                   >
                 {% elsif product.featured_image %}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 1400 }}"
-                    alt="{{ product.title | escape }}"
-                    loading="lazy"
-                  >
+                  {% if block.settings.hover_swap_image and product.images.size > 1 %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 1400 }}"
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                      class="shop-grid__img--primary"
+                    >
+                    <img
+                      src="{{ product.images[1] | image_url: width: 1400 }}"
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                      class="shop-grid__img--alt"
+                    >
+                  {% else %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 1400 }}"
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                    >
+                  {% endif %}
                 {% endif %}
                 {% if block.settings.show_meta %}
                   <div class="media-meta">
@@ -410,6 +425,7 @@
         { "type": "checkbox", "id": "tile_open_new_tab", "label": "Open product link in new tab", "default": false },
         { "type": "image_picker", "id": "tile_image", "label": "Custom tile image (optional, overrides product image)" },
         { "type": "checkbox",     "id": "show_meta",  "label": "Show title + price", "default": false },
+        { "type": "checkbox", "id": "hover_swap_image", "label": "Swap to alternate product image on hover", "default": false },
         { "type": "checkbox", "id": "coming_soon", "label": "Coming soon (disables link)", "default": false },
         { "type": "header", "content": "Badge" },
         { "type": "checkbox", "id": "show_badge",  "label": "Show badge",  "default": false },

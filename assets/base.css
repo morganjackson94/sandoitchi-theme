@@ -6697,6 +6697,33 @@ a.locations-grid__link:hover {
   .shop-grid__cell:hover .shop-grid__inner img { transform: none; }
 }
 
+/* -- Hover image swap (alternate product image) -- */
+.shop-grid__inner img.shop-grid__img--alt {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop-grid__inner img.shop-grid__img--primary,
+  .shop-grid__inner img.shop-grid__img--alt {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .shop-grid__cell:hover .shop-grid__inner img.shop-grid__img--alt {
+    opacity: 1;
+  }
+  .shop-grid__cell:hover .shop-grid__inner img.shop-grid__img--primary {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-grid__inner img.shop-grid__img--primary,
+  .shop-grid__inner img.shop-grid__img--alt {
+    transition: none;
+  }
+}
+
 /* â”€â”€ Mobile gap rhythm â”€â”€ */
 @media (max-width: 767px) {
   .shop-grid {

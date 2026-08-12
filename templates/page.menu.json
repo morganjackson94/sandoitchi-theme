@@ -218,6 +218,7 @@
             "name": "Mango Ube Donut",
             "category": "side",
             "description": "Japanese Sweet Potato Donut, Ube Glaze, Yuzu Mango Cream",
+            "image": "shopify://shop_images/mango_donut_4x-100.jpg",
             "toast_item_id": ""
           }
         },
@@ -227,6 +228,7 @@
             "name": "Kinako Salted Sweet Cream Donut",
             "category": "side",
             "description": "Japanese Sweet Potato Donut, Roasted Soybean Crumble, Salted Sweet Cream Filling",
+            "image": "shopify://shop_images/kinako_donut_4x-100.jpg",
             "toast_item_id": ""
           }
         },
@@ -236,6 +238,7 @@
             "name": "Japanese Sugar Donut",
             "category": "side",
             "description": "Japanese Sweet Potato Donut, Yuzu Cream",
+            "image": "shopify://shop_images/sugar_donut_4x-100.jpg",
             "toast_item_id": ""
           }
         },
@@ -245,6 +248,7 @@
             "name": "Matcha Glazed Donut",
             "category": "side",
             "description": "Japanese Sweet Potato Donut, Ceremonial Matcha Glaze",
+            "image": "shopify://shop_images/matcha_donut_4x-100.jpg",
             "toast_item_id": ""
           }
         },
@@ -254,6 +258,7 @@
             "name": "Black Sesame Banana Bread",
             "category": "side",
             "description": "Bananas, Black Sesame Streusel",
+            "image": "shopify://shop_images/banana_bread_4x-100.jpg",
             "toast_item_id": ""
           }
         },
@@ -263,6 +268,7 @@
             "name": "Japanese Milk Bread",
             "category": "side",
             "description": "Pillowy Shokupan, baked fresh daily — the bread behind every sando",
+            "image": "shopify://shop_images/milk_bread_4x-100.jpg",
             "toast_item_id": ""
           }
         },
@@ -385,22 +391,7 @@
             "image": "shopify://shop_images/GRID_27.jpg",
             "toast_item_id": ""
           }
-        },
-        "spacer-1":  { "type": "spacer", "settings": {} },
-        "spacer-2":  { "type": "spacer", "settings": {} },
-        "spacer-3":  { "type": "spacer", "settings": {} },
-        "spacer-4":  { "type": "spacer", "settings": {} },
-        "spacer-5":  { "type": "spacer", "settings": {} },
-        "spacer-6":  { "type": "spacer", "settings": {} },
-        "spacer-7":  { "type": "spacer", "settings": {} },
-        "spacer-8":  { "type": "spacer", "settings": {} },
-        "spacer-9":  { "type": "spacer", "settings": {} },
-        "spacer-10": { "type": "spacer", "settings": {} },
-        "spacer-11": { "type": "spacer", "settings": {} },
-        "spacer-12": { "type": "spacer", "settings": {} },
-        "spacer-13": { "type": "spacer", "settings": {} },
-        "spacer-14": { "type": "spacer", "settings": {} },
-        "spacer-15": { "type": "spacer", "settings": {} }
+        }
       },
       "block_order": [
         "egg-salad-sando",
@@ -412,22 +403,12 @@
         "roasted-chicken-club-sando",
         "ebi-shrimp-katsu-sando",
         "lobster-roll",
-        "spacer-1",
-        "spacer-2",
-        "spacer-3",
-        "spacer-4",
-        "spacer-5",
         "chicken-karaage",
         "shiso-ebi-dango",
         "tori-maze-ramen",
         "chicken-katsu-don",
         "gyu-don",
         "matcha-tres-leches-parfait",
-        "spacer-6",
-        "spacer-7",
-        "spacer-8",
-        "spacer-9",
-        "spacer-10",
         "friend-fries",
         "item_KeDHPN",
         "smacked-cucumber-salad",
@@ -439,11 +420,6 @@
         "matcha-glazed-donut",
         "black-sesame-banana-bread",
         "japanese-milk-bread",
-        "spacer-11",
-        "spacer-12",
-        "spacer-13",
-        "spacer-14",
-        "spacer-15",
         "tokyo-cold-brew",
         "matcha-latte",
         "strawberry-matcha-latte",

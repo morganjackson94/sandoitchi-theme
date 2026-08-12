@@ -3,14 +3,6 @@
     "shop_grid": {
       "type": "shop-grid",
       "blocks": {
-        "product_collab_J9zRNV": {
-          "type": "product-collab",
-          "disabled": true,
-          "settings": {
-            "product": "sando-force-1-white-black",
-            "tile_image": "shopify://shop_images/fin_12_81046f7d-416d-463e-8c43-b5373c001b8c.jpg"
-          }
-        },
         "product_krMUpP": {
           "type": "product",
           "settings": {
@@ -29,31 +21,6 @@
             "action_btn_style": "none",
             "action_btn_url": "",
             "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "link_bMiFGA": {
-          "type": "link",
-          "settings": {
-            "url": "shopify://pages/order",
-            "tile_open_new_tab": true,
-            "image": "shopify://shop_images/shop_35_copy_2.jpg",
-            "alt": "",
-            "open_new_tab": false,
-            "coming_soon": false,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "order-now-red",
-            "action_btn_url": "shopify://pages/order",
-            "action_btn_new_tab": true,
             "btn_position": "bottom-right",
             "enable_ig_btn": false,
             "ig_url": "",
@@ -79,31 +46,6 @@
             "action_btn_url": "",
             "action_btn_new_tab": false,
             "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "link_AQingN": {
-          "type": "link",
-          "settings": {
-            "url": "shopify://pages/order",
-            "tile_open_new_tab": true,
-            "image": "shopify://shop_images/shop_36_56fe7bc7-3f49-42ed-aa1b-7682201b96b2.jpg",
-            "alt": "",
-            "open_new_tab": false,
-            "coming_soon": false,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "order-now-black",
-            "action_btn_url": "shopify://pages/order",
-            "action_btn_new_tab": true,
-            "btn_position": "bottom-left",
             "enable_ig_btn": false,
             "ig_url": "",
             "ig_float": "right"
@@ -156,22 +98,6 @@
             "ig_float": "right"
           }
         },
-        "product_collab_dGtQGM": {
-          "type": "product-collab",
-          "disabled": true,
-          "settings": {
-            "product": "sando-force-1-white-black",
-            "tile_image": "shopify://shop_images/fin_12_2_4x-100_copy.jpg"
-          }
-        },
-        "product_collab_fEBKqr": {
-          "type": "product-collab",
-          "disabled": true,
-          "settings": {
-            "product": "sando-force-1-black-gradient",
-            "tile_image": "shopify://shop_images/fin_5_4x-100_copy.jpg"
-          }
-        },
         "product_k7iCr3": {
           "type": "product",
           "settings": {
@@ -189,34 +115,6 @@
             "cart_btn_new_tab": false,
             "action_btn_style": "none",
             "action_btn_url": "https://www.sandoitchi.com/pages/employee-shop",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "video_rKb8PY": {
-          "type": "video",
-          "settings": {
-            "video_file": "https://cdn.shopify.com/videos/c/o/v/29aeeb3ad3304e49a8a84ecc8dc28081.mov",
-            "poster": "shopify://shop_images/sticker_video_sando-09.jpg",
-            "fit": "cover",
-            "autoplay": false,
-            "loop": false,
-            "muted": false,
-            "url": "",
-            "open_new_tab": false,
-            "coming_soon": false,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
             "action_btn_new_tab": false,
             "btn_position": "bottom-right",
             "enable_ig_btn": false,
@@ -296,222 +194,6 @@
             "ig_float": "right"
           }
         },
-        "image_c376PK": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/shop_35_copy_3.jpg",
-            "url": "",
-            "alt": "",
-            "coming_soon": false,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "link_r4wpX7": {
-          "type": "link",
-          "disabled": true,
-          "settings": {
-            "url": "https://toast.com",
-            "tile_open_new_tab": false,
-            "image": "shopify://shop_images/shop_34.jpg",
-            "alt": "",
-            "open_new_tab": false,
-            "coming_soon": false,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "product_QFmQVc": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "tile_open_new_tab": false,
-            "tile_image": "shopify://shop_images/shop_28_9eec9ac1-eb3b-4206-9133-6ec1c4d2905b.jpg",
-            "show_meta": false,
-            "coming_soon": true,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "product_NWLhUD": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "tile_open_new_tab": false,
-            "tile_image": "shopify://shop_images/shop_29_c1bc5cd2-447e-4c90-80e8-2b802d67acc8.jpg",
-            "show_meta": false,
-            "coming_soon": true,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "product_fJMNcw": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "tile_open_new_tab": false,
-            "tile_image": "shopify://shop_images/shop_31_5ccbaf10-911b-4287-8b25-b72163e0ec98.jpg",
-            "show_meta": false,
-            "coming_soon": true,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "shopify://products/sandoitchi-utensils",
-            "enable_cart_btn": false,
-            "cart_btn_url": "shopify://products/sandoitchi-utensils",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "product_AhpLx4": {
-          "type": "product",
-          "settings": {
-            "product": "crest-cup",
-            "tile_open_new_tab": false,
-            "tile_image": "shopify://shop_images/crest_cup_29ef3646-dc16-4b6b-9938-53774099b5e9.jpg",
-            "show_meta": false,
-            "coming_soon": false,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": true,
-            "share_btn_url": "shopify://products/crest-cup",
-            "enable_cart_btn": true,
-            "cart_btn_url": "shopify://products/crest-cup",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "image_VPPkij": {
-          "type": "image",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/grey_background.jpg",
-            "url": "",
-            "alt": "",
-            "coming_soon": false,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "product_pYGD9D": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "tile_open_new_tab": false,
-            "tile_image": "shopify://shop_images/shop_27_22dcd9d9-2da5-43b7-9e06-61da4a499ce2.jpg",
-            "show_meta": false,
-            "coming_soon": true,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_url": "",
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
-        "product_fXG7PE": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "tile_open_new_tab": false,
-            "tile_image": "shopify://shop_images/shop_30_168a3f34-53bc-4d5a-9db2-82183ce673aa.jpg",
-            "show_meta": false,
-            "coming_soon": true,
-            "show_badge": false,
-            "badge_text": "new",
-            "enable_share": false,
-            "share_btn_url": "",
-            "enable_cart_btn": false,
-            "cart_btn_new_tab": false,
-            "action_btn_style": "none",
-            "action_btn_url": "",
-            "action_btn_new_tab": false,
-            "btn_position": "bottom-right",
-            "enable_ig_btn": false,
-            "ig_url": "",
-            "ig_float": "right"
-          }
-        },
         "product_empLogoTee1": {
           "type": "product",
           "settings": {
@@ -519,6 +201,7 @@
             "tile_open_new_tab": false,
             "tile_image": "",
             "show_meta": true,
+            "hover_swap_image": true,
             "coming_soon": false,
             "show_badge": true,
             "badge_text": "new",
@@ -543,6 +226,7 @@
             "tile_open_new_tab": false,
             "tile_image": "",
             "show_meta": true,
+            "hover_swap_image": true,
             "coming_soon": false,
             "show_badge": true,
             "badge_text": "new",
@@ -567,6 +251,7 @@
             "tile_open_new_tab": false,
             "tile_image": "",
             "show_meta": true,
+            "hover_swap_image": true,
             "coming_soon": false,
             "show_badge": true,
             "badge_text": "new",
@@ -591,6 +276,7 @@
             "tile_open_new_tab": false,
             "tile_image": "",
             "show_meta": true,
+            "hover_swap_image": true,
             "coming_soon": false,
             "show_badge": true,
             "badge_text": "new",
@@ -610,29 +296,14 @@
         }
       },
       "block_order": [
-        "product_collab_J9zRNV",
         "product_krMUpP",
-        "link_bMiFGA",
         "product_6phzbp",
-        "link_AQingN",
         "product_eA7QGx",
         "product_MzGHzQ",
-        "product_collab_dGtQGM",
-        "product_collab_fEBKqr",
         "product_k7iCr3",
-        "video_rKb8PY",
         "product_RPCUr8",
         "product_RtwHfT",
         "product_8yahMw",
-        "image_c376PK",
-        "link_r4wpX7",
-        "product_QFmQVc",
-        "product_NWLhUD",
-        "product_fJMNcw",
-        "product_AhpLx4",
-        "image_VPPkij",
-        "product_pYGD9D",
-        "product_fXG7PE",
         "product_empLogoTee1",
         "product_empLogoTee2",
         "product_empLogoTee3",
