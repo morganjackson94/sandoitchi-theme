@@ -730,7 +730,7 @@
           "type": "city",
           "settings": {
             "city_name": "Houston",
-            "city_url": "#"
+            "city_url": "/pages/houston"
           }
         },
         "city_9": {
