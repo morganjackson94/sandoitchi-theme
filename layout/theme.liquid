@@ -323,6 +323,131 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <iframe name="notify-iframe" id="notify-iframe" style="display:none" aria-hidden="true"></iframe>
 
+<!-- ── Houston Waitlist Modal — opened by any [data-houston-waitlist] trigger ── -->
+<div id="houston-modal" class="notify-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="houston-modal-title">
+  <div class="notify-modal__backdrop"></div>
+  <div class="notify-modal__dialog">
+    <div class="notify-modal__header">
+      <span class="notify-modal__header-label" id="houston-modal-title">JOIN THE LIST</span>
+      <button class="notify-modal__close" type="button" aria-label="Close">&#x2715;</button>
+    </div>
+    <div class="notify-modal__body">
+      <p class="notify-modal__sub">Sandoitchi is coming to Houston. Drop your email and be the first to know when we open.</p>
+
+      {% form 'customer', class: 'notify-modal__form', id: 'HoustonModalForm', target: 'houston-iframe' %}
+        <input type="hidden" name="contact[tags]" value="houston-waitlist" id="HoustonModalTags">
+        <input type="hidden" name="contact[accepts_marketing]" value="true">
+
+        <div class="notify-modal__field-wrap">
+          <div class="notify-modal__field-row">
+            <label class="notify-modal__label" for="HoustonModalEmail">Email *</label>
+            <span class="notify-modal__required">*required fields</span>
+          </div>
+          <input
+            type="email"
+            name="contact[email]"
+            autocomplete="email"
+            required
+            class="notify-modal__input"
+            id="HoustonModalEmail"
+          >
+        </div>
+
+        <label class="notify-modal__checkbox-wrap">
+          <input type="checkbox" class="notify-modal__checkbox" id="HoustonModalConsent" required checked>
+          <span class="notify-modal__checkbox-label">With your consent, Sandoitchi will use your contact information (E-mail address) to alert you about the Houston opening.</span>
+        </label>
+
+        <label class="notify-modal__checkbox-wrap">
+          <input type="checkbox" class="notify-modal__checkbox" id="HoustonModalNewsletter">
+          <span class="notify-modal__checkbox-label">I agree to stay in touch with Sandoitchi</span>
+        </label>
+
+        <p class="notify-modal__success" aria-live="polite" hidden>you're on the list &#10038;</p>
+        <p class="notify-modal__error" aria-live="polite" hidden>something went wrong &mdash; try again.</p>
+
+        <button type="submit" class="notify-modal__submit">join the list</button>
+      {% endform %}
+    </div>
+  </div>
+</div>
+<iframe name="houston-iframe" id="houston-iframe" style="display:none" aria-hidden="true"></iframe>
+
+<script>
+(function () {
+  var modal   = document.getElementById('houston-modal');
+  if (!modal) return;
+
+  var form    = document.getElementById('HoustonModalForm');
+  var success = modal.querySelector('.notify-modal__success');
+  var error   = modal.querySelector('.notify-modal__error');
+  var input   = document.getElementById('HoustonModalEmail');
+
+  function openModal() {
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('is-open');
+    document.body.classList.add('notify-modal-open');
+    setTimeout(function () { if (input) input.focus(); }, 80);
+  }
+
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('is-open');
+    document.body.classList.remove('notify-modal-open');
+    if (success) success.hidden = true;
+    if (error)   error.hidden   = true;
+    if (form)    form.reset();
+    var submitBtn = form ? form.querySelector('.notify-modal__submit') : null;
+    if (submitBtn) { submitBtn.hidden = false; submitBtn.disabled = false; submitBtn.textContent = 'join the list'; }
+    var fieldWrap = form ? form.querySelector('.notify-modal__field-wrap') : null;
+    if (fieldWrap) fieldWrap.style.display = '';
+    if (form) form.querySelectorAll('.notify-modal__checkbox-wrap').forEach(function(c){ c.style.display = ''; });
+  }
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-houston-waitlist]');
+    if (btn) { e.preventDefault(); openModal(); }
+  });
+
+  modal.querySelector('.notify-modal__backdrop').addEventListener('click', closeModal);
+  modal.querySelector('.notify-modal__close').addEventListener('click', closeModal);
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Escape' || e.keyCode === 27) && modal.classList.contains('is-open')) closeModal();
+  });
+
+  if (form) {
+    // Submit into hidden iframe — same proven pattern as the Notify Me modal
+    var iframe = document.getElementById('houston-iframe');
+
+    form.addEventListener('submit', function (e) {
+      var email = input ? input.value.trim() : '';
+      if (!email) { e.preventDefault(); return; }
+
+      // Tag the customer record; add newsletter tag when opted in
+      var tags = document.getElementById('HoustonModalTags');
+      var news = document.getElementById('HoustonModalNewsletter');
+      if (tags) tags.value = (news && news.checked) ? 'houston-waitlist, newsletter' : 'houston-waitlist';
+
+      var submitBtn = form.querySelector('.notify-modal__submit');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'sending...'; }
+
+      if (iframe) {
+        iframe.onload = function () {
+          if (success) success.hidden = false;
+          if (error)   error.hidden   = true;
+          var fieldWrap = form.querySelector('.notify-modal__field-wrap');
+          if (fieldWrap) fieldWrap.style.display = 'none';
+          form.querySelectorAll('.notify-modal__checkbox-wrap').forEach(function(c){ c.style.display = 'none'; });
+          if (submitBtn) submitBtn.hidden = true;
+          iframe.onload = null;
+        };
+      }
+      // Form submits natively — don't preventDefault
+    });
+  }
+})();
+</script>
+
 <script>
 (function () {
   var modal   = document.getElementById('notify-modal');

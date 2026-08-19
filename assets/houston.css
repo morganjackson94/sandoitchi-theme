@@ -1,0 +1,75 @@
+/* ── Houston Launch — standalone page styles ──
+   Loaded only by layout/houston.liquid. Everything page-level lives here;
+   section markup keeps its inline styles (they ARE the design). */
+
+html, body { margin: 0; padding: 0; background: #0F0D0B; }
+* { box-sizing: border-box; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: #7B3FD4; }
+::selection { background: #7B3FD4; color: #F7F4EE; }
+
+/* ── Keyframes (ported verbatim from source page) ── */
+@keyframes drop {
+  0%   { transform: translate3d(var(--x), -135vh, 0) rotate(var(--r0)) scale(1.04); opacity: 0; }
+  8%   { opacity: 1; }
+  62%  { transform: translate3d(var(--x), var(--y), 0) rotate(var(--r)) scale(1); }
+  72%  { transform: translate3d(var(--x), calc(var(--y) - 14px), 0) rotate(calc(var(--r) * 0.82)) scale(1.005); }
+  86%  { transform: translate3d(var(--x), calc(var(--y) + 3px), 0) rotate(calc(var(--r) * 1.04)) scale(1); }
+  100% { transform: translate3d(var(--x), var(--y), 0) rotate(var(--r)) scale(1); opacity: 1; }
+}
+@keyframes riseIn {
+  from { transform: translate3d(0, 22px, 0); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+@keyframes wipeIn {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes wordSettle {
+  0%   { opacity: 0; letter-spacing: 0.16em; filter: blur(6px); }
+  45%  { opacity: 0.22; filter: blur(0); }
+  100% { opacity: 0.14; letter-spacing: -0.01em; filter: blur(0); }
+}
+@property --ring { syntax: '<percentage>'; initial-value: 0%; inherits: false; }
+@keyframes ringMove { from { --ring: 0%; } to { --ring: 164%; } }
+@keyframes marq { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+@keyframes pulse { 0%, 100% { opacity: 0.88; transform: scale(1); } 50% { opacity: 1; transform: scale(1.01); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+}
+
+/* ── Hover states (converted from style-hover attributes) ── */
+.houston-hover-purple:hover { background: #7B3FD4 !important; }
+.houston-hover-purple-fill:hover { background: #7B3FD4 !important; color: #F7F4EE !important; }
+.houston-hover-opaque { transition: opacity 0.2s; }
+.houston-hover-opaque:hover { opacity: 1 !important; }
+
+/* ── Responsive show/hide (converted from data-wide / data-narrow JS) ──
+   Wide-only elements appear above 760px; narrow-only at or below. */
+[data-wide], [data-narrow] { display: none !important; }
+@media (min-width: 761px) {
+  [data-wide=""], [data-wide="1"] { display: inline !important; }
+  [data-wide="inline-flex"] { display: inline-flex !important; }
+}
+@media (max-width: 760px) {
+  [data-narrow="inline-flex"] { display: inline-flex !important; }
+}
+
+/* ── Reveal-on-scroll base state (JS adds .is-revealed) ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition: opacity 0.8s cubic-bezier(0.2,0.8,0.2,1), transform 0.8s cubic-bezier(0.2,0.8,0.2,1);
+}
+[data-reveal].is-revealed { opacity: 1; transform: none; }
+/* No-JS fallback: never hide content behind a reveal that can't fire */
+.no-js [data-reveal] { opacity: 1; transform: none; }
+
+/* ── RSVP form focus polish ── */
+#HoustonRsvpForm input[type="email"]:focus-visible { outline: none; }
+#HoustonRsvpForm div:focus-within { border-color: rgba(22,19,15,0.55); }

@@ -1,0 +1,278 @@
+{%- comment -%}
+  ── Houston Launch — standalone page section ──
+  Ported from the bundled standalone build (Aug 2026).
+  Design intentionally deviates from Booton: Instrument Serif + Zen Kaku
+  Gothic New, loaded by layout/houston.liquid.
+  Interactive behavior (header flip, hscroll, card drop, reveal) lives in
+  assets/houston.js; keyframes + hover/responsive rules in assets/houston.css.
+{%- endcomment -%}
+
+<div style="background:#0F0D0B; color:#EFEBE3; font-family:'Zen Kaku Gothic New', Helvetica, Arial, sans-serif; overflow-x:hidden">
+
+  <header style="position:fixed; top:0; left:0; right:0; z-index:60; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:14px clamp(14px,3vw,34px); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; backdrop-filter:blur(6px); background:rgba(15,13,11,0.72); color:#EFEBE3; border-bottom:1px solid rgba(239,235,227,0.14); transition:background 0.4s ease, color 0.4s ease, border-color 0.4s ease" data-header="1">
+    <img data-hdr-mark="" src="{{ 'houston-wordmark-sando.png' | asset_url }}" alt="Sando" style="display:block; height:15px; width:auto">
+    <span style="opacity:0.55; display:flex; gap:18px">
+      <span>Houston</span>
+      <span style="display:none" data-wide="1">-</span>
+      <span style="display:none" data-wide="1">Opening 2026</span>
+    </span>
+    <a href="#rsvp" style="border-bottom:1px solid currentColor; padding-bottom:2px; opacity:0.85">Join the list</a>
+  </header>
+
+  <section data-screen-label="Intro" style="position:relative; min-height:100svh; color:#16130F; display:grid; grid-template-rows:auto 1fr auto; padding:78px clamp(14px,3vw,34px) calc(clamp(24px,3vw,34px) + env(safe-area-inset-bottom))">
+    <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; z-index:0; overflow:hidden">
+      <div style="position:absolute; inset:0; background:#E7E1D6"></div>
+      <div style="position:absolute; inset:0; pointer-events:none; background:repeating-radial-gradient(circle closest-side at 50% 50%, #FBF6EA calc(var(--ring) + 0%), #7B3FD4 calc(var(--ring) + 82%), #FBF6EA calc(var(--ring) + 164%)); animation:ringMove 12.5s linear infinite"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(231,225,214,0.7) 0%, rgba(231,225,214,0) 22%, rgba(231,225,214,0) 62%, rgba(231,225,214,0.88) 84%, rgba(231,225,214,0.96) 100%)"></div>
+    </div>
+    <div style="position:relative; z-index:1; display:flex; justify-content:space-between; align-items:flex-start; gap:20px; font-size:11px; letter-spacing:0.16em; text-transform:uppercase">
+      <span style="opacity:0.9">Fall 2026</span>
+      <img src="{{ 'houston-mark.png' | asset_url }}" alt="Sandoitchi mark" style="display:block; width:30px; height:auto">
+    </div>
+
+    <div style="position:relative; z-index:1; display:grid; place-items:center; min-height:0; padding:clamp(12px,3svh,40px) clamp(14px,3vw,34px); overflow:hidden">
+      <div aria-hidden="true" style="position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; padding:0 clamp(14px,4vw,34px)">
+        <img src="{{ 'houston-logotype-alt.png' | asset_url }}" alt="" style="display:block; width:clamp(280px,74vw,1400px); height:auto; opacity:0.92; animation:pulse 7s ease-in-out infinite">
+      </div>
+    </div>
+
+    <div style="position:relative; z-index:1; display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:clamp(18px,3vw,48px); align-items:end; border-top:1px solid rgba(22,19,15,0.24); padding-top:20px">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px">
+        <h1 style="margin:0; font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(34px,5.6vw,74px); line-height:0.95; letter-spacing:-0.015em; animation:riseIn 0.7s 0.25s cubic-bezier(0.2,0.8,0.2,1) both"><img src="{{ 'houston-logotype.png' | asset_url }}" alt="Sandoitchi" style="display:block; width:min(100%, 4em); height:auto"><span style="display:block">is coming to <em style="font-style:italic"><span style="color:#5B22B0">the Heights</span>.</em></span></h1>
+        <a data-narrow="inline-flex" href="#rsvp" style="display:none; flex:none; align-items:center; justify-content:center; gap:8px; background:#16130F; color:#F7F4EE; padding:10px 18px; border-radius:999px; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; min-height:38px; margin-bottom:6px; transition:background 0.3s, color 0.3s" class="houston-hover-purple-fill">Sign up →</a>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:14px 20px; align-items:center; justify-content:flex-end; animation:riseIn 0.7s 0.45s cubic-bezier(0.2,0.8,0.2,1) both">
+        <span data-wide="" style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.75">サンドイッチ・ヒューストン</span>
+        <a data-cta="" data-wide="inline-flex" href="#rsvp" style="display:inline-flex; align-items:center; gap:8px; background:#16130F; color:#F7F4EE; padding:10px 18px; border-radius:999px; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; min-height:38px; transition:background 0.3s, color 0.3s">Be first in line →</a>
+      </div>
+    </div>
+  </section>
+
+  <div style="overflow:hidden; background:#7B3FD4; color:#F7F4EE; padding:11px 0">
+    <div style="display:flex; width:max-content; gap:44px; animation:marq 26s linear infinite; will-change:transform; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; white-space:nowrap">
+      <span>Houston</span><span>·</span><span>Katsu Sando</span><span>·</span><span>Egg Salad</span><span>·</span><span>Strawberry Cream Sando</span><span>·</span><span>Matcha</span><span>·</span><span>Opening Fall 2026</span><span>·</span>
+      <span aria-hidden="true">Houston</span><span aria-hidden="true">·</span><span aria-hidden="true">Katsu Sando</span><span aria-hidden="true">·</span><span aria-hidden="true">Egg Salad</span><span aria-hidden="true">·</span><span aria-hidden="true">Strawberry Cream Sando</span><span aria-hidden="true">·</span><span aria-hidden="true">Matcha</span><span aria-hidden="true">·</span><span aria-hidden="true">Opening Fall 2026</span><span aria-hidden="true">·</span>
+    </div>
+  </div>
+
+  <section data-screen-label="Photo drop" data-hscroll="" style="position:relative; background:#0F0D0B">
+    <div data-hscroll-sticky="" style="position:absolute; top:0; left:0; right:0; height:100svh; overflow:hidden; display:grid; grid-template-rows:auto 1fr auto; gap:clamp(14px,2.4vh,30px); padding:clamp(40px,7vh,84px) clamp(14px,3vw,34px) clamp(20px,3vh,34px); backface-visibility:hidden">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; gap:20px; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.55">
+        <span>1603 N Durham Dr</span>
+        <span>The Heights</span>
+      </div>
+
+      <div data-hscroll-viewport="" style="position:relative; min-height:0; display:flex; align-items:center; overflow:hidden; margin:0 calc(-1 * clamp(14px,3vw,34px)); -webkit-overflow-scrolling:touch">
+        <div data-hscroll-track="" style="display:flex; align-items:center; flex:none; height:100%; min-height:0; gap:clamp(18px,2.6vw,44px); padding:0 clamp(20px,6vw,90px); will-change:transform">
+          <figure style="position:relative; flex:none; width:min(52vw, 430px); height:88%; min-height:0; margin:0; display:flex; flex-direction:column; gap:10px; scroll-snap-align:center; animation:drop 2.1s cubic-bezier(0.33,0.05,0.2,1) both; animation-delay:0.25s; animation-play-state:paused; will-change:transform; --x:0%; --y:0%; --r:-2.4deg; --r0:-16deg" data-card="0">
+              <img src="{{ 'houston-dwg-siteplan.jpg' | asset_url }}" alt="Site plan and section — the oval, the drive, the trees" loading="lazy" style="display:block; flex:1; min-height:0; width:100%; object-fit:contain; background:#F7F4EE; padding:5%; border:1px solid rgba(239,235,227,0.16)">
+              <figcaption style="flex:none; display:flex; gap:10px; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.5"><span style="color:#E0785C">01</span><span>Site plan and section — the oval, the drive, the trees</span></figcaption>
+            </figure>
+            <figure style="position:relative; flex:none; width:min(52vw, 430px); height:88%; min-height:0; margin:0; display:flex; flex-direction:column; gap:10px; scroll-snap-align:center; animation:drop 2.1s cubic-bezier(0.33,0.05,0.2,1) both; animation-delay:0.47s; animation-play-state:paused; will-change:transform; --x:0%; --y:0%; --r:1.5deg; --r0:12deg" data-card="1">
+              <img src="{{ 'houston-photo-welding.jpg' | asset_url }}" alt="Steel canopy frame going up" loading="lazy" style="display:block; flex:1; min-height:0; width:100%; object-fit:cover; background:#0B0A09; border:1px solid rgba(239,235,227,0.16)">
+              <figcaption style="flex:none; display:flex; gap:10px; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.5"><span style="color:#E0785C">02</span><span>Steel canopy frame going up</span></figcaption>
+            </figure>
+            <figure style="position:relative; flex:none; width:min(52vw, 430px); height:88%; min-height:0; margin:0; display:flex; flex-direction:column; gap:10px; scroll-snap-align:center; animation:drop 2.1s cubic-bezier(0.33,0.05,0.2,1) both; animation-delay:0.69s; animation-play-state:paused; will-change:transform; --x:0%; --y:0%; --r:-1.2deg; --r0:-11deg" data-card="2">
+              <img src="{{ 'houston-dwg-canopy.jpg' | asset_url }}" alt="Canopy section — the curve, in steel and purlins" loading="lazy" style="display:block; flex:1; min-height:0; width:100%; object-fit:contain; background:#F7F4EE; padding:5%; border:1px solid rgba(239,235,227,0.16)">
+              <figcaption style="flex:none; display:flex; gap:10px; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.5"><span style="color:#E0785C">03</span><span>Canopy section — the curve, in steel and purlins</span></figcaption>
+            </figure>
+            <figure style="position:relative; flex:none; width:min(52vw, 430px); height:88%; min-height:0; margin:0; display:flex; flex-direction:column; gap:10px; scroll-snap-align:center; animation:drop 2.1s cubic-bezier(0.33,0.05,0.2,1) both; animation-delay:0.91s; animation-play-state:paused; will-change:transform; --x:0%; --y:0%; --r:-1.8deg; --r0:-13deg" data-card="3">
+              <img src="{{ 'houston-photo-lights.jpg' | asset_url }}" alt="Dining room, light track in, walls up" loading="lazy" style="display:block; flex:1; min-height:0; width:100%; object-fit:cover; background:#0B0A09; border:1px solid rgba(239,235,227,0.16)">
+              <figcaption style="flex:none; display:flex; gap:10px; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.5"><span style="color:#E0785C">04</span><span>Dining room, light track in, walls up</span></figcaption>
+            </figure>
+            <figure style="position:relative; flex:none; width:min(52vw, 430px); height:88%; min-height:0; margin:0; display:flex; flex-direction:column; gap:10px; scroll-snap-align:center; animation:drop 2.1s cubic-bezier(0.33,0.05,0.2,1) both; animation-delay:1.13s; animation-play-state:paused; will-change:transform; --x:0%; --y:0%; --r:2deg; --r0:16deg" data-card="4">
+              <img src="{{ 'houston-photo-framing.jpg' | asset_url }}" alt="Panels numbered 7 through 13, going in order" loading="lazy" style="display:block; flex:1; min-height:0; width:100%; object-fit:cover; background:#0B0A09; border:1px solid rgba(239,235,227,0.16)">
+              <figcaption style="flex:none; display:flex; gap:10px; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.5"><span style="color:#E0785C">05</span><span>Panels numbered 7 through 13, going in order</span></figcaption>
+            </figure>
+            <figure style="position:relative; flex:none; width:min(52vw, 430px); height:88%; min-height:0; margin:0; display:flex; flex-direction:column; gap:10px; scroll-snap-align:center; animation:drop 2.1s cubic-bezier(0.33,0.05,0.2,1) both; animation-delay:1.35s; animation-play-state:paused; will-change:transform; --x:0%; --y:0%; --r:-1.3deg; --r0:-10deg" data-card="5">
+              <img src="{{ 'houston-dwg-kitchen.jpg' | asset_url }}" alt="Kitchen plan — the line, the POS, the pickup window" loading="lazy" style="display:block; flex:1; min-height:0; width:100%; object-fit:contain; background:#F7F4EE; padding:5%; border:1px solid rgba(239,235,227,0.16)">
+              <figcaption style="flex:none; display:flex; gap:10px; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.5"><span style="color:#E0785C">06</span><span>Kitchen plan — the line, the POS, the pickup window</span></figcaption>
+            </figure>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:clamp(14px,3vw,48px); align-items:end; border-top:1px solid rgba(239,235,227,0.2); padding-top:16px">
+        <h2 style="margin:0; font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(26px,3.2vw,48px); line-height:0.98; letter-spacing:-0.01em">Drawn first,<br><em style="font-style:italic">then built.</em></h2>
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px">
+          <p style="margin:0; max-width:36ch; font-size:14px; line-height:1.6; opacity:0.7">Steel to a finished room. Scroll through the build — framing, panels, tile, and the sign going up.</p>
+          <button type="button" data-replay style="flex:none; border:0; background:none; padding:6px 0; font:inherit; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.5; cursor:pointer" class="houston-hover-opaque">↻ Replay</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="The building" style="background:#1C1814; color:#EFEBE3; padding:clamp(48px,9vw,120px) clamp(14px,3vw,34px)">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:clamp(20px,4vw,64px); align-items:start; max-width:1500px; margin:0 auto 42px">
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.55">01 — The concept</span>
+        <h2 data-reveal="1" style="margin:0; font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(28px,3.6vw,52px); line-height:1.0; letter-spacing:-0.01em">Where we<br>pictured it<br>going.</h2>
+      </div>
+      <div data-reveal="1" style="display:flex; flex-direction:column; gap:14px; max-width:46ch">
+        <p style="margin:0; font-size:15px; line-height:1.6; opacity:0.72">Somewhere between a temple and a courtyard. These are concept renderings, not built drawings — the design moved since, through the process and through what the city allowed — but the intent held: a space you can enjoy and chill in as long as you'd like.</p>
+      </div>
+    </div>
+
+    <div style="max-width:1500px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(20px,3.4vw,44px)">
+      <figure data-reveal="1" style="margin:0">
+        <img src="{{ 'houston-render-street.jpg' | asset_url }}" alt="Rendering of the Houston pavilion from the street" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:#DFD9CF">
+        <figcaption style="display:flex; gap:14px; padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.6"><span style="color:#E0785C">01</span><span>Street elevation — the wave roof over the common area.</span></figcaption>
+      </figure>
+      <div style="display:grid; gap:clamp(12px,2vw,26px); grid-template-columns:repeat(auto-fit, minmax(min(100%,280px),1fr))">
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-render-aerial.jpg' | asset_url }}" alt="Aerial concept rendering showing the oval canopy, planting beds and parking" style="display:block; width:100%; aspect-ratio:4/3; object-fit:cover; background:#DFD9CF">
+          <figcaption style="display:flex; gap:14px; padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.6"><span style="color:#E0785C">02</span><span>Aerial study — the oval roof, the garden wall, and how cars move around both.</span></figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-render-curtain.jpg' | asset_url }}" alt="Concept rendering of the pavilion wrapped in translucent curtains under the oval roof" style="display:block; width:100%; aspect-ratio:4/3; object-fit:cover; background:#DFD9CF">
+          <figcaption style="display:flex; gap:14px; padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.6"><span style="color:#E0785C">03</span><span>Translucent curtains under the oval, sign above.</span></figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-render-courtyard.jpg' | asset_url }}" alt="Concept rendering with a red and blue striped courtyard wall" style="display:block; width:100%; aspect-ratio:4/3; object-fit:cover; background:#DFD9CF">
+          <figcaption style="display:flex; gap:14px; padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.6"><span style="color:#E0785C">04</span><span>Colour study — the courtyard wall striped red, plum and blue.</span></figcaption>
+        </figure>
+      </div>
+      <figure data-reveal="1" style="margin:0">
+        <img src="{{ 'houston-render-dining.jpg' | asset_url }}" alt="Concept rendering looking down the length of the dining room" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:#DFD9CF">
+        <figcaption style="display:flex; gap:14px; padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.6"><span style="color:#E0785C">05</span><span>Dining area — the long room, counter on the right.</span></figcaption>
+      </figure>
+      <div style="display:grid; gap:clamp(12px,2vw,26px); grid-template-columns:repeat(auto-fit, minmax(min(100%,280px),1fr))">
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-render-counter.jpg' | asset_url }}" alt="Concept rendering of the ordering counter and menu panels" style="display:block; width:100%; aspect-ratio:4/3; object-fit:cover; background:#DFD9CF">
+          <figcaption style="display:flex; gap:14px; padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.6"><span style="color:#E0785C">06</span><span>Terrazzo counter, birch millwork, sandwiches and screens on the wall.</span></figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-render-oculus.jpg' | asset_url }}" alt="Concept rendering of the oculus above the sliding doors" style="display:block; width:100%; aspect-ratio:4/3; object-fit:cover; background:#DFD9CF">
+          <figcaption style="display:flex; gap:14px; padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.6"><span style="color:#E0785C">07</span><span>The oculus, and the doors that open onto the court.</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="In progress" style="background:#A79D8E; color:#16130F; padding:clamp(48px,9vw,120px) clamp(14px,3vw,34px)">
+    <div style="max-width:1500px; margin:0 auto">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:clamp(20px,4vw,64px); align-items:end; margin-bottom:clamp(24px,4vw,52px)">
+        <div style="display:flex; flex-direction:column; gap:10px">
+          <span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.6">02 — In progress</span>
+          <h2 data-reveal="1" style="margin:0; font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(28px,3.6vw,52px); line-height:1.0">Right now it smells<br>like plywood.</h2>
+        </div>
+        <p data-reveal="1" style="margin:0; font-size:15px; line-height:1.6; opacity:0.78; max-width:44ch; color:#16130F">Photos from the site. Counters landed, lights on, floors still papered. We'll keep posting until the door opens.</p>
+      </div>
+
+      <div style="display:grid; gap:clamp(12px,2vw,22px); grid-template-columns:repeat(auto-fit, minmax(240px,1fr))">
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-dining.jpg' | asset_url }}" alt="Interior with plywood walls and long light track" style="display:block; width:100%; aspect-ratio:4/3; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Dining room, looking toward the counter.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-terrazzo.jpg' | asset_url }}" alt="Terrazzo counter with keep-off marker" style="display:block; width:100%; aspect-ratio:4/3; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Speckled counter, freshly set. Keep off.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0; grid-column:1 / -1">
+          <img src="{{ 'houston-photo-wide.jpg' | asset_url }}" alt="Wide interior view of plywood-lined room" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Wide open, plywood floor to ceiling.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-line.jpg' | asset_url }}" alt="Kitchen line under construction" style="display:block; width:100%; aspect-ratio:4/5; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">The line, waiting on equipment.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-plywood.jpg' | asset_url }}" alt="Finished birch plywood wall panels with steel reveal" style="display:block; width:100%; aspect-ratio:4/5; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Birch and a steel reveal, one panel from done.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-millwork.jpg' | asset_url }}" alt="Carpenter setting glazing into the numbered plywood wall" style="display:block; width:100%; aspect-ratio:4/5; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Glazing going into the numbered panels.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-signtower.jpg' | asset_url }}" alt="Sign tower and folded canopy seen from the sidewalk, courtyard fenced off" style="display:block; width:100%; aspect-ratio:4/5; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Canopy up, sign blank, courtyard still fenced.</figcaption>
+        </figure>
+      </div>
+
+    </div>
+  </section>
+
+  <section data-screen-label="The red room" style="background:#16130F; color:#EFEBE3; padding:clamp(48px,9vw,120px) clamp(14px,3vw,34px)">
+    <div style="max-width:1500px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(20px,4vw,52px)">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:clamp(16px,3vw,48px); align-items:end">
+        <div style="display:flex; flex-direction:column; gap:10px">
+          <span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.55">03 — The red room</span>
+          <h2 data-reveal="1" style="margin:0; font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(28px,3.6vw,52px); line-height:1.0; letter-spacing:-0.01em">We didn't skip<br>the room at the<br>back.</h2>
+        </div>
+        <p data-reveal="1" style="margin:0; font-size:15px; line-height:1.6; opacity:0.72; max-width:46ch">People notice these things. So: red gloss tile top to bottom, a poured trough sink, one big oval of light. Easy to clean, nice to stand in. Take a selfie if you want.</p>
+      </div>
+
+      <div style="display:grid; gap:clamp(12px,2vw,22px); grid-template-columns:repeat(auto-fit, minmax(240px,1fr))">
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-restroom-red.jpg' | asset_url }}" alt="Finished restroom in red and charcoal tile with grab bars" style="display:block; width:100%; aspect-ratio:1/1; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Done. Red walls, charcoal field, a curved ceiling.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-restroom-oval.jpg' | asset_url }}" alt="Finished restroom with an oval ceiling light and trough sink" style="display:block; width:100%; aspect-ratio:1/1; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">One oval of light, one poured sink.</figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin:0">
+          <img src="{{ 'houston-photo-restroom-wip.jpg' | asset_url }}" alt="Restroom mid-construction with tile up and sinks unfinished" style="display:block; width:100%; aspect-ratio:1/1; object-fit:cover; background:#241F19">
+          <figcaption style="padding-top:9px; font-size:11px; letter-spacing:0.06em; opacity:0.55">Tile up, fixtures pending, ladder resident.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Neighborhood" style="background:#7B3FD4; color:#F7F4EE; padding:clamp(48px,9vw,120px) clamp(14px,3vw,34px)">
+    <div style="max-width:1500px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:clamp(20px,4vw,64px); align-items:start">
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.55">04 — Where</span>
+        <h2 data-reveal="1" style="margin:0; font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(28px,3.6vw,52px); line-height:1.0">Houston, Texas</h2>
+      </div>
+      <div style="display:grid; gap:20px; font-size:15px; line-height:1.6">
+        <div style="display:grid; gap:4px"><span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.5">Address</span><span style="font-family:'Instrument Serif', Georgia, serif; font-size:26px; line-height:1.2">1603 N Durham Dr<br>Houston, TX 77008<br>United States</span></div>
+        <div style="display:grid; gap:4px"><span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.5">Neighborhood</span><span>The Heights — bungalows, bike trails, and old oaks over the sidewalks.</span></div>
+      </div>
+      <div style="display:grid; gap:20px; font-size:15px; line-height:1.6">
+        <div style="display:grid; gap:4px"><span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.5">Hours</span><span>Announced with the opening date.</span></div>
+        <div style="display:grid; gap:4px"><span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.5">Follow</span><span style="display:flex; gap:16px"><a href="https://instagram.com/sandoitchi" style="border-bottom:1px solid rgba(247,244,238,0.4)">Instagram</a><a href="https://sandoitchi.com" style="border-bottom:1px solid rgba(247,244,238,0.4)">sandoitchi.com</a></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rsvp" data-screen-label="RSVP" style="background:#EFEBE3; color:#16130F; border-top:1px solid rgba(22,19,15,0.18); padding:clamp(48px,9vw,120px) clamp(14px,3vw,34px)">
+    <div style="max-width:1500px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:clamp(24px,4vw,64px); align-items:end">
+      <h2 data-reveal="1" style="margin:0; font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(32px,5vw,68px); line-height:0.98; letter-spacing:-0.015em">Be the first<br>to know.</h2>
+      {% form 'customer', id: 'HoustonRsvpForm' %}
+        <input type="hidden" name="contact[tags]" value="houston-waitlist">
+        <input type="hidden" name="contact[accepts_marketing]" value="true">
+        <input type="hidden" name="return_to" value="/pages/houston?joined=1#rsvp">
+        <div style="display:grid; gap:12px; max-width:460px; width:100%">
+          <label for="email-rsvp" style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.55">Email</label>
+          <div style="display:flex; align-items:center; gap:8px; min-height:46px; padding:5px 5px 5px 14px; background:#F7F4EE; border:1px solid rgba(22,19,15,0.25); border-radius:12px">
+            <input id="email-rsvp" type="email" name="contact[email]" required placeholder="you@email.com" autocomplete="email" style="flex:1 1 auto; min-width:0; padding:8px 0; font:inherit; font-size:15px; background:transparent; border:0; outline:none; color:#16130F">
+            <button type="submit" class="houston-hover-purple" style="flex:none; min-height:34px; padding:7px 13px; border:0; border-radius:7px; background:#16130F; color:#EFEBE3; font:inherit; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:background 0.2s">Notify me</button>
+          </div>
+          {% if form.errors %}
+            <p style="margin:0; font-size:12px; line-height:1.5; letter-spacing:0.02em; color:#B3452B" aria-live="polite">{{ form.errors | default_errors }}</p>
+          {% endif %}
+          <p data-form-note hidden style="margin:0; font-size:12px; line-height:1.5; letter-spacing:0.02em; opacity:0.6" aria-live="polite">You&rsquo;re on the list. See you in Houston.</p>
+        </div>
+      {% endform %}
+    </div>
+  </section>
+
+  <footer style="background:#EFEBE3; color:#16130F; display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; padding:20px clamp(14px,3vw,34px) 34px; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.5; border-top:1px solid rgba(22,19,15,0.18)">
+    <span>Sandoitchi © 2026</span>
+    <span>Houston, TX</span>
+  </footer>
+</div>
+
+{% schema %}
+{
+  "name": "Houston Launch",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Standalone Houston launch page. Rendered by templates/page.houston.liquid inside layout/houston.liquid. Images live in theme assets (houston-*.jpg/png); styles in houston.css; behaviors in houston.js. RSVP posts a tagged customer record (houston-waitlist)."
+    }
+  ],
+  "presets": [{ "name": "Houston Launch" }]
+}
+{% endschema %}
