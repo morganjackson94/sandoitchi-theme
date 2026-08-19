@@ -1,6 +1,13 @@
 <!doctype html>
 <html class="no-js" lang="{{ request.locale.iso_code }}">
 <head>
+  <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N7VTTCPJ');</script>
+<!-- End Google Tag Manager -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,9 +35,40 @@
 
   {{ 'houston.css' | asset_url | stylesheet_tag }}
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Sandoitchi Houston",
+    "url": "https://www.sandoitchi.com/pages/houston",
+    "image": "{{ 'houston-render-street.jpg' | asset_url | prepend: 'https:' | remove: 'https:https:' }}",
+    "servesCuisine": "Japanese",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1603 N Durham Dr",
+      "addressLocality": "Houston",
+      "addressRegion": "TX",
+      "postalCode": "77008",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 29.7998414,
+      "longitude": -95.4120299
+    },
+    "sameAs": [
+      "https://www.instagram.com/sando.itchi"
+    ]
+  }
+  </script>
+
   {{ content_for_header }}
 </head>
 <body>
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N7VTTCPJ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
   {{ content_for_layout }}
   <script src="{{ 'houston.js' | asset_url }}" defer></script>
 </body>

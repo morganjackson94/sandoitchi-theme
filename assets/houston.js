@@ -211,6 +211,8 @@
       note.hidden = false;
       var input = document.getElementById('email-rsvp');
       if (input) input.value = '';
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'houston_waitlist_signup' });
       /* Clean the param so a refresh doesn't re-show stale state */
       if (window.history && history.replaceState) {
         history.replaceState(null, '', window.location.pathname + window.location.hash);
