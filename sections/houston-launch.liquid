@@ -10,7 +10,9 @@
 <div style="background:#0F0D0B; color:#EFEBE3; font-family:'Zen Kaku Gothic New', Helvetica, Arial, sans-serif; overflow-x:hidden">
 
   <header style="position:fixed; top:0; left:0; right:0; z-index:60; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:14px clamp(14px,3vw,34px); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; backdrop-filter:blur(6px); background:rgba(15,13,11,0.72); color:#EFEBE3; border-bottom:1px solid rgba(239,235,227,0.14); transition:background 0.4s ease, color 0.4s ease, border-color 0.4s ease" data-header="1">
-    <img data-hdr-mark="" src="{{ 'houston-wordmark-sando.png' | asset_url }}" alt="Sando" style="display:block; height:15px; width:auto">
+    <a href="{{ routes.root_url }}" style="display:block">
+      <img data-hdr-mark="" src="{{ 'houston-wordmark-sando.png' | asset_url }}" alt="Sando" style="display:block; height:15px; width:auto">
+    </a>
     <span style="opacity:0.55; display:flex; gap:18px">
       <span>Houston</span>
       <span style="display:none" data-wide="1">-</span>
