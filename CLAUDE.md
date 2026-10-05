@@ -6,7 +6,7 @@ Context file for Claude Code. Read this at the start of every session.
 
 ## Project Overview
 
-Custom Shopify theme for **Sandoitchi** — a Japanese sando and matcha café with locations in Dallas and Denver. Built entirely in Liquid and vanilla JavaScript. No frameworks. No build tools.
+Custom Shopify theme for **Sandoitchi** — a Japanese sando and matcha café with locations in Dallas and Denver, plus a Houston location in pre-launch. Built entirely in Liquid and vanilla JavaScript. No frameworks. No build tools.
 
 **Developer:** AFRA Visibility (Jack / Morgan)
 **Live site:** https://www.sandoitchi.com
@@ -57,6 +57,12 @@ These are the key custom sections built for this theme:
 | `sections/three-column-info.liquid` | Three-up info/feature row |
 | `sections/header-minimal.liquid` | Minimal top header with logo + order CTA |
 | `sections/announcement-bar.liquid` | Top announcement strip |
+| `sections/houston-launch.liquid` | Houston pre-launch page content + waitlist form |
+| `sections/menu-grid.liquid` | Menu page grid with category filters + carousel |
+| `sections/hero-title.liquid` | Hero title block |
+| `sections/split-image-hero.liquid` | Two-up image hero |
+| `sections/footer-content.liquid` | Footer content |
+| `sections/page-redirect.liquid` | Client-side page redirect helper |
 
 ---
 
@@ -79,9 +85,22 @@ These are the key custom sections built for this theme:
 
 ## Ordering / External URLs
 
-- **Toast order URL:** `https://order.toasttab.com/online/sandoitchi`
+- **Toast order URL (Dallas):** `https://order.toasttab.com/online/sandoitchi`
 - This is used in the header `order_url` setting, the nav "order now" button, and any order CTAs
 - Do not change or hardcode a different URL — always reference the theme setting
+
+**Denver — metafield-driven weekly toggle.** The Denver order link is NOT hardcoded. It reads
+from a shop metafield so a Shopify Flow can swap it between Toast and TapTap Eat on a weekly
+cadence without a theme deploy. See `templates/page.order-select.liquid`:
+
+```liquid
+{%- assign denver_url = shop.metafields.custom.denver_order_url.value
+    | default: "https://order.toasttab.com/online/sandoitchi-denver" -%}
+```
+
+- Metafield: `custom.denver_order_url` (shop-level)
+- Fallback if unset: the Denver Toast URL above
+- To change where Denver orders go, edit the metafield or the Flow — **not** the theme
 
 ---
 
@@ -89,6 +108,28 @@ These are the key custom sections built for this theme:
 
 - **Dallas** — Sandoitchi @ The Joule
 - **Denver** — separate location, same menu concept
+- **Houston** — pre-launch. Has its own standalone page (`/pages/houston`) with a dedicated
+  layout (`layout/houston.liquid`), section (`sections/houston-launch.liquid`) and
+  `assets/houston.js`. Waitlist signups use a tagged customer form, not the old modal.
+  Linked from the homepage find-us grid.
+
+---
+
+## Action Button Styles (grid tiles)
+
+`sections/featured-media-grid.liquid` and `sections/shop-grid.liquid` both expose an
+`action_btn_style` select on their blocks. The option list must stay **identical across every
+block type in both sections** (8 block types in featured-media-grid, 4 in shop-grid).
+
+- Buttons render as **inline SVG** in the Liquid, wrapped in `.media-action-svg-btn`
+- Sizing comes from `.media-action-svg-btn svg { height: 30px }` (28px under 600px)
+- `order-now-*` / `shop-now-*` are links: they use `action_btn_url` + `action_btn_new_tab`
+- `notify-me-black` is a `<button data-notify="true">` that opens the notify modal instead
+- Brand red for red variants: `#df2522`. Blacks vary: `#010000` (order-now-black),
+  `#252023` (shop-now-black, notify-me-black)
+
+Positioning is driven by `btn_position` (`bottom-left` / `bottom-right`) on the
+`.media-cell__actions` wrapper — keep wrapper markup and classes intact when adding variants.
 
 ---
 
@@ -99,6 +140,10 @@ These are the key custom sections built for this theme:
 | Shop | `/pages/shop` |
 | Order | `/pages/order` (used as ordering intent proxy — Toast orders are not tracked in Shopify) |
 | Catering | `/pages/catering` |
+| Houston (pre-launch) | `/pages/houston` |
+| Order select (Dallas/Denver chooser) | `/pages/order-select` |
+| Employee shop (unlisted, staff logo tees) | see `templates/page.employee-shop.json` |
+| Menu | `/pages/menu` |
 
 > **Note:** Toast / TapTap Eat orders do not appear in Shopify analytics. `/pages/order` session data is used as the ordering intent proxy in reporting.
 
@@ -136,6 +181,7 @@ Detailed status files live in `/docs/`. Reference these before making decisions 
 |---|---|
 | `docs/seo-status.md` | All 12 SEO actions + analytics stack status, pending items, future work, key IDs (GTM, GA4) |
 | `docs/ai-readiness.md` | AI readiness scores, data source gaps, 5-step foundation roadmap, 6–12 month intelligence layer |
+| `docs/dashboard.html` | Standalone reporting dashboard page |
 
 ---
 
@@ -144,12 +190,12 @@ Detailed status files live in `/docs/`. Reference these before making decisions 
 **Starting a session:**
 ```bash
 # Terminal tab 1 — dev server
-cd ~/Desktop/sandoitchi-theme
+cd ~/sandoitchi-theme
 shopify theme dev --store sando-itchi.myshopify.com
 # Open http://127.0.0.1:9292 in browser
 
 # Terminal tab 2 — Claude Code
-cd ~/Desktop/sandoitchi-theme
+cd ~/sandoitchi-theme
 claude
 ```
 
