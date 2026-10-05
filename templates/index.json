@@ -290,17 +290,17 @@
         "image_mfaFmw": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/fin_11_4x-100.jpg",
-            "url": "shopify://pages/order",
+            "image": "shopify://shop_images/z1_4x-100_copy.jpg",
+            "url": "https://complexcon.sandoitchi.com",
             "tile_open_new_tab": true,
-            "alt": "Banana milk drink — Sandoitchi café",
+            "alt": "Complex Con Family Style 2026 — Sandoitchi",
             "enable_share": true,
-            "share_btn_url": "",
-            "enable_cart_btn": true,
-            "cart_btn_url": "shopify://pages/order",
-            "cart_btn_new_tab": true,
+            "share_btn_url": "https://complexcon.sandoitchi.com",
+            "enable_cart_btn": false,
+            "cart_btn_url": "",
+            "cart_btn_new_tab": false,
             "action_btn_style": "none",
-            "action_btn_url": "",
+            "action_btn_url": "https://complexcon.sandoitchi.com",
             "action_btn_new_tab": false,
             "btn_position": "bottom-right",
             "enable_ig_btn": false,
@@ -360,8 +360,29 @@
             "ig_float": "right"
           }
         },
+        "product_zgEwrp": {
+          "type": "product",
+          "settings": {
+            "product": "keiko-sootome-x-sandoitchi-tee-1",
+            "tile_open_new_tab": false,
+            "show_meta": false,
+            "enable_share": true,
+            "share_btn_url": "",
+            "enable_cart_btn": true,
+            "cart_btn_url": "shopify://products/keiko-sootome-x-sandoitchi-tee",
+            "cart_btn_new_tab": false,
+            "action_btn_style": "none",
+            "action_btn_url": "",
+            "action_btn_new_tab": false,
+            "btn_position": "bottom-right",
+            "enable_ig_btn": false,
+            "ig_url": "",
+            "ig_float": "right"
+          }
+        },
         "video_GbB7Dh": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_file": "https://cdn.shopify.com/videos/c/o/v/29aeeb3ad3304e49a8a84ecc8dc28081.mov",
             "poster": "shopify://shop_images/sticker_video_sando-09.jpg",
@@ -676,6 +697,7 @@
         "label_shop",
         "image_3zVB4f",
         "image_EwPpGC",
+        "product_zgEwrp",
         "video_GbB7Dh",
         "image_y3cPUT",
         "image_RbrqYT",
