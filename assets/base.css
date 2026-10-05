@@ -7313,12 +7313,18 @@ body .copyright.copyright--visible .copyright__link:nth-child(4) { transition-de
 }
 
 /* ── SECTION: grid-action-buttons / learn-more (PNG) ── */
-/* Appended after .media-action-btn__img so these override its height: 40px
-   at equal specificity. Keep this block last. */
+
+/* These selectors are deliberately specific. The grid sections style their tile
+   images with `.featured-media-grid .media-cell__inner img { width:100%; height:100% }`
+   at specificity (0,2,1), and action buttons sit inside that container, so a plain
+   `.media-action-btn__img--learn` (0,1,0) loses and the button stretches to fill the
+   cell — ~2.7x too large. The existing order-now/shop-now/notify-me buttons are
+   inline <svg> and are never caught by it; these PNG variants are the first <img>
+   buttons in that container. Both width and height must be overridden. */
 
 /* Pill variants — match the inline-SVG buttons exactly
    (.media-action-svg-btn svg is 30px, 28px under 600px) */
-.media-action-btn__img--learn {
+.media-cell__actions .media-action-svg-btn img.media-action-btn__img--learn {
   display: block;
   height: 30px;
   width: auto;
@@ -7330,7 +7336,7 @@ body .copyright.copyright--visible .copyright__link:nth-child(4) { transition-de
    different canvases: 165/449 inside a pill vs 165/167 standalone. So when a
    pill renders at 30px its glyphs are 30 x 165/449 = 11.02px, and this box
    must be 11.02 x 167/165 = 11.16px to match. */
-.media-action-btn__img--learn-text {
+.media-cell__actions .media-action-svg-btn img.media-action-btn__img--learn-text {
   display: block;
   height: 11.16px;
   width: auto;
@@ -7338,8 +7344,8 @@ body .copyright.copyright--visible .copyright__link:nth-child(4) { transition-de
 }
 
 @media (max-width: 600px) {
-  .media-action-btn__img--learn      { height: 28px; }
-  .media-action-btn__img--learn-text { height: 10.41px; } /* 11.16 x 28/30 */
+  .media-cell__actions .media-action-svg-btn img.media-action-btn__img--learn      { height: 28px; }
+  .media-cell__actions .media-action-svg-btn img.media-action-btn__img--learn-text { height: 10.41px; } /* 11.16 x 28/30 */
 }
 
 /* Text-only needs a >= 44px tap target. The actions wrapper is a gap: 12px
