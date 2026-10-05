@@ -133,6 +133,75 @@ Positioning is driven by `btn_position` (`bottom-left` / `bottom-right`) on the
 
 ---
 
+## Deploying to Shopify (read before any push)
+
+**Git and Shopify are separate pipelines.** Committing or pushing to GitHub changes
+nothing on the store, and the theme editor will not show new section settings until
+a `shopify theme push` actually uploads the `.liquid` files. Conversely, anyone
+editing in the Shopify customizer puts **live ahead of this repo**, and the next
+push from git silently reverts their work.
+
+This has already bitten us once: in Oct 2026 the repo was ~4 months behind live and
+still had the old banana-milk homepage tile where live was running the Complex Con
+campaign, plus it was missing the 4 Keiko Sootome collab tiles. A straight push would
+have deleted a live campaign.
+
+### Always check for drift before pushing
+
+Pull live into a **separate folder** — a plain `shopify theme pull` overwrites your
+working tree and will wipe uncommitted work:
+
+```bash
+mkdir -p ~/sando-live-snapshot          # --path requires the dir to exist
+shopify theme pull --live --path ~/sando-live-snapshot --store sando-itchi.myshopify.com
+
+diff -rq ~/sandoitchi-theme ~/sando-live-snapshot \
+  -x '.git' -x '.claude' -x '.shopify' -x 'node_modules' -x '.DS_Store' \
+  -x 'docs' -x 'CLAUDE.md' -x '.gitignore' -x '.shopifyignore' -x 'start.sh'
+```
+
+### Reading the diff — most of it is noise
+
+- Live's JSON files carry an auto-generated `/* ... */` header the repo versions lack
+  (exactly 411 bytes), and live is pretty-printed where the repo is minified. Files can
+  differ by thousands of bytes and be **semantically identical**.
+- `hover_swap_image: null -> false`, `action_btn_url: null -> ""` and similar are just
+  Shopify writing out unset values explicitly. Ignore them.
+- To compare properly, strip the comment header and compare parsed JSON, not bytes:
+
+```python
+import json, re
+d = json.loads(re.sub(r"/\*.*?\*/", "", open(path).read(), flags=re.S))
+```
+
+Then compare `sections` block-by-block and watch `block_order` length for added or
+removed tiles. **Blocks that exist only on live are the thing to protect.**
+
+### Resolving drift
+
+Adopt live's file where live is ahead (campaign/product content added in the editor),
+keep the repo's where the repo is ahead (deliberate code work not yet shipped), and
+commit the result as a sync commit before pushing. Decide per file, not wholesale.
+
+### Pushing
+
+```bash
+# Preferred: new unpublished theme, verify, then Publish from the admin
+shopify theme push --unpublished --theme "<name>" --store sando-itchi.myshopify.com
+
+# Straight to live - overwrites every file on the published theme
+shopify theme push --live --store sando-itchi.myshopify.com
+```
+
+A push uploads **all** local files, not just the ones you changed. Anything sitting in
+`assets/` gets uploaded too.
+
+> The Shopify CLI needs an interactive browser login, so these commands must be run in
+> a real terminal window. They cannot be run from a non-interactive shell (including
+> Claude Code's bash tool, which is why pushes get handed back to Jack).
+
+---
+
 ## Pages
 
 | Page | Handle |
