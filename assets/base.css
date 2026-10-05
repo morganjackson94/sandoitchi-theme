@@ -7311,3 +7311,52 @@ body .copyright.copyright--visible .copyright__link:nth-child(4) { transition-de
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ── SECTION: grid-action-buttons / learn-more (PNG) ── */
+/* Appended after .media-action-btn__img so these override its height: 40px
+   at equal specificity. Keep this block last. */
+
+/* Pill variants — match the inline-SVG buttons exactly
+   (.media-action-svg-btn svg is 30px, 28px under 600px) */
+.media-action-btn__img--learn {
+  display: block;
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Text-only variant — sized so its GLYPHS match the pill versions' glyphs,
+   not the pill box. All three PNGs carry the same 165px of glyph ink, but on
+   different canvases: 165/449 inside a pill vs 165/167 standalone. So when a
+   pill renders at 30px its glyphs are 30 x 165/449 = 11.02px, and this box
+   must be 11.02 x 167/165 = 11.16px to match. */
+.media-action-btn__img--learn-text {
+  display: block;
+  height: 11.16px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .media-action-btn__img--learn      { height: 28px; }
+  .media-action-btn__img--learn-text { height: 10.41px; } /* 11.16 x 28/30 */
+}
+
+/* Text-only needs a >= 44px tap target. The actions wrapper is a gap: 12px
+   flex row, so padding + negative margin on the <a> would eat the gap and
+   overlap the share/cart siblings. An overlay pseudo-element adds the hit
+   area with zero layout participation, so the glyph's corner position and
+   btn_position alignment are unchanged. */
+.media-action-svg-btn:has(.media-action-btn__img--learn-text) {
+  position: relative;
+}
+.media-action-svg-btn:has(.media-action-btn__img--learn-text)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  min-width: 44px;
+  height: 44px;
+}

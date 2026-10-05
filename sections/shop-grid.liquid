@@ -273,6 +273,12 @@
                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 305.25 111.79"><defs><style>.abn-sb1{fill:#252023;filter:url(#ds-sb)}.abn-sb2{fill:#fff;font-family:HelveticaNeue,'Helvetica Neue';font-size:53.06px;letter-spacing:.02em}</style><filter id="ds-sb" x="-3.09" y="-3.01" width="315.84" height="122.4" filterUnits="userSpaceOnUse"><feOffset dx="2.19" dy="2.19"/><feGaussianBlur result="blur" stdDeviation="1.7"/><feFlood flood-color="#010000" flood-opacity=".08"/><feComposite in2="blur" operator="in"/><feComposite in="SourceGraphic"/></filter></defs><rect class="abn-sb1" width="305.25" height="111.79" rx="18.83" ry="18.83"/><text class="abn-sb2" transform="translate(33.55 72.06)"><tspan x="0" y="0">shop now</tspan></text></svg>
                 {%- elsif action_style == 'notify-me-black' -%}
                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 305.79 111.99"><defs><style>.abn-n1{fill:#252023;filter:url(#ds-n)}.abn-n2{fill:#fff;font-family:HelveticaNeue,'Helvetica Neue';font-size:53.06px;letter-spacing:.02em}</style><filter id="ds-n" x="-3.16" y="-2.92" width="316.56" height="122.4" filterUnits="userSpaceOnUse"><feOffset dx="2.19" dy="2.19"/><feGaussianBlur result="blur" stdDeviation="1.7"/><feFlood flood-color="#010000" flood-opacity=".08"/><feComposite in2="blur" operator="in"/><feComposite in="SourceGraphic"/></filter></defs><rect class="abn-n1" width="305.79" height="111.99" rx="18.86" ry="18.86"/><text class="abn-n2" transform="translate(39.06 72.18)"><tspan x="0" y="0">notify me</tspan></text></svg>
+                {%- elsif action_style == 'learn-more-red' -%}
+                  <img src="{{ 'learn-more-red.png' | asset_url }}" alt="Learn more" class="media-action-btn__img media-action-btn__img--learn" width="1225" height="449" loading="lazy">
+                {%- elsif action_style == 'learn-more-black' -%}
+                  <img src="{{ 'learn-more-black.png' | asset_url }}" alt="Learn more" class="media-action-btn__img media-action-btn__img--learn" width="1224" height="449" loading="lazy">
+                {%- elsif action_style == 'learn-more-text-black' -%}
+                  <img src="{{ 'learn-more-text-black.png' | asset_url }}" alt="Learn more" class="media-action-btn__img media-action-btn__img--learn-text" width="1059" height="167" loading="lazy">
                 {%- endif -%}
               {% if action_style == 'notify-me-black' %}</button>{% else %}</a>{% endif %}
             {%- endif -%}
@@ -400,7 +406,10 @@
             { "value": "order-now-black", "label": "Order Now \u2014 black" },
             { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
             { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
-            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" },
+            { "value": "learn-more-red",        "label": "Learn More \u2014 red" },
+            { "value": "learn-more-black",      "label": "Learn More \u2014 black" },
+            { "value": "learn-more-text-black", "label": "Learn More \u2014 text only (black)" }
           ]
         },
         { "type": "url",    "id": "action_btn_url", "label": "Action button URL" },
@@ -445,7 +454,10 @@
             { "value": "order-now-black", "label": "Order Now \u2014 black" },
             { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
             { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
-            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" },
+            { "value": "learn-more-red",        "label": "Learn More \u2014 red" },
+            { "value": "learn-more-black",      "label": "Learn More \u2014 black" },
+            { "value": "learn-more-text-black", "label": "Learn More \u2014 text only (black)" }
           ]
         },
         { "type": "url",    "id": "action_btn_url", "label": "Action button URL" },
@@ -490,7 +502,10 @@
             { "value": "order-now-black", "label": "Order Now \u2014 black" },
             { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
             { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
-            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" },
+            { "value": "learn-more-red",        "label": "Learn More \u2014 red" },
+            { "value": "learn-more-black",      "label": "Learn More \u2014 black" },
+            { "value": "learn-more-text-black", "label": "Learn More \u2014 text only (black)" }
           ]
         },
         { "type": "url",    "id": "action_btn_url", "label": "Action button URL" },
@@ -540,7 +555,10 @@
             { "value": "order-now-black", "label": "Order Now \u2014 black" },
             { "value": "shop-now-red",    "label": "Shop Now \u2014 red" },
             { "value": "shop-now-black",  "label": "Shop Now \u2014 black" },
-            { "value": "notify-me-black", "label": "Notify Me \u2014 black" }
+            { "value": "notify-me-black", "label": "Notify Me \u2014 black" },
+            { "value": "learn-more-red",        "label": "Learn More \u2014 red" },
+            { "value": "learn-more-black",      "label": "Learn More \u2014 black" },
+            { "value": "learn-more-text-black", "label": "Learn More \u2014 text only (black)" }
           ]
         },
         { "type": "url",    "id": "action_btn_url", "label": "Action button URL" },
